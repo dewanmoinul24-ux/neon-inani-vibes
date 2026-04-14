@@ -92,7 +92,7 @@ const HotelSection = () => {
                     <span className="text-muted-foreground text-sm"> / night</span>
                   </div>
                   <Link
-                    to={`/hotels/${hotel.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}`}
+                    to={`/hotels/${hotel.id}`}
                     className="px-4 py-2 rounded-lg font-ui text-xs uppercase tracking-widest gradient-neon text-primary-foreground transition-transform hover:scale-105"
                   >
                     Book
