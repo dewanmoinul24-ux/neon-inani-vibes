@@ -6,6 +6,7 @@ import hotel3 from "@/assets/hotel-3.jpg";
 
 const hotels = [
   {
+    id: "ocean-neon-resort",
     name: "Ocean Neon Resort",
     location: "Inani Beach",
     price: 12500,
@@ -14,6 +15,7 @@ const hotels = [
     tags: ["Sea View", "Pool", "Family"],
   },
   {
+    id: "sunset-bay-boutique",
     name: "Sunset Bay Boutique",
     location: "Kolatoli",
     price: 8500,
@@ -22,6 +24,7 @@ const hotels = [
     tags: ["Couple", "Sea View", "Spa"],
   },
   {
+    id: "azure-beach-club",
     name: "The Azure Beach Club",
     location: "Marine Drive",
     price: 18000,
