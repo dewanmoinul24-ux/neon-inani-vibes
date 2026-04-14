@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 const navLinks = [
   { label: "Home", href: "#home" },
-  { label: "Hotels", href: "#hotels" },
+  { label: "Hotels", href: "/hotels", isRoute: true },
   { label: "Vehicles", href: "#vehicles" },
   { label: "Experiences", href: "#experiences" },
   { label: "Places", href: "#places" },
