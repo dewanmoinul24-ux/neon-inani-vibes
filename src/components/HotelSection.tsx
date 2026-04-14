@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Star, MapPin, Waves } from "lucide-react";
 import hotel1 from "@/assets/hotel-1.jpg";
 import hotel2 from "@/assets/hotel-2.jpg";
@@ -5,6 +6,7 @@ import hotel3 from "@/assets/hotel-3.jpg";
 
 const hotels = [
   {
+    id: "ocean-neon-resort",
     name: "Ocean Neon Resort",
     location: "Inani Beach",
     price: 12500,
@@ -13,6 +15,7 @@ const hotels = [
     tags: ["Sea View", "Pool", "Family"],
   },
   {
+    id: "sunset-bay-boutique",
     name: "Sunset Bay Boutique",
     location: "Kolatoli",
     price: 8500,
@@ -21,6 +24,7 @@ const hotels = [
     tags: ["Couple", "Sea View", "Spa"],
   },
   {
+    id: "azure-beach-club",
     name: "The Azure Beach Club",
     location: "Marine Drive",
     price: 18000,
@@ -87,9 +91,12 @@ const HotelSection = () => {
                     </span>
                     <span className="text-muted-foreground text-sm"> / night</span>
                   </div>
-                  <button className="px-4 py-2 rounded-lg font-ui text-xs uppercase tracking-widest gradient-neon text-primary-foreground transition-transform hover:scale-105">
+                  <Link
+                    to={`/hotels/${hotel.id}`}
+                    className="px-4 py-2 rounded-lg font-ui text-xs uppercase tracking-widest gradient-neon text-primary-foreground transition-transform hover:scale-105"
+                  >
                     Book
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
