@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Star, MapPin, Waves } from "lucide-react";
 import hotel1 from "@/assets/hotel-1.jpg";
 import hotel2 from "@/assets/hotel-2.jpg";
@@ -87,9 +88,12 @@ const HotelSection = () => {
                     </span>
                     <span className="text-muted-foreground text-sm"> / night</span>
                   </div>
-                  <button className="px-4 py-2 rounded-lg font-ui text-xs uppercase tracking-widest gradient-neon text-primary-foreground transition-transform hover:scale-105">
+                  <Link
+                    to={`/hotels/${hotel.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}`}
+                    className="px-4 py-2 rounded-lg font-ui text-xs uppercase tracking-widest gradient-neon text-primary-foreground transition-transform hover:scale-105"
+                  >
                     Book
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
