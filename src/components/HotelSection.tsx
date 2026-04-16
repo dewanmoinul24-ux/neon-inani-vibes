@@ -102,6 +102,15 @@ const HotelSection = () => {
             </div>
           ))}
         </div>
+
+        <div className="text-center mt-12">
+          <Link
+            to="/hotels"
+            className="inline-block px-8 py-3 rounded-lg font-ui text-sm uppercase tracking-widest gradient-neon text-primary-foreground neon-glow-pink transition-all duration-300 hover:scale-105"
+          >
+            View All Hotels
+          </Link>
+        </div>
       </div>
     </section>
   );
