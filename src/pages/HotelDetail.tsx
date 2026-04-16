@@ -52,6 +52,7 @@ const HotelDetail = () => {
   const [guestEmail, setGuestEmail] = useState("");
   const [guestPhone, setGuestPhone] = useState("");
   const [specialRequests, setSpecialRequests] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!hotel) {
     return (
@@ -72,7 +73,6 @@ const HotelDetail = () => {
   const taxes = Math.round(totalPrice * 0.15);
   const grandTotal = totalPrice + taxes;
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleBooking = async () => {
     if (!guestName || !guestEmail || !guestPhone) {
