@@ -1,4 +1,5 @@
-import { Bike, Car, Truck, User, Clock } from "lucide-react";
+import { Bike, Car, Truck, User, Clock, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const vehicles = [
   {
@@ -83,6 +84,15 @@ const VehicleSection = () => {
               </div>
             );
           })}
+        </div>
+
+        <div className="text-center mt-10">
+          <Link
+            to="/vehicles"
+            className="inline-flex items-center gap-2 px-8 py-3 rounded-lg font-ui text-sm uppercase tracking-widest gradient-neon text-primary-foreground neon-glow-pink transition-all duration-300 hover:scale-105"
+          >
+            View All Vehicles <ArrowRight size={16} />
+          </Link>
         </div>
       </div>
     </section>
