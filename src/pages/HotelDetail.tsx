@@ -14,6 +14,7 @@ import {
   CalendarDays,
   Minus,
   Plus,
+  Loader2,
 } from "lucide-react";
 import { format, differenceInDays } from "date-fns";
 import Navbar from "@/components/Navbar";
@@ -25,6 +26,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 const HotelDetail = () => {
   const { id } = useParams();
@@ -50,6 +52,7 @@ const HotelDetail = () => {
   const [guestEmail, setGuestEmail] = useState("");
   const [guestPhone, setGuestPhone] = useState("");
   const [specialRequests, setSpecialRequests] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!hotel) {
     return (
@@ -70,7 +73,8 @@ const HotelDetail = () => {
   const taxes = Math.round(totalPrice * 0.15);
   const grandTotal = totalPrice + taxes;
 
-  const handleBooking = () => {
+
+  const handleBooking = async () => {
     if (!guestName || !guestEmail || !guestPhone) {
       toast.error("Please fill in all required fields.");
       return;
@@ -84,11 +88,37 @@ const HotelDetail = () => {
       return;
     }
 
-    toast.success("Booking confirmed! 🎉", {
-      description: `${hotel.name} — ${selectedRoom.name} × ${roomCount} for ${nights} night${nights > 1 ? "s" : ""}. Confirmation sent to ${guestEmail}.`,
-      duration: 6000,
-    });
-    setShowBookingForm(false);
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase.from("bookings").insert({
+        hotel_id: hotel.id,
+        hotel_name: hotel.name,
+        guest_name: guestName,
+        guest_email: guestEmail,
+        check_in: format(checkIn, "yyyy-MM-dd"),
+        check_out: format(checkOut, "yyyy-MM-dd"),
+        guests,
+        rooms: [{ name: selectedRoom.name, count: roomCount, price: selectedRoom.price }],
+        subtotal: totalPrice,
+        tax_and_fees: taxes,
+        total: grandTotal,
+        special_requests: specialRequests || null,
+      });
+
+      if (error) throw error;
+
+      toast.success("Booking confirmed! 🎉", {
+        description: `${hotel.name} — ${selectedRoom.name} × ${roomCount} for ${nights} night${nights > 1 ? "s" : ""}. Confirmation sent to ${guestEmail}.`,
+        duration: 6000,
+      });
+      setShowBookingForm(false);
+    } catch (err: any) {
+      toast.error("Booking failed. Please try again.", {
+        description: err.message,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -538,8 +568,13 @@ const HotelDetail = () => {
             <Button
               className="w-full mt-6 gradient-neon text-primary-foreground font-ui uppercase tracking-widest h-12 text-sm neon-glow-pink hover:scale-[1.02] transition-transform"
               onClick={handleBooking}
+              disabled={isSubmitting}
             >
-              Confirm Booking — ৳{grandTotal.toLocaleString()}
+              {isSubmitting ? (
+                <><Loader2 size={16} className="mr-2 animate-spin" /> Processing...</>
+              ) : (
+                <>Confirm Booking — ৳{grandTotal.toLocaleString()}</>
+              )}
             </Button>
 
             <p className="text-xs text-center text-muted-foreground mt-3 font-body">
