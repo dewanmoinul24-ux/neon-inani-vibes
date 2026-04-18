@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { hotels } from "@/data/hotels";
+import hotelsBanner from "@/assets/hotels-banner.jpg";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -60,16 +61,36 @@ const Hotels = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      {/* Hero Search Bar */}
-      <section className="pt-24 pb-8 md:pt-32 md:pb-12 relative">
+      {/* Banner */}
+      <section className="relative pt-16 md:pt-20">
+        <div className="relative h-[320px] md:h-[420px] overflow-hidden">
+          <img
+            src={hotelsBanner}
+            alt="Neon-lit luxury hotels along Cox's Bazar Marine Drive at night"
+            className="w-full h-full object-cover"
+            width={1920}
+            height={640}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/40 to-transparent" />
+          <div className="absolute bottom-8 md:bottom-12 left-0 right-0 container mx-auto px-4">
+            <p className="font-ui text-sm uppercase tracking-[0.3em] text-neon-cyan neon-text-cyan mb-2">
+              Stay in style
+            </p>
+            <h1 className="font-display text-3xl md:text-5xl font-bold gradient-neon-text">
+              Find Your Perfect Stay
+            </h1>
+            <p className="mt-3 text-muted-foreground max-w-xl font-body text-sm md:text-base">
+              Beachfront luxury along Marine Drive. Search Cox's Bazar hotels — best rates guaranteed.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Search Bar */}
+      <section className="pt-8 pb-8 md:pt-12 md:pb-12 relative">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
         <div className="container mx-auto px-4 relative">
-          <h1 className="font-display text-3xl md:text-5xl font-bold gradient-neon-text text-center mb-2">
-            Find Your Perfect Stay
-          </h1>
-          <p className="text-center text-muted-foreground mb-8 font-body">
-            Search hotels in Cox's Bazar — best rates guaranteed
-          </p>
 
           {/* Search Bar — Booking.com style */}
           <div className="glass-strong rounded-xl p-4 md:p-6 neon-border-pink max-w-5xl mx-auto">

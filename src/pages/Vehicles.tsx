@@ -111,6 +111,10 @@ const Vehicles = () => {
             <CalendarDays size={14} className="inline mr-2" /> Full Day
           </button>
         </div>
+        <p className="text-center text-xs md:text-sm font-ui text-neon-cyan neon-text-cyan -mt-8 mb-12">
+          <Clock size={12} className="inline mr-1.5 -mt-0.5" />
+          Whole Day = 8 hours from pickup time
+        </p>
 
         {/* Vehicle Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
@@ -261,7 +265,8 @@ const Vehicles = () => {
             <li className="flex items-start gap-2">
               <Clock size={14} className="text-neon-cyan mt-0.5 shrink-0" />
               <span>
-                Hourly bookings have a minimum of 1 hour. Overtime is charged at the hourly rate.
+                <strong className="text-foreground">Whole Day = 8 hours</strong> from your pickup
+                time. Hourly bookings have a minimum of 1 hour. Overtime is charged at the hourly rate.
               </span>
             </li>
           </ul>
