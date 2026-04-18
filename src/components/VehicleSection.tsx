@@ -78,9 +78,15 @@ const VehicleSection = () => {
                     </span>
                   </div>
                 </div>
-                <button className="mt-6 w-full px-4 py-2.5 rounded-lg font-ui text-xs uppercase tracking-widest gradient-neon text-primary-foreground transition-transform hover:scale-105">
-                  Rent Now
-                </button>
+                <p className="mt-4 text-[10px] font-ui uppercase tracking-widest text-neon-cyan neon-text-cyan">
+                  Whole Day = 8 hrs from pickup
+                </p>
+                <Link
+                  to="/vehicles"
+                  className="mt-3 block w-full px-4 py-2.5 rounded-lg font-ui text-xs uppercase tracking-widest gradient-neon text-primary-foreground transition-transform hover:scale-105"
+                >
+                  Select
+                </Link>
               </div>
             );
           })}
