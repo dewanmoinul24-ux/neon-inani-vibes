@@ -4,13 +4,13 @@ import { Menu, X } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 const navLinks = [
-  { label: "Home", href: "#home" },
+  { label: "Home", href: "/", isRoute: true },
   { label: "Hotels", href: "/hotels", isRoute: true },
   { label: "Vehicles", href: "/vehicles", isRoute: true },
-  { label: "Experiences", href: "#experiences" },
-  { label: "Places", href: "#places" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
+  { label: "Experiences", href: "/#experiences" },
+  { label: "Places", href: "/#places" },
+  { label: "About", href: "/#about" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 const Navbar = () => {
