@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Star, MapPin, Waves } from "lucide-react";
+import { useCurrency } from "@/hooks/useCurrency";
 import hotel1 from "@/assets/hotel-1.jpg";
 import hotel2 from "@/assets/hotel-2.jpg";
 import hotel3 from "@/assets/hotel-3.jpg";
@@ -35,6 +36,7 @@ const hotels = [
 ];
 
 const HotelSection = () => {
+  const { formatPrice } = useCurrency();
   return (
     <section id="hotels" className="py-20 md:py-32 relative">
       <div className="absolute top-0 right-0 w-96 h-96 bg-neon-pink/5 rounded-full blur-[150px]" />
@@ -87,7 +89,7 @@ const HotelSection = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <span className="font-display text-xl font-bold text-primary">
-                      ৳{hotel.price.toLocaleString()}
+                      {formatPrice(hotel.price)}
                     </span>
                     <span className="text-muted-foreground text-sm"> / night</span>
                   </div>

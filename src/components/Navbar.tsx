@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, User, LogOut, Settings, History, ChevronDown } from "lucide-react";
+import { Menu, X, User, LogOut, Settings, History, ChevronDown, Wallet } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { useAuth } from "@/contexts/AuthContext";
 import AuthModal from "@/components/AuthModal";
@@ -27,7 +27,7 @@ const navLinks = [
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
-  const { user, profile, signOut } = useAuth();
+  const { user, profile, signOut, currency, setCurrency } = useAuth();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -36,6 +36,35 @@ const Navbar = () => {
   };
 
   const initials = (profile?.display_name || user?.email || "U").slice(0, 2).toUpperCase();
+
+  const CurrencySwitcher = ({ compact = false }: { compact?: boolean }) => (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        className={`flex items-center gap-1.5 rounded-lg border border-border/60 hover:border-primary/50 transition-colors font-ui ${
+          compact ? "px-2 py-1 text-xs" : "px-3 py-1.5 text-xs uppercase tracking-widest"
+        }`}
+        aria-label="Change currency"
+      >
+        <Wallet className="w-3.5 h-3.5 text-neon-cyan" />
+        <span className="text-foreground font-semibold">{currency}</span>
+        <ChevronDown className="w-3 h-3 text-muted-foreground" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-44 glass-strong border-primary/30">
+        <DropdownMenuLabel className="font-ui text-xs uppercase tracking-widest">
+          Currency
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => setCurrency("BDT")} className="cursor-pointer">
+          <span className="mr-2">৳</span> BDT — Taka
+          {currency === "BDT" && <span className="ml-auto text-primary">✓</span>}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setCurrency("USD")} className="cursor-pointer">
+          <span className="mr-2">$</span> USD — Dollar
+          {currency === "USD" && <span className="ml-auto text-primary">✓</span>}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
 
   return (
     <>
@@ -70,6 +99,8 @@ const Navbar = () => {
                 </a>
               )
             )}
+
+            <CurrencySwitcher />
 
             {user ? (
               <DropdownMenu>
@@ -118,13 +149,17 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Mobile toggle */}
-          <button
-            onClick={() => setOpen(!open)}
-            className="lg:hidden text-foreground"
-          >
-            {open ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          {/* Mobile right cluster */}
+          <div className="lg:hidden flex items-center gap-2">
+            <CurrencySwitcher compact />
+            <button
+              onClick={() => setOpen(!open)}
+              className="text-foreground"
+              aria-label="Toggle menu"
+            >
+              {open ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile menu */}

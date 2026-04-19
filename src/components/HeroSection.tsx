@@ -25,9 +25,6 @@ const HeroSection = () => {
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 text-center">
         <div className="animate-slide-up">
-          <p className="font-display text-2xl md:text-4xl mb-3 gradient-neon-text">
-            Inani Vibes
-          </p>
           <p className="font-ui text-sm md:text-base uppercase tracking-[0.3em] text-neon-cyan mb-4 neon-text-cyan">
             Cox's Bazar, Bangladesh
           </p>

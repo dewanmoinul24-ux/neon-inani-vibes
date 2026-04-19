@@ -21,6 +21,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { vehicles } from "@/data/vehicles";
 import vehiclesBanner from "@/assets/vehicles-banner.jpg";
+import { useCurrency } from "@/hooks/useCurrency";
 
 const iconMap: Record<string, React.ElementType> = {
   Sedan: Car,
@@ -48,6 +49,7 @@ const accentTextMap: Record<string, string> = {
 
 const Vehicles = () => {
   const navigate = useNavigate();
+  const { formatPrice } = useCurrency();
   const [rentalType, setRentalType] = useState<"hourly" | "daily">("daily");
 
   return (
@@ -140,7 +142,7 @@ const Vehicles = () => {
                         Starting From
                       </p>
                       <p className="font-display text-xl font-bold text-foreground">
-                        ৳{startingPrice.toLocaleString()}
+                        {formatPrice(startingPrice)}
                       </p>
                       <p className="text-xs text-muted-foreground font-ui">
                         per {rentalType === "hourly" ? "hour" : "day"}

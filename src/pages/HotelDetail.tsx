@@ -28,14 +28,18 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useCurrency } from "@/hooks/useCurrency";
+import AuthModal from "@/components/AuthModal";
 
 const HotelDetail = () => {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const hotel = hotels.find((h) => h.id === id);
   const { user } = useAuth();
+  const { formatPrice } = useCurrency();
 
   const [activeImage, setActiveImage] = useState(0);
+  const [authOpen, setAuthOpen] = useState(false);
   const [checkIn, setCheckIn] = useState<Date | undefined>(
     searchParams.get("checkIn") ? new Date(searchParams.get("checkIn")!) : undefined
   );
@@ -290,7 +294,7 @@ const HotelDetail = () => {
                         </div>
                         <div className="text-right flex-shrink-0">
                           <p className="font-display text-xl font-bold text-primary">
-                            ৳{room.price.toLocaleString()}
+                            {formatPrice(room.price)}
                           </p>
                           <p className="text-xs text-muted-foreground">per night</p>
                           <p className="text-xs text-neon-cyan mt-1">
@@ -352,7 +356,7 @@ const HotelDetail = () => {
                 <div className="glass-strong rounded-xl p-6 neon-border-pink">
                   <div className="mb-4">
                     <span className="font-display text-2xl font-bold text-primary">
-                      ৳{hotel.price.toLocaleString()}
+                      {formatPrice(hotel.price)}
                     </span>
                     <span className="text-muted-foreground text-sm"> / night</span>
                   </div>
@@ -445,23 +449,23 @@ const HotelDetail = () => {
                           {selectedRoom.name} × {roomCount}
                         </span>
                         <span className="text-foreground">
-                          ৳{(selectedRoom.price * roomCount).toLocaleString()}
+                          {formatPrice(selectedRoom.price * roomCount)}
                         </span>
                       </div>
                       <div className="flex justify-between text-sm font-body">
                         <span className="text-muted-foreground">
                           {nights} night{nights > 1 ? "s" : ""}
                         </span>
-                        <span className="text-foreground">৳{totalPrice.toLocaleString()}</span>
+                        <span className="text-foreground">{formatPrice(totalPrice)}</span>
                       </div>
                       <div className="flex justify-between text-sm font-body">
                         <span className="text-muted-foreground">Taxes & fees (15%)</span>
-                        <span className="text-foreground">৳{taxes.toLocaleString()}</span>
+                        <span className="text-foreground">{formatPrice(taxes)}</span>
                       </div>
                       <div className="flex justify-between pt-2 border-t border-border">
                         <span className="font-display text-base font-bold text-foreground">Total</span>
                         <span className="font-display text-base font-bold text-primary">
-                          ৳{grandTotal.toLocaleString()}
+                          {formatPrice(grandTotal)}
                         </span>
                       </div>
                     </div>
@@ -472,6 +476,11 @@ const HotelDetail = () => {
                     onClick={() => {
                       if (!selectedRoom) {
                         toast.error("Please select a room first.");
+                        return;
+                      }
+                      if (!user) {
+                        toast.info("Please sign in to confirm your booking.");
+                        setAuthOpen(true);
                         return;
                       }
                       setShowBookingForm(true);
@@ -513,7 +522,7 @@ const HotelDetail = () => {
                 <span className="text-muted-foreground">
                   {checkIn ? format(checkIn, "MMM dd") : "—"} → {checkOut ? format(checkOut, "MMM dd, yyyy") : "—"}
                 </span>
-                <span className="text-primary font-display font-bold">৳{grandTotal.toLocaleString()}</span>
+                <span className="text-primary font-display font-bold">{formatPrice(grandTotal)}</span>
               </div>
             </div>
 
@@ -576,7 +585,7 @@ const HotelDetail = () => {
               {isSubmitting ? (
                 <><Loader2 size={16} className="mr-2 animate-spin" /> Processing...</>
               ) : (
-                <>Confirm Booking — ৳{grandTotal.toLocaleString()}</>
+                <>Confirm Booking — {formatPrice(grandTotal)}</>
               )}
             </Button>
 
@@ -587,6 +596,7 @@ const HotelDetail = () => {
         </div>
       )}
 
+      <AuthModal open={authOpen} onOpenChange={setAuthOpen} />
       <Footer />
     </div>
   );
