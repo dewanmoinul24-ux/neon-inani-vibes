@@ -15,6 +15,9 @@ import Experiences from "./pages/Experiences.tsx";
 import ExperienceDetail from "./pages/ExperienceDetail.tsx";
 import Profile from "./pages/Profile.tsx";
 import ResetPassword from "./pages/ResetPassword.tsx";
+import AdminOverview from "./pages/admin/AdminOverview.tsx";
+import AdminQueue from "./pages/admin/AdminQueue.tsx";
+import AdminBookings from "./pages/admin/AdminBookings.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -38,6 +41,9 @@ const App = () => (
             <Route path="/experiences/:id" element={<ExperienceDetail />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/admin" element={<AdminOverview />} />
+            <Route path="/admin/queue" element={<AdminQueue />} />
+            <Route path="/admin/bookings" element={<AdminBookings />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
