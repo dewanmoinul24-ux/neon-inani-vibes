@@ -223,7 +223,19 @@ const Profile = () => {
     loadBookings();
   };
 
-  const handleSignOut = async () => {
+  const handleCancelReservation = async (id: string) => {
+    if (!confirm("Cancel this reservation request?")) return;
+    const { error } = await supabase
+      .from("experience_reservations")
+      .update({ status: "cancelled" })
+      .eq("id", id);
+    if (error) {
+      toast.error("Could not cancel reservation");
+      return;
+    }
+    toast.success("Reservation cancelled");
+    loadReservations();
+  };
     await signOut();
     toast.success("Signed out");
     navigate("/");
