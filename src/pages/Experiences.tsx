@@ -65,7 +65,7 @@ const Experiences = () => {
 
       {/* ───────── Banner ───────── */}
       <section className="relative pt-16 md:pt-20">
-        <div className="relative h-[55vh] md:h-[70vh] w-full overflow-hidden">
+        <div className="relative h-[420px] sm:h-[55vh] md:h-[70vh] w-full overflow-hidden">
           <motion.img
             src={bannerImg}
             alt="Aerial drone shot of a neon beach party at Cox's Bazar Marine Drive"
