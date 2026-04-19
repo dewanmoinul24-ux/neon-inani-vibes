@@ -179,6 +179,9 @@ const Experiences = () => {
       {/* ───────── Countdown Marquee ───────── */}
       <EventCountdownMarquee />
 
+      {/* ───────── Featured Tonight (within 24h) ───────── */}
+      <FeaturedTonight />
+
       {/* ───────── Upcoming Events ───────── */}
       <section id="upcoming" className="py-16 md:py-24 relative">
         <div className="absolute top-1/4 left-0 w-96 h-96 bg-neon-pink/5 rounded-full blur-[150px]" />
