@@ -39,10 +39,13 @@ import {
   MapPin,
   ChevronRight,
   Star,
+  Sparkles,
 } from "lucide-react";
 import { format, isAfter, parseISO } from "date-fns";
 import { useCurrency } from "@/hooks/useCurrency";
 import { CURRENCY_LABEL } from "@/lib/currency";
+import { countCompletedTrips, getVibesTier } from "@/lib/vibesLevel";
+import VibesLevelCard from "@/components/VibesLevelCard";
 
 interface Booking {
   id: string;
@@ -60,6 +63,7 @@ type SectionKey =
   | "security"
   | "payment"
   | "preferences"
+  | "vibes"
   | "upcoming"
   | "history"
   | "saved"
@@ -77,6 +81,7 @@ const sections: {
   { key: "payment", label: "Payment methods", icon: CreditCard, group: "manage" },
   { key: "preferences", label: "Preferences", icon: SettingsIcon, group: "manage" },
   { key: "notifications", label: "Email notifications", icon: Bell, group: "manage" },
+  { key: "vibes", label: "Vibes Level", icon: Sparkles, group: "trips" },
   { key: "upcoming", label: "Upcoming trips", icon: Calendar, group: "trips" },
   { key: "history", label: "Trip history", icon: Calendar, group: "trips" },
   { key: "saved", label: "Saved", icon: Heart, group: "trips" },
