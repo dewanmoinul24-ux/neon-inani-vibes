@@ -570,6 +570,7 @@ const VehicleSelection = () => {
       )}
 
       <Footer />
+      <AuthModal open={authOpen} onOpenChange={setAuthOpen} />
     </div>
   );
 };
