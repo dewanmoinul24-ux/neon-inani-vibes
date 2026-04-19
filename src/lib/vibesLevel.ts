@@ -11,6 +11,10 @@ export interface VibesTier {
   accent: "cyan" | "pink" | "purple" | "orange";
   tagline: string;
   perks: string[];
+  /** Discount applied to hotel bookings (0–1). */
+  hotelDiscount: number;
+  /** Discount applied to vehicle bookings (0–1). */
+  vehicleDiscount: number;
 }
 
 export const VIBES_TIERS: VibesTier[] = [
