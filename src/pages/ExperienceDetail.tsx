@@ -365,6 +365,18 @@ const ExperienceDetail = () => {
                 />
               </div>
 
+              <div>
+                <Label htmlFor="notes" className="text-xs">Special requests (optional)</Label>
+                <Textarea
+                  id="notes"
+                  rows={2}
+                  maxLength={500}
+                  placeholder="Allergies, group ages, accessibility..."
+                  value={specialRequests}
+                  onChange={(e) => setSpecialRequests(e.target.value)}
+                />
+              </div>
+
               <div className="border-t border-border/60 pt-3 flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Total</span>
                 <span className="font-display text-2xl font-bold text-primary">{format(total)}</span>
@@ -375,7 +387,7 @@ const ExperienceDetail = () => {
                 disabled={submitting}
                 className="w-full gradient-neon text-primary-foreground font-ui uppercase tracking-widest neon-glow-pink hover:opacity-90"
               >
-                {submitting ? "Sending..." : "Request Reservation"}
+                {submitting ? "Sending..." : user ? "Request Reservation" : "Sign in to reserve"}
               </Button>
 
               <div className="text-xs text-muted-foreground space-y-1.5 pt-1">
@@ -383,10 +395,10 @@ const ExperienceDetail = () => {
                   <Phone className="w-3 h-3" /> {experience.contactPhone}
                 </p>
                 <p className="flex items-center gap-2">
-                  <Mail className="w-3 h-3" /> Confirmation by email within 30 min
+                  <Mail className="w-3 h-3" /> Confirmation within 30 min by the Inani Vibes team
                 </p>
                 <p className="opacity-80">
-                  Pay on arrival. Cash, card or bKash accepted.
+                  Online payment coming soon — instructions will follow on confirmation.
                 </p>
               </div>
             </form>
