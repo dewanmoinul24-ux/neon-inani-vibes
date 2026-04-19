@@ -79,7 +79,7 @@ const Experiences = () => {
               Marine Drive · After Dark
             </p>
             <h1
-              className="font-display text-5xl md:text-7xl lg:text-8xl font-bold gradient-neon-text max-w-4xl leading-[1.05]"
+              className="font-display text-5xl md:text-7xl font-bold gradient-neon-text max-w-4xl leading-[1.05] lg:text-6xl"
               style={{
                 filter:
                   "drop-shadow(0 0 24px hsl(330 100% 65% / 0.55)) drop-shadow(0 4px 16px hsl(0 0% 0% / 0.9))",
