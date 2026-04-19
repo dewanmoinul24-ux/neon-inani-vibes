@@ -33,6 +33,7 @@ const parseEventDate = (iso: string, startTime?: string) => {
 const EventCountdownMarquee = () => {
   const events = useMemo(() => getUpcomingEvents().slice(0, 3), []);
   const [, force] = useState(0);
+  const [paused, setPaused] = useState(false);
 
   useEffect(() => {
     const id = setInterval(() => force((n) => n + 1), 1000);
@@ -61,8 +62,15 @@ const EventCountdownMarquee = () => {
           </span>
         </div>
 
-        <div className="flex-1 overflow-hidden">
-          <div className="flex gap-12 py-3 animate-marquee whitespace-nowrap">
+        <div
+          className="flex-1 overflow-hidden"
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+        >
+          <div
+            className="flex gap-12 py-3 animate-marquee whitespace-nowrap"
+            style={{ animationPlayState: paused ? "paused" : "running" }}
+          >
             {loop.map((e, i) => {
               const target = parseEventDate(e.date!, e.startTime);
               const r = computeRemaining(target);
@@ -70,10 +78,11 @@ const EventCountdownMarquee = () => {
                 <Link
                   key={`${e.id}-${i}`}
                   to={`/experiences/${e.id}`}
-                  className="flex items-center gap-3 group"
+                  className="flex items-center gap-3 group cursor-pointer hover:opacity-100"
+                  title={`View ${e.title}`}
                 >
                   <Calendar className="w-3.5 h-3.5 text-neon-pink shrink-0" />
-                  <span className="font-display text-sm font-semibold text-foreground group-hover:text-neon-pink transition-colors">
+                  <span className="font-display text-sm font-semibold text-foreground group-hover:text-neon-pink transition-colors underline-offset-4 group-hover:underline decoration-neon-pink/60">
                     {e.title}
                   </span>
                   <span className="text-muted-foreground text-xs">·</span>
