@@ -4,6 +4,7 @@ import { Calendar, Clock, MapPin, Sparkles, Ticket, Filter } from "lucide-react"
 import { motion, useScroll, useTransform } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import EventCountdownMarquee from "@/components/EventCountdownMarquee";
 import bannerImg from "@/assets/experiences-banner.jpg";
 import {
   experiences,
@@ -114,8 +115,8 @@ const Experiences = () => {
 
           <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-end pb-12 md:pb-20 shadow-inner">
             <p
-              className="font-ui text-xs md:text-sm uppercase tracking-[0.4em] text-neon-pink mb-3"
-              style={{ textShadow: "0 0 14px hsl(330 100% 65% / 0.95), 0 2px 8px hsl(0 0% 0% / 0.8)" }}
+              className="font-ui text-xs md:text-sm uppercase tracking-[0.4em] text-neon-cyan mb-3"
+              style={{ textShadow: "0 0 14px hsl(180 100% 55% / 0.95), 0 2px 8px hsl(0 0% 0% / 0.85)" }}
             >
               Marine Drive · After Dark
             </p>
@@ -123,7 +124,7 @@ const Experiences = () => {
               className="font-display text-5xl md:text-7xl font-bold gradient-neon-text max-w-4xl leading-[1.05] lg:text-6xl"
               style={{
                 filter:
-                  "drop-shadow(0 0 24px hsl(330 100% 65% / 0.55)) drop-shadow(0 4px 16px hsl(0 0% 0% / 0.9))",
+                  "drop-shadow(0 4px 18px hsl(0 0% 0% / 0.95)) drop-shadow(0 0 24px hsl(330 100% 65% / 0.55)) drop-shadow(0 8px 24px hsl(0 0% 0% / 0.85))",
               }}
             >
               Experiences & Adventure Sports
