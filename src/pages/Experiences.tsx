@@ -183,28 +183,28 @@ const Experiences = () => {
       <FeaturedTonight />
 
       {/* ───────── Upcoming Events ───────── */}
-      <section id="upcoming" className="py-16 md:py-24 relative">
+      <section id="upcoming" className="py-12 sm:py-16 md:py-24 relative">
         <div className="absolute top-1/4 left-0 w-96 h-96 bg-neon-pink/5 rounded-full blur-[150px]" />
         <div className="container mx-auto px-4 relative">
-          <div className="flex items-end justify-between flex-wrap gap-4 mb-8">
+          <div className="flex items-end justify-between flex-wrap gap-3 sm:gap-4 mb-6 sm:mb-8">
             <div>
               <p
-                className="font-ui text-xs uppercase tracking-[0.3em] text-neon-orange mb-2"
+                className="font-ui text-[10px] sm:text-xs uppercase tracking-[0.3em] text-neon-orange mb-1.5 sm:mb-2"
                 style={{ textShadow: "0 0 10px hsl(25 100% 55% / 0.8)" }}
               >
                 What's coming up
               </p>
-              <h2 className="font-display text-[2.25rem] md:text-[3.375rem] font-bold gradient-neon-text mt-[6px] mb-[14px]">
+              <h2 className="font-display text-3xl sm:text-[2.25rem] md:text-[3.375rem] font-bold gradient-neon-text mt-1 mb-2">
                 Upcoming Events
               </h2>
             </div>
-            <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
               <Filter className="w-4 h-4 text-muted-foreground" />
               {eventCategories.map((c) => (
                 <button
                   key={c.value}
                   onClick={() => setEventFilter(c.value)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-ui uppercase tracking-wider border transition-all ${
+                  className={`px-2.5 sm:px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-ui uppercase tracking-wider border transition-all ${
                     eventFilter === c.value
                       ? "bg-primary text-primary-foreground border-primary"
                       : "border-border/60 text-muted-foreground hover:border-primary/60 hover:text-primary"
@@ -219,7 +219,7 @@ const Experiences = () => {
           {upcomingEvents.length === 0 ? (
             <p className="text-muted-foreground">No upcoming events in this category yet.</p>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8">
               {upcomingEvents.map((e, i) => (
                 <Link
                   key={e.id}
