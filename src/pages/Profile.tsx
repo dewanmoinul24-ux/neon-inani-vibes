@@ -334,6 +334,8 @@ const Profile = () => {
                           ? upcoming.length
                           : s.key === "history"
                           ? history.length
+                          : s.key === "reservations"
+                          ? reservations.filter((r) => r.status !== "cancelled").length
                           : undefined
                       }
                     />
