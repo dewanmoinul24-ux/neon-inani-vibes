@@ -26,6 +26,7 @@ import vehiclesBanner from "@/assets/vehicles-banner.jpg";
 import { toast } from "@/components/ui/sonner";
 import { useCurrency } from "@/hooks/useCurrency";
 import { useAuth } from "@/contexts/AuthContext";
+import { useVibes } from "@/hooks/useVibes";
 import { supabase } from "@/integrations/supabase/client";
 import AuthModal from "@/components/AuthModal";
 import { addDays, addHours, format } from "date-fns";
@@ -50,6 +51,7 @@ const VehicleSelection = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
   const { formatPrice } = useCurrency();
   const { user } = useAuth();
+  const { tier: vibesTier } = useVibes();
   const vehicle = useMemo(() => vehicles.find((v) => v.id === categoryId), [categoryId]);
 
   const [rentalType, setRentalType] = useState<"hourly" | "daily">("daily");
@@ -78,8 +80,10 @@ const VehicleSelection = () => {
   const unitPrice = rentalType === "hourly" ? vehicle.pricePerHour : vehicle.pricePerDay;
   const duration = rentalType === "hourly" ? hours : days;
   const subtotal = unitPrice * duration;
-  const platformFee = Math.round(subtotal * 0.02);
-  const total = subtotal + platformFee;
+  const vibesDiscount = Math.round(subtotal * vibesTier.vehicleDiscount);
+  const discountedSubtotal = subtotal - vibesDiscount;
+  const platformFee = Math.round(discountedSubtotal * 0.02);
+  const total = discountedSubtotal + platformFee;
   const advance = Math.ceil(total * (vehicle.bookingAdvance / 100));
 
   const openBooking = (unit: VehicleUnit) => {
