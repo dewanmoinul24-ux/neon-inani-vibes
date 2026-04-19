@@ -22,10 +22,12 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
 import { getExperienceById } from "@/data/experiences";
 import { useCurrency } from "@/hooks/useCurrency";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 const formatEventDate = (iso: string) =>
   new Date(iso + "T00:00:00").toLocaleDateString(undefined, {
@@ -49,6 +51,7 @@ const ExperienceDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [preferredDate, setPreferredDate] = useState(experience?.date || "");
   const [preferredTime, setPreferredTime] = useState("");
+  const [specialRequests, setSpecialRequests] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   if (!experience) {
@@ -67,8 +70,19 @@ const ExperienceDetail = () => {
   const isEvent = experience.type === "event";
   const total = experience.priceBdt * quantity;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!user) {
+      toast({
+        title: "Please sign in",
+        description: "You need an account to request a reservation.",
+        variant: "destructive",
+      });
+      navigate("/?auth=1");
+      return;
+    }
+
     if (!name || !email || !phone) {
       toast({ title: "Missing details", description: "Please fill name, email and phone.", variant: "destructive" });
       return;
@@ -81,15 +95,43 @@ const ExperienceDetail = () => {
       });
       return;
     }
+
     setSubmitting(true);
-    // Reservation request only — UI confirmation, no DB persistence by design.
-    setTimeout(() => {
-      setSubmitting(false);
+    const { error } = await supabase.from("experience_reservations").insert({
+      user_id: user.id,
+      experience_id: experience.id,
+      experience_title: experience.title,
+      experience_type: experience.type,
+      category: experience.category,
+      organizer: experience.organizer,
+      location: experience.location,
+      preferred_date: isEvent ? experience.date! : preferredDate,
+      preferred_time: isEvent ? experience.startTime ?? null : preferredTime,
+      quantity,
+      unit_price: experience.priceBdt,
+      total_price: total,
+      guest_name: name,
+      guest_email: email,
+      guest_phone: phone,
+      special_requests: specialRequests || null,
+      status: "pending",
+    });
+    setSubmitting(false);
+
+    if (error) {
       toast({
-        title: "Reservation requested! 🎉",
-        description: `${experience.organizer} will confirm your spot via email within 30 minutes.`,
+        title: "Could not submit",
+        description: error.message,
+        variant: "destructive",
       });
-    }, 700);
+      return;
+    }
+
+    toast({
+      title: "Reservation requested! 🎉",
+      description: "Pending confirmation by the Inani Vibes team. Track it in Profile → My reservations.",
+    });
+    navigate("/profile?tab=reservations");
   };
 
   return (
@@ -323,6 +365,18 @@ const ExperienceDetail = () => {
                 />
               </div>
 
+              <div>
+                <Label htmlFor="notes" className="text-xs">Special requests (optional)</Label>
+                <Textarea
+                  id="notes"
+                  rows={2}
+                  maxLength={500}
+                  placeholder="Allergies, group ages, accessibility..."
+                  value={specialRequests}
+                  onChange={(e) => setSpecialRequests(e.target.value)}
+                />
+              </div>
+
               <div className="border-t border-border/60 pt-3 flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Total</span>
                 <span className="font-display text-2xl font-bold text-primary">{format(total)}</span>
@@ -333,7 +387,7 @@ const ExperienceDetail = () => {
                 disabled={submitting}
                 className="w-full gradient-neon text-primary-foreground font-ui uppercase tracking-widest neon-glow-pink hover:opacity-90"
               >
-                {submitting ? "Sending..." : "Request Reservation"}
+                {submitting ? "Sending..." : user ? "Request Reservation" : "Sign in to reserve"}
               </Button>
 
               <div className="text-xs text-muted-foreground space-y-1.5 pt-1">
@@ -341,10 +395,10 @@ const ExperienceDetail = () => {
                   <Phone className="w-3 h-3" /> {experience.contactPhone}
                 </p>
                 <p className="flex items-center gap-2">
-                  <Mail className="w-3 h-3" /> Confirmation by email within 30 min
+                  <Mail className="w-3 h-3" /> Confirmation within 30 min by the Inani Vibes team
                 </p>
                 <p className="opacity-80">
-                  Pay on arrival. Cash, card or bKash accepted.
+                  Online payment coming soon — instructions will follow on confirmation.
                 </p>
               </div>
             </form>
