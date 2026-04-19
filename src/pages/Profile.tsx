@@ -608,6 +608,8 @@ const NotifRow = ({
   </div>
 );
 
+type BookingFilter = "all" | "hotel" | "vehicle";
+
 const BookingList = ({
   bookings,
   loading,
@@ -625,20 +627,100 @@ const BookingList = ({
   onCancel?: (id: string) => void;
   showCancel?: boolean;
 }) => {
+  const [filter, setFilter] = useState<BookingFilter>("all");
+
+  const counts = useMemo(
+    () => ({
+      all: bookings.length,
+      hotel: bookings.filter((b) => (b.category ?? "hotel") === "hotel").length,
+      vehicle: bookings.filter((b) => b.category === "vehicle").length,
+    }),
+    [bookings]
+  );
+
+  const filtered = useMemo(
+    () =>
+      filter === "all"
+        ? bookings
+        : bookings.filter((b) => (b.category ?? "hotel") === filter),
+    [bookings, filter]
+  );
+
   if (loading)
     return (
       <div className="flex justify-center py-12">
         <Loader2 className="w-6 h-6 animate-spin text-primary" />
       </div>
     );
-  if (bookings.length === 0)
-    return (
-      <div className="text-center py-12 border border-dashed border-border rounded-xl">
-        <Calendar className="w-10 h-10 mx-auto text-muted-foreground mb-3" />
-        <p className="text-muted-foreground font-ui mb-4">{emptyText}</p>
-        {emptyCta}
+
+  const chips: { key: BookingFilter; label: string; Icon: React.ElementType }[] = [
+    { key: "all", label: "All", Icon: Calendar },
+    { key: "hotel", label: "Hotels", Icon: HotelIcon },
+    { key: "vehicle", label: "Vehicles", Icon: CarIcon },
+  ];
+
+  return (
+    <>
+      <div className="flex flex-wrap gap-2 mb-4">
+        {chips.map(({ key, label, Icon }) => {
+          const isActive = filter === key;
+          return (
+            <button
+              key={key}
+              onClick={() => setFilter(key)}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-ui uppercase tracking-widest border transition-colors ${
+                isActive
+                  ? "bg-primary/15 text-primary border-primary/40"
+                  : "border-border text-muted-foreground hover:text-foreground hover:border-primary/30"
+              }`}
+            >
+              <Icon className="w-3.5 h-3.5" />
+              {label}
+              <span
+                className={`ml-1 text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${
+                  isActive ? "bg-primary/20 text-primary" : "bg-muted text-muted-foreground"
+                }`}
+              >
+                {counts[key]}
+              </span>
+            </button>
+          );
+        })}
       </div>
-    );
+
+      {filtered.length === 0 ? (
+        <div className="text-center py-12 border border-dashed border-border rounded-xl">
+          <Calendar className="w-10 h-10 mx-auto text-muted-foreground mb-3" />
+          <p className="text-muted-foreground font-ui mb-4">
+            {filter === "all"
+              ? emptyText
+              : `No ${filter === "hotel" ? "hotel" : "vehicle"} bookings here.`}
+          </p>
+          {filter === "all" && emptyCta}
+        </div>
+      ) : (
+        <BookingListItems
+          bookings={filtered}
+          formatPrice={formatPrice}
+          onCancel={onCancel}
+          showCancel={showCancel}
+        />
+      )}
+    </>
+  );
+};
+
+const BookingListItems = ({
+  bookings,
+  formatPrice,
+  onCancel,
+  showCancel,
+}: {
+  bookings: Booking[];
+  formatPrice: (n: number) => string;
+  onCancel?: (id: string) => void;
+  showCancel?: boolean;
+}) => {
   return (
     <div className="grid gap-3">
       {bookings.map((b) => {
