@@ -88,7 +88,7 @@ const Experiences = () => {
               Experiences & Adventure Sports
             </h1>
             <p
-              className="mt-5 max-w-2xl text-base md:text-xl text-foreground/90"
+              className="mt-5 max-w-2xl text-base text-foreground/90 md:text-base"
               style={{ textShadow: "0 2px 12px hsl(0 0% 0% / 0.9)" }}
             >
               Beach raves, music festivals, parasailing, jet skis, scuba and more — curated
