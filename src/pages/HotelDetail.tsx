@@ -29,6 +29,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCurrency } from "@/hooks/useCurrency";
+import { useVibes } from "@/hooks/useVibes";
 import AuthModal from "@/components/AuthModal";
 
 const HotelDetail = () => {
@@ -37,6 +38,7 @@ const HotelDetail = () => {
   const hotel = hotels.find((h) => h.id === id);
   const { user } = useAuth();
   const { formatPrice } = useCurrency();
+  const { tier: vibesTier } = useVibes();
 
   const [activeImage, setActiveImage] = useState(0);
   const [authOpen, setAuthOpen] = useState(false);
@@ -76,9 +78,11 @@ const HotelDetail = () => {
 
   const nights = checkIn && checkOut ? differenceInDays(checkOut, checkIn) : 1;
   const totalPrice = selectedRoom ? selectedRoom.price * nights * roomCount : 0;
-  const taxes = Math.round(totalPrice * 0.15);
-  const platformFee = Math.round(totalPrice * 0.02);
-  const grandTotal = totalPrice + taxes + platformFee;
+  const vibesDiscount = Math.round(totalPrice * vibesTier.hotelDiscount);
+  const discountedSubtotal = totalPrice - vibesDiscount;
+  const taxes = Math.round(discountedSubtotal * 0.15);
+  const platformFee = Math.round(discountedSubtotal * 0.02);
+  const grandTotal = discountedSubtotal + taxes + platformFee;
 
 
   const handleBooking = async () => {
@@ -108,7 +112,7 @@ const HotelDetail = () => {
         guests,
         rooms: [{ name: selectedRoom.name, count: roomCount, price: selectedRoom.price }],
         subtotal: totalPrice,
-        tax_and_fees: taxes + platformFee,
+        tax_and_fees: taxes + platformFee - vibesDiscount,
         total: grandTotal,
         special_requests: specialRequests || null,
         user_id: user?.id ?? null,
