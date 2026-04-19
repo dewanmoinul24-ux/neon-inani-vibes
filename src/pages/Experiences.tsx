@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Calendar, Clock, MapPin, Sparkles, Ticket, Filter } from "lucide-react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import bannerImg from "@/assets/experiences-banner.jpg";
@@ -42,6 +43,9 @@ const Experiences = () => {
   const { formatPrice: format } = useCurrency();
   const [eventFilter, setEventFilter] = useState<"all" | ExperienceCategory>("all");
   const [sportFilter, setSportFilter] = useState<"all" | SportCategory>("all");
+  const { scrollY } = useScroll();
+  const bannerY = useTransform(scrollY, [0, 600], [0, 150]);
+  const bannerScale = useTransform(scrollY, [0, 600], [1, 1.15]);
 
   const upcomingEvents = useMemo(() => {
     const all = getUpcomingEvents();
@@ -60,13 +64,51 @@ const Experiences = () => {
       {/* ───────── Banner ───────── */}
       <section className="relative pt-16 md:pt-20">
         <div className="relative h-[55vh] md:h-[70vh] w-full overflow-hidden">
-          <img
+          <motion.img
             src={bannerImg}
             alt="Aerial drone shot of a neon beach party at Cox's Bazar Marine Drive"
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 w-full h-[115%] object-cover will-change-transform"
+            style={{ y: bannerY, scale: bannerScale }}
             width={1920}
             height={832}
           />
+
+          {/* Animated neon laser beams overlay */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none mix-blend-screen">
+            {[
+              { left: "12%", color: "hsl(330 100% 65%)", delay: 0, duration: 4.5, rotate: -18 },
+              { left: "28%", color: "hsl(180 100% 55%)", delay: 0.8, duration: 5.2, rotate: 12 },
+              { left: "46%", color: "hsl(280 100% 70%)", delay: 1.6, duration: 4.8, rotate: -8 },
+              { left: "62%", color: "hsl(330 100% 65%)", delay: 0.4, duration: 5.5, rotate: 16 },
+              { left: "78%", color: "hsl(180 100% 55%)", delay: 2.0, duration: 4.2, rotate: -14 },
+              { left: "90%", color: "hsl(25 100% 60%)", delay: 1.2, duration: 5.0, rotate: 6 },
+            ].map((b, i) => (
+              <motion.div
+                key={i}
+                className="absolute top-0 origin-top"
+                style={{
+                  left: b.left,
+                  width: "2px",
+                  height: "120%",
+                  rotate: `${b.rotate}deg`,
+                  background: `linear-gradient(to bottom, transparent 0%, ${b.color} 20%, ${b.color} 70%, transparent 100%)`,
+                  boxShadow: `0 0 20px ${b.color}, 0 0 40px ${b.color}`,
+                  filter: "blur(0.5px)",
+                }}
+                animate={{
+                  opacity: [0, 0.85, 0.4, 0.9, 0],
+                  scaleY: [0.6, 1, 0.95, 1, 0.6],
+                }}
+                transition={{
+                  duration: b.duration,
+                  delay: b.delay,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+            ))}
+          </div>
+
           <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-transparent to-background" />
           <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
 
@@ -123,7 +165,7 @@ const Experiences = () => {
               >
                 What's coming up
               </p>
-              <h2 className="font-display text-3xl md:text-5xl font-bold gradient-neon-text my-[6px]">
+              <h2 className="font-display text-[2.25rem] md:text-[3.375rem] font-bold gradient-neon-text my-[6px]">
                 Upcoming Events
               </h2>
             </div>
