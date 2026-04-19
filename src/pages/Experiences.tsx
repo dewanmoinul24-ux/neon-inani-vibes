@@ -224,7 +224,7 @@ const Experiences = () => {
                 <Link
                   key={e.id}
                   to={`/experiences/${e.id}`}
-                  className="group relative rounded-xl overflow-hidden h-[26rem] animate-slide-up glass neon-border-pink"
+                  className="group relative rounded-xl overflow-hidden h-[22rem] sm:h-[26rem] animate-slide-up glass neon-border-pink"
                   style={{ animationDelay: `${i * 100}ms` }}
                 >
                   <img
