@@ -31,6 +31,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useCurrency } from "@/hooks/useCurrency";
 import { useVibes } from "@/hooks/useVibes";
 import AuthModal from "@/components/AuthModal";
+import StickyBookingBar from "@/components/StickyBookingBar";
 
 const HotelDetail = () => {
   const { id } = useParams();
@@ -147,11 +148,11 @@ const HotelDetail = () => {
       <Navbar />
 
       {/* Back nav */}
-      <div className="pt-20 md:pt-24">
-        <div className="container mx-auto px-4">
+      <div className="pt-16 md:pt-24">
+        <div className="container mx-auto">
           <Link
             to="/hotels"
-            className="inline-flex items-center gap-1 text-muted-foreground hover:text-primary transition-colors font-ui text-sm uppercase tracking-widest mb-4"
+            className="inline-flex items-center gap-1 text-muted-foreground hover:text-primary transition-colors font-ui text-xs sm:text-sm uppercase tracking-widest mb-3 sm:mb-4"
           >
             <ChevronLeft size={16} /> Back to Hotels
           </Link>
@@ -160,9 +161,9 @@ const HotelDetail = () => {
 
       {/* Gallery */}
       <section className="pb-6">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3 rounded-xl overflow-hidden">
-            <div className="md:col-span-3 h-64 md:h-[420px] overflow-hidden relative">
+            <div className="md:col-span-3 h-56 sm:h-72 md:h-[420px] overflow-hidden relative">
               <img
                 src={hotel.gallery[activeImage]}
                 alt={hotel.name}
@@ -188,9 +189,9 @@ const HotelDetail = () => {
       </section>
 
       {/* Content */}
-      <section className="pb-20">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <section className="pb-12 lg:pb-20">
+        <div className="container mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
             {/* Left - Details */}
             <div className="lg:col-span-2 space-y-8">
               {/* Header */}
@@ -363,8 +364,8 @@ const HotelDetail = () => {
               </div>
             </div>
 
-            {/* Right - Booking Sidebar */}
-            <div className="lg:col-span-1">
+            {/* Right - Booking Sidebar (hidden on mobile, replaced by StickyBookingBar) */}
+            <div className="lg:col-span-1 hidden lg:block">
               <div className="sticky top-24 space-y-4">
                 {/* Price Card */}
                 <div className="glass-strong rounded-xl p-6 neon-border-pink">
@@ -531,8 +532,8 @@ const HotelDetail = () => {
 
       {/* Booking Modal */}
       {showBookingForm && selectedRoom && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4">
-          <div className="glass-strong rounded-xl p-6 md:p-8 w-full max-w-lg neon-border-pink animate-slide-up max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-background/80 backdrop-blur-sm sm:p-4">
+          <div className="glass-strong rounded-t-2xl sm:rounded-xl p-5 sm:p-6 md:p-8 w-full sm:max-w-lg neon-border-pink animate-slide-up max-h-[92vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <h2 className="font-display text-xl font-bold text-foreground">Complete Your Booking</h2>
               <button onClick={() => setShowBookingForm(false)} className="text-muted-foreground hover:text-foreground">
@@ -562,7 +563,8 @@ const HotelDetail = () => {
                   value={guestName}
                   onChange={(e) => setGuestName(e.target.value)}
                   placeholder="John Doe"
-                  className="bg-muted border-border font-body"
+                  autoComplete="name"
+                  className="bg-muted border-border font-body h-11"
                 />
               </div>
               <div>
@@ -571,10 +573,12 @@ const HotelDetail = () => {
                 </label>
                 <Input
                   type="email"
+                  inputMode="email"
+                  autoComplete="email"
                   value={guestEmail}
                   onChange={(e) => setGuestEmail(e.target.value)}
                   placeholder="john@example.com"
-                  className="bg-muted border-border font-body"
+                  className="bg-muted border-border font-body h-11"
                 />
               </div>
               <div>
@@ -583,10 +587,12 @@ const HotelDetail = () => {
                 </label>
                 <Input
                   type="tel"
+                  inputMode="tel"
+                  autoComplete="tel"
                   value={guestPhone}
                   onChange={(e) => setGuestPhone(e.target.value)}
                   placeholder="+880 1XXX-XXXXXX"
-                  className="bg-muted border-border font-body"
+                  className="bg-muted border-border font-body h-11"
                 />
               </div>
               <div>
@@ -620,6 +626,37 @@ const HotelDetail = () => {
             </p>
           </div>
         </div>
+      )}
+
+      {/* Mobile sticky CTA bar (hidden on desktop) */}
+      {!showBookingForm && (
+        <StickyBookingBar
+          priceLabel={
+            selectedRoom
+              ? `${formatPrice(grandTotal)}`
+              : `From ${formatPrice(hotel.price)}`
+          }
+          subLabel={
+            selectedRoom
+              ? `${selectedRoom.name} · ${nights} night${nights > 1 ? "s" : ""}`
+              : "per night"
+          }
+          ctaLabel={selectedRoom ? "Reserve" : "Select Room"}
+          onCta={() => {
+            if (!selectedRoom) {
+              const roomsEl = document.querySelector("h2.font-display + div .glass");
+              roomsEl?.scrollIntoView({ behavior: "smooth", block: "center" });
+              toast.info("Pick a room to continue");
+              return;
+            }
+            if (!user) {
+              toast.info("Please sign in to confirm your booking.");
+              setAuthOpen(true);
+              return;
+            }
+            setShowBookingForm(true);
+          }}
+        />
       )}
 
       <AuthModal open={authOpen} onOpenChange={setAuthOpen} />
