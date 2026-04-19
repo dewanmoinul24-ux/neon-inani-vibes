@@ -224,7 +224,7 @@ const Profile = () => {
               <span className="flex items-center gap-1"><Mail className="w-3.5 h-3.5" />{user.email}</span>
               <span>Member since {memberSince}</span>
               <Badge variant="outline" className="border-neon-cyan/40 text-neon-cyan">
-                Genius Level 1
+                Vibes Level 1
               </Badge>
             </div>
           </div>

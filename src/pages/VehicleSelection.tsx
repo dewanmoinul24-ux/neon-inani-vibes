@@ -71,7 +71,9 @@ const VehicleSelection = () => {
 
   const unitPrice = rentalType === "hourly" ? vehicle.pricePerHour : vehicle.pricePerDay;
   const duration = rentalType === "hourly" ? hours : days;
-  const total = unitPrice * duration;
+  const subtotal = unitPrice * duration;
+  const platformFee = Math.round(subtotal * 0.02);
+  const total = subtotal + platformFee;
   const advance = Math.ceil(total * (vehicle.bookingAdvance / 100));
 
   const openBooking = (unit: VehicleUnit) => {
@@ -486,6 +488,14 @@ const VehicleSelection = () => {
 
               <div className="pt-2 space-y-2">
                 <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Rental Subtotal</span>
+                  <span className="text-foreground">{formatPrice(subtotal)}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Platform fee (2%)</span>
+                  <span className="text-foreground">{formatPrice(platformFee)}</span>
+                </div>
+                <div className="flex justify-between text-sm border-t border-border pt-2">
                   <span className="text-muted-foreground">Rental Total</span>
                   <span className="text-foreground">{formatPrice(total)}</span>
                 </div>
