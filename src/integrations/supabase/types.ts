@@ -77,6 +77,75 @@ export type Database = {
         }
         Relationships: []
       }
+      experience_reservations: {
+        Row: {
+          category: string | null
+          created_at: string
+          experience_id: string
+          experience_title: string
+          experience_type: string
+          guest_email: string
+          guest_name: string
+          guest_phone: string
+          id: string
+          location: string | null
+          organizer: string | null
+          preferred_date: string
+          preferred_time: string | null
+          quantity: number
+          special_requests: string | null
+          status: string
+          total_price: number
+          unit_price: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          experience_id: string
+          experience_title: string
+          experience_type: string
+          guest_email: string
+          guest_name: string
+          guest_phone: string
+          id?: string
+          location?: string | null
+          organizer?: string | null
+          preferred_date: string
+          preferred_time?: string | null
+          quantity?: number
+          special_requests?: string | null
+          status?: string
+          total_price: number
+          unit_price: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          experience_id?: string
+          experience_title?: string
+          experience_type?: string
+          guest_email?: string
+          guest_name?: string
+          guest_phone?: string
+          id?: string
+          location?: string | null
+          organizer?: string | null
+          preferred_date?: string
+          preferred_time?: string | null
+          quantity?: number
+          special_requests?: string | null
+          status?: string
+          total_price?: number
+          unit_price?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
