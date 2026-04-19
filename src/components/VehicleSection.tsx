@@ -32,34 +32,34 @@ const vehicles = [
 const VehicleSection = () => {
   const { formatPrice } = useCurrency();
   return (
-    <section id="vehicles" className="py-20 md:py-32 relative">
-      <div className="absolute bottom-0 left-0 w-80 h-80 bg-neon-blue/5 rounded-full blur-[120px]" />
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <p className="font-ui text-sm uppercase tracking-[0.3em] text-neon-pink mb-3 neon-text-pink">
+    <section id="vehicles" className="py-14 sm:py-20 md:py-32 relative overflow-hidden">
+      <div className="pointer-events-none absolute bottom-0 left-0 w-64 sm:w-80 h-64 sm:h-80 bg-neon-blue/5 rounded-full blur-[80px] sm:blur-[120px]" />
+      <div className="container mx-auto">
+        <div className="text-center mb-10 sm:mb-12 md:mb-16">
+          <p className="font-ui text-xs sm:text-sm uppercase tracking-[0.3em] text-neon-pink mb-3 neon-text-pink">
             Ride the coast
           </p>
-          <h2 className="font-display text-2xl md:text-4xl font-bold gradient-neon-text">
+          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold gradient-neon-text">
             Vehicle Rental
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 sm:gap-6 md:gap-8 max-w-4xl mx-auto">
           {vehicles.map((v, i) => {
             const Icon = v.icon;
             return (
               <div
                 key={v.name}
-                className="glass rounded-xl p-6 text-center neon-border-blue transition-all duration-500 hover:neon-glow-blue hover:scale-[1.03] animate-slide-up"
+                className="glass rounded-xl p-5 sm:p-6 text-center neon-border-blue transition-all duration-500 hover:neon-glow-blue hover:scale-[1.03] animate-slide-up"
                 style={{ animationDelay: `${i * 150}ms` }}
               >
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full glass flex items-center justify-center">
-                  <Icon size={28} className={`text-${v.color}`} />
+                <div className="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 rounded-full glass flex items-center justify-center">
+                  <Icon size={26} className={`text-${v.color}`} />
                 </div>
-                <h3 className="font-display text-lg font-semibold text-foreground mb-2">
+                <h3 className="font-display text-base sm:text-lg font-semibold text-foreground mb-2">
                   {v.name}
                 </h3>
-                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-ui uppercase glass text-neon-cyan border border-neon-cyan/20 mb-4">
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] sm:text-xs font-ui uppercase glass text-neon-cyan border border-neon-cyan/20 mb-4">
                   <User size={12} /> {v.driver}
                 </span>
                 <div className="space-y-2 mt-4">
@@ -94,10 +94,10 @@ const VehicleSection = () => {
           })}
         </div>
 
-        <div className="text-center mt-10">
+        <div className="text-center mt-8 sm:mt-10">
           <Link
             to="/vehicles"
-            className="inline-flex items-center gap-2 px-8 py-3 rounded-lg font-ui text-sm uppercase tracking-widest gradient-neon text-primary-foreground neon-glow-pink transition-all duration-300 hover:scale-105"
+            className="inline-flex items-center gap-2 px-7 sm:px-8 py-3 rounded-lg font-ui text-sm uppercase tracking-widest gradient-neon text-primary-foreground neon-glow-pink transition-all duration-300 hover:scale-105"
           >
             View All Vehicles <ArrowRight size={16} />
           </Link>

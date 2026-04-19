@@ -23,27 +23,27 @@ const testimonials = [
 
 const TestimonialsSection = () => {
   return (
-    <section id="about" className="py-20 md:py-32 relative">
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-neon-pink/5 rounded-full blur-[150px]" />
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <p className="font-ui text-sm uppercase tracking-[0.3em] text-neon-cyan mb-3 neon-text-cyan">
+    <section id="about" className="py-14 sm:py-20 md:py-32 relative overflow-hidden">
+      <div className="pointer-events-none absolute bottom-0 right-1/4 w-72 sm:w-96 h-72 sm:h-96 bg-neon-pink/5 rounded-full blur-[100px] sm:blur-[150px]" />
+      <div className="container mx-auto">
+        <div className="text-center mb-10 sm:mb-12 md:mb-16">
+          <p className="font-ui text-xs sm:text-sm uppercase tracking-[0.3em] text-neon-cyan mb-3 neon-text-cyan">
             Real stories
           </p>
-          <h2 className="font-display text-2xl md:text-4xl font-bold gradient-neon-text">
+          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold gradient-neon-text">
             What Travelers Say
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 md:gap-8">
           {testimonials.map((t, i) => (
             <div
               key={t.name}
-              className="glass rounded-xl p-6 neon-border-blue transition-all duration-500 hover:neon-glow-blue animate-slide-up"
+              className="glass rounded-xl p-5 sm:p-6 neon-border-blue transition-all duration-500 hover:neon-glow-blue animate-slide-up"
               style={{ animationDelay: `${i * 150}ms` }}
             >
-              <Quote size={24} className="text-primary/40 mb-4" />
-              <p className="text-muted-foreground leading-relaxed mb-6 text-sm">
+              <Quote size={24} className="text-primary/40 mb-3 sm:mb-4" />
+              <p className="text-muted-foreground leading-relaxed mb-5 sm:mb-6 text-sm">
                 "{t.text}"
               </p>
               <div className="flex items-center gap-1 mb-3">
