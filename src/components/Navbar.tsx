@@ -121,10 +121,10 @@ const Navbar = () => {
                     <User className="w-4 h-4 mr-2" /> Profile
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate("/profile?tab=upcoming")} className="cursor-pointer">
-                    <History className="w-4 h-4 mr-2" /> My Bookings
+                    <History className="w-4 h-4 mr-2" /> My Trips
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate("/profile?tab=settings")} className="cursor-pointer">
-                    <Settings className="w-4 h-4 mr-2" /> Settings
+                  <DropdownMenuItem onClick={() => navigate("/profile?tab=preferences")} className="cursor-pointer">
+                    <Settings className="w-4 h-4 mr-2" /> Preferences
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-destructive focus:text-destructive">
