@@ -239,8 +239,12 @@ const VehicleSelection = () => {
             >
               −
             </button>
-            <span className="font-display text-base w-20 text-center">
-              {rentalType === "hourly" ? `${hours} hrs` : `${days} day${days > 1 ? "s" : ""}`}
+            <span className="font-display text-base w-32 text-center">
+              {rentalType === "hourly"
+                ? `${hours} hr${hours > 1 ? "s" : ""}`
+                : days === 1
+                ? "Whole Day (8 hrs)"
+                : `${days} days (${days * 8} hrs)`}
             </span>
             <button
               onClick={() =>
@@ -440,8 +444,12 @@ const VehicleSelection = () => {
               {selectedUnit.modelName} • {selectedUnit.registrationNo}
             </p>
             <p className="text-xs text-muted-foreground font-ui mb-5">
-              {rentalType === "hourly" ? `${hours} hour(s)` : `${days} day(s)`} —{" "}
-              <span className="text-foreground">Total {formatPrice(total)}</span> •{" "}
+              {rentalType === "hourly"
+                ? `${hours} hour${hours > 1 ? "s" : ""}`
+                : days === 1
+                ? "Whole Day · 8 hours"
+                : `${days} days · ${days * 8} hours`}{" "}
+              — <span className="text-foreground">Total {formatPrice(total)}</span> •{" "}
               <span className="text-neon-cyan">Advance {formatPrice(advance)}</span>
             </p>
 
@@ -502,7 +510,7 @@ const VehicleSelection = () => {
               </div>
               <div>
                 <label className="text-xs font-ui text-muted-foreground uppercase tracking-wider mb-1 block">
-                  Pickup Date *
+                  Pickup Date & Time *
                 </label>
                 <div className="relative">
                   <CalendarDays
@@ -510,13 +518,21 @@ const VehicleSelection = () => {
                     className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
                   />
                   <input
-                    type="date"
-                    value={pickupDate}
-                    onChange={(e) => setPickupDate(e.target.value)}
-                    min={new Date().toISOString().split("T")[0]}
+                    type="datetime-local"
+                    required
+                    value={pickupDateTime}
+                    onChange={(e) => setPickupDateTime(e.target.value)}
+                    min={new Date().toISOString().slice(0, 16)}
                     className="w-full pl-9 pr-3 py-2.5 rounded-lg glass border border-border text-sm text-foreground focus:outline-none focus:border-primary bg-transparent"
                   />
                 </div>
+                <p className="text-[10px] text-muted-foreground mt-1 font-ui">
+                  {rentalType === "hourly"
+                    ? `Drop-off: ${hours}h after pickup`
+                    : days === 1
+                    ? "Whole Day = 8 hours from pickup time"
+                    : `${days} days = ${days * 8} hours from pickup time`}
+                </p>
               </div>
 
               {vehicle.requiresLicense && (
