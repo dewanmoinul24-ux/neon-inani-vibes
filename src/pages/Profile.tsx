@@ -502,7 +502,22 @@ const Profile = () => {
               </SectionShell>
             )}
 
-            {active === "history" && (
+            {active === "reservations" && (
+              <SectionShell
+                title="My reservations"
+                description="Your event tickets and adventure session requests. The Inani Vibes & event teams will confirm shortly."
+              >
+                <ReservationList
+                  reservations={reservations}
+                  loading={reservationsLoading}
+                  formatPrice={formatPrice}
+                  onCancel={handleCancelReservation}
+                  onBrowse={() => navigate("/experiences")}
+                />
+              </SectionShell>
+            )}
+
+
               <SectionShell title="Trip history" description="Past and cancelled bookings.">
                 <BookingList
                   bookings={history}
