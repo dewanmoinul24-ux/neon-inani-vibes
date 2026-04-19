@@ -127,6 +127,8 @@ const Profile = () => {
   const [saving, setSaving] = useState(false);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [bookingsLoading, setBookingsLoading] = useState(true);
+  const [reservations, setReservations] = useState<ExperienceReservation[]>([]);
+  const [reservationsLoading, setReservationsLoading] = useState(true);
 
   // Notification prefs (local-only for now)
   const [notif, setNotif] = useState({
