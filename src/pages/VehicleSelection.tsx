@@ -29,7 +29,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useVibes } from "@/hooks/useVibes";
 import { supabase } from "@/integrations/supabase/client";
 import AuthModal from "@/components/AuthModal";
-import { addDays, addHours, format } from "date-fns";
+import { addHours, format } from "date-fns";
 
 const accentTextMap: Record<string, string> = {
   pink: "text-neon-pink",
