@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useParams, Navigate } from "react-router-dom";
 import {
   ChevronLeft,
@@ -50,7 +50,7 @@ const accentBorderMap: Record<string, string> = {
 const VehicleSelection = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
   const { formatPrice } = useCurrency();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const { tier: vibesTier } = useVibes();
   const vehicle = useMemo(() => vehicles.find((v) => v.id === categoryId), [categoryId]);
 
@@ -66,9 +66,17 @@ const VehicleSelection = () => {
   const [guestName, setGuestName] = useState("");
   const [guestPhone, setGuestPhone] = useState("");
   const [guestEmail, setGuestEmail] = useState("");
-  const [pickupDate, setPickupDate] = useState("");
+  const [pickupDateTime, setPickupDateTime] = useState(""); // datetime-local string
   const [licenseNo, setLicenseNo] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Pre-fill from logged-in user's profile.
+  useEffect(() => {
+    if (profile?.display_name && !guestName) setGuestName(profile.display_name);
+    if (user?.email && !guestEmail) setGuestEmail(user.email);
+    if (profile?.phone && !guestPhone) setGuestPhone(profile.phone);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, profile]);
 
   if (!vehicle) {
     return <Navigate to="/vehicles" replace />;
@@ -98,8 +106,12 @@ const VehicleSelection = () => {
 
   const handleConfirm = async () => {
     if (!selectedUnit) return;
-    if (!guestName || !guestPhone || !pickupDate) {
-      toast.error("Please fill in all required fields");
+    if (!guestName || !guestPhone) {
+      toast.error("Please fill in your name and phone number");
+      return;
+    }
+    if (!pickupDateTime) {
+      toast.error("Pickup date & time is required");
       return;
     }
     if (vehicle.requiresLicense && !licenseNo) {
@@ -108,9 +120,10 @@ const VehicleSelection = () => {
     }
     setIsSubmitting(true);
 
-    const pickup = new Date(pickupDate);
+    const pickup = new Date(pickupDateTime);
+    // Daily rentals = 8 hours per "day" from pickup time (per the policy on /vehicles).
     const dropoff =
-      rentalType === "hourly" ? addHours(pickup, hours) : addDays(pickup, days);
+      rentalType === "hourly" ? addHours(pickup, hours) : addHours(pickup, days * 8);
 
     const { error } = await supabase.from("bookings").insert({
       category: "vehicle",
@@ -152,10 +165,7 @@ const VehicleSelection = () => {
       description: `${selectedUnit.modelName} — Advance Due: ${formatPrice(advance)}`,
     });
     setSelectedUnit(null);
-    setGuestName("");
-    setGuestPhone("");
-    setGuestEmail("");
-    setPickupDate("");
+    setPickupDateTime("");
     setLicenseNo("");
   };
 
