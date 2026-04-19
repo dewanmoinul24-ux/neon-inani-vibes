@@ -65,7 +65,7 @@ const Experiences = () => {
 
       {/* ───────── Banner ───────── */}
       <section className="relative pt-16 md:pt-20">
-        <div className="relative h-[55vh] md:h-[70vh] w-full overflow-hidden">
+        <div className="relative h-[420px] sm:h-[55vh] md:h-[70vh] w-full overflow-hidden">
           <motion.img
             src={bannerImg}
             alt="Aerial drone shot of a neon beach party at Cox's Bazar Marine Drive"
@@ -135,15 +135,15 @@ const Experiences = () => {
           <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-transparent to-background" />
           <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
 
-          <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-end pb-12 md:pb-20 shadow-inner">
+          <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-end pb-8 sm:pb-12 md:pb-20 shadow-inner">
             <p
-              className="font-ui text-xs md:text-sm uppercase tracking-[0.4em] text-neon-cyan mb-3"
+              className="font-ui text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.4em] text-neon-cyan mb-2 sm:mb-3"
               style={{ textShadow: "0 0 14px hsl(180 100% 55% / 0.95), 0 2px 8px hsl(0 0% 0% / 0.85)" }}
             >
               Marine Drive · After Dark
             </p>
             <h1
-              className="font-display text-5xl md:text-7xl font-bold gradient-neon-text max-w-4xl leading-[1.05] lg:text-6xl"
+              className="font-display text-[2.25rem] sm:text-5xl md:text-7xl lg:text-6xl font-bold gradient-neon-text max-w-4xl leading-[1.05]"
               style={{
                 filter:
                   "drop-shadow(0 4px 18px hsl(0 0% 0% / 0.95)) drop-shadow(0 0 24px hsl(330 100% 65% / 0.55)) drop-shadow(0 8px 24px hsl(0 0% 0% / 0.85))",
@@ -152,22 +152,22 @@ const Experiences = () => {
               Experiences & Adventure Sports
             </h1>
             <p
-              className="mt-5 max-w-2xl text-base text-foreground/90 md:text-base"
+              className="mt-3 sm:mt-5 max-w-2xl text-sm sm:text-base text-foreground/90"
               style={{ textShadow: "0 2px 12px hsl(0 0% 0% / 0.9)" }}
             >
               Beach raves, music festivals, parasailing, jet skis, scuba and more — curated
               along the world's longest beach. Pick a vibe, book your spot.
             </p>
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-4 sm:mt-6 flex flex-wrap gap-2 sm:gap-3">
               <a
                 href="#upcoming"
-                className="px-5 py-2.5 rounded-lg font-ui text-xs uppercase tracking-widest gradient-neon text-primary-foreground neon-glow-pink hover:scale-105 transition-transform"
+                className="px-4 sm:px-5 py-2.5 rounded-lg font-ui text-[11px] sm:text-xs uppercase tracking-widest gradient-neon text-primary-foreground neon-glow-pink hover:scale-105 transition-transform"
               >
                 Upcoming Events
               </a>
               <a
                 href="#sports"
-                className="px-5 py-2.5 rounded-lg font-ui text-xs uppercase tracking-widest glass neon-border-cyan text-neon-cyan hover:scale-105 transition-transform"
+                className="px-4 sm:px-5 py-2.5 rounded-lg font-ui text-[11px] sm:text-xs uppercase tracking-widest glass neon-border-cyan text-neon-cyan hover:scale-105 transition-transform"
               >
                 Adventure Sports
               </a>
@@ -183,28 +183,28 @@ const Experiences = () => {
       <FeaturedTonight />
 
       {/* ───────── Upcoming Events ───────── */}
-      <section id="upcoming" className="py-16 md:py-24 relative">
+      <section id="upcoming" className="py-12 sm:py-16 md:py-24 relative">
         <div className="absolute top-1/4 left-0 w-96 h-96 bg-neon-pink/5 rounded-full blur-[150px]" />
         <div className="container mx-auto px-4 relative">
-          <div className="flex items-end justify-between flex-wrap gap-4 mb-8">
+          <div className="flex items-end justify-between flex-wrap gap-3 sm:gap-4 mb-6 sm:mb-8">
             <div>
               <p
-                className="font-ui text-xs uppercase tracking-[0.3em] text-neon-orange mb-2"
+                className="font-ui text-[10px] sm:text-xs uppercase tracking-[0.3em] text-neon-orange mb-1.5 sm:mb-2"
                 style={{ textShadow: "0 0 10px hsl(25 100% 55% / 0.8)" }}
               >
                 What's coming up
               </p>
-              <h2 className="font-display text-[2.25rem] md:text-[3.375rem] font-bold gradient-neon-text mt-[6px] mb-[14px]">
+              <h2 className="font-display text-3xl sm:text-[2.25rem] md:text-[3.375rem] font-bold gradient-neon-text mt-1 mb-2">
                 Upcoming Events
               </h2>
             </div>
-            <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
               <Filter className="w-4 h-4 text-muted-foreground" />
               {eventCategories.map((c) => (
                 <button
                   key={c.value}
                   onClick={() => setEventFilter(c.value)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-ui uppercase tracking-wider border transition-all ${
+                  className={`px-2.5 sm:px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-ui uppercase tracking-wider border transition-all ${
                     eventFilter === c.value
                       ? "bg-primary text-primary-foreground border-primary"
                       : "border-border/60 text-muted-foreground hover:border-primary/60 hover:text-primary"
@@ -219,12 +219,12 @@ const Experiences = () => {
           {upcomingEvents.length === 0 ? (
             <p className="text-muted-foreground">No upcoming events in this category yet.</p>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8">
               {upcomingEvents.map((e, i) => (
                 <Link
                   key={e.id}
                   to={`/experiences/${e.id}`}
-                  className="group relative rounded-xl overflow-hidden h-[26rem] animate-slide-up glass neon-border-pink"
+                  className="group relative rounded-xl overflow-hidden h-[22rem] sm:h-[26rem] animate-slide-up glass neon-border-pink"
                   style={{ animationDelay: `${i * 100}ms` }}
                 >
                   <img
