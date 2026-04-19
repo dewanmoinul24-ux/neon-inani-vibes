@@ -56,6 +56,7 @@ interface Booking {
   total: number;
   status: string;
   created_at: string;
+  category?: string;
 }
 
 type SectionKey =
