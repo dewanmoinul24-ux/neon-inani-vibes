@@ -27,11 +27,13 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const HotelDetail = () => {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const hotel = hotels.find((h) => h.id === id);
+  const { user } = useAuth();
 
   const [activeImage, setActiveImage] = useState(0);
   const [checkIn, setCheckIn] = useState<Date | undefined>(
@@ -103,6 +105,7 @@ const HotelDetail = () => {
         tax_and_fees: taxes,
         total: grandTotal,
         special_requests: specialRequests || null,
+        user_id: user?.id ?? null,
       });
 
       if (error) throw error;
