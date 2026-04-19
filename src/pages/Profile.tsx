@@ -164,8 +164,23 @@ const Profile = () => {
     setBookingsLoading(false);
   };
 
+  const loadReservations = async () => {
+    if (!user) return;
+    setReservationsLoading(true);
+    const { data } = await supabase
+      .from("experience_reservations")
+      .select("*")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false });
+    setReservations((data as ExperienceReservation[]) || []);
+    setReservationsLoading(false);
+  };
+
   useEffect(() => {
-    if (user) loadBookings();
+    if (user) {
+      loadBookings();
+      loadReservations();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
