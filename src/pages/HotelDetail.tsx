@@ -77,7 +77,8 @@ const HotelDetail = () => {
   const nights = checkIn && checkOut ? differenceInDays(checkOut, checkIn) : 1;
   const totalPrice = selectedRoom ? selectedRoom.price * nights * roomCount : 0;
   const taxes = Math.round(totalPrice * 0.15);
-  const grandTotal = totalPrice + taxes;
+  const platformFee = Math.round(totalPrice * 0.02);
+  const grandTotal = totalPrice + taxes + platformFee;
 
 
   const handleBooking = async () => {
@@ -106,7 +107,7 @@ const HotelDetail = () => {
         guests,
         rooms: [{ name: selectedRoom.name, count: roomCount, price: selectedRoom.price }],
         subtotal: totalPrice,
-        tax_and_fees: taxes,
+        tax_and_fees: taxes + platformFee,
         total: grandTotal,
         special_requests: specialRequests || null,
         user_id: user?.id ?? null,
@@ -461,6 +462,10 @@ const HotelDetail = () => {
                       <div className="flex justify-between text-sm font-body">
                         <span className="text-muted-foreground">Taxes & fees (15%)</span>
                         <span className="text-foreground">{formatPrice(taxes)}</span>
+                      </div>
+                      <div className="flex justify-between text-sm font-body">
+                        <span className="text-muted-foreground">Platform fee (2%)</span>
+                        <span className="text-foreground">{formatPrice(platformFee)}</span>
                       </div>
                       <div className="flex justify-between pt-2 border-t border-border">
                         <span className="font-display text-base font-bold text-foreground">Total</span>

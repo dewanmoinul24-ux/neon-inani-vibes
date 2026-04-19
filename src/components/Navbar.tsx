@@ -121,10 +121,10 @@ const Navbar = () => {
                     <User className="w-4 h-4 mr-2" /> Profile
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate("/profile?tab=upcoming")} className="cursor-pointer">
-                    <History className="w-4 h-4 mr-2" /> My Bookings
+                    <History className="w-4 h-4 mr-2" /> My Trips
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate("/profile?tab=settings")} className="cursor-pointer">
-                    <Settings className="w-4 h-4 mr-2" /> Settings
+                  <DropdownMenuItem onClick={() => navigate("/profile?tab=preferences")} className="cursor-pointer">
+                    <Settings className="w-4 h-4 mr-2" /> Preferences
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-destructive focus:text-destructive">
@@ -143,6 +143,7 @@ const Navbar = () => {
 
             <Link
               to="/hotels"
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
               className="ml-1 px-5 py-2 rounded-lg font-ui text-sm uppercase tracking-widest gradient-neon text-primary-foreground neon-glow-pink transition-all duration-300 hover:scale-105"
             >
               Book Now
@@ -205,7 +206,7 @@ const Navbar = () => {
 
               <Link
                 to="/hotels"
-                onClick={() => setOpen(false)}
+                onClick={() => { setOpen(false); window.scrollTo({ top: 0, behavior: "smooth" }); }}
                 className="mt-2 px-5 py-3 rounded-lg font-ui text-center uppercase tracking-widest gradient-neon text-primary-foreground"
               >
                 Book Now
