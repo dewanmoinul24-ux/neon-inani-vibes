@@ -40,6 +40,10 @@ const HotelDetail = () => {
   const { formatPrice } = useCurrency();
   const { tier: vibesTier } = useVibes();
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [id]);
+
   const [activeImage, setActiveImage] = useState(0);
   const [authOpen, setAuthOpen] = useState(false);
   const [checkIn, setCheckIn] = useState<Date | undefined>(
