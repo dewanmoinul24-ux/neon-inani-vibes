@@ -154,6 +154,9 @@ const Experiences = () => {
         </div>
       </section>
 
+      {/* ───────── Countdown Marquee ───────── */}
+      <EventCountdownMarquee />
+
       {/* ───────── Upcoming Events ───────── */}
       <section id="upcoming" className="py-16 md:py-24 relative">
         <div className="absolute top-1/4 left-0 w-96 h-96 bg-neon-pink/5 rounded-full blur-[150px]" />
@@ -166,7 +169,7 @@ const Experiences = () => {
               >
                 What's coming up
               </p>
-              <h2 className="font-display text-[2.25rem] md:text-[3.375rem] font-bold gradient-neon-text my-[6px]">
+              <h2 className="font-display text-[2.25rem] md:text-[3.375rem] font-bold gradient-neon-text mt-[6px] mb-[14px]">
                 Upcoming Events
               </h2>
             </div>
