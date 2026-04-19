@@ -39,7 +39,7 @@ const formatEventDate = (iso: string) => {
 };
 
 const Experiences = () => {
-  const { format } = useCurrency();
+  const { formatPrice: format } = useCurrency();
   const [eventFilter, setEventFilter] = useState<"all" | ExperienceCategory>("all");
   const [sportFilter, setSportFilter] = useState<"all" | SportCategory>("all");
 

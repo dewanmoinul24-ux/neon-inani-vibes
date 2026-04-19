@@ -12,7 +12,7 @@ const formatEventDate = (iso: string) =>
   });
 
 const ExperienceSection = () => {
-  const { format } = useCurrency();
+  const { formatPrice: format } = useCurrency();
   const featured = getUpcomingEvents().slice(0, 3);
 
   return (

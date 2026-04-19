@@ -38,7 +38,7 @@ const formatEventDate = (iso: string) =>
 const ExperienceDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { format } = useCurrency();
+  const { formatPrice: format } = useCurrency();
   const { user, profile } = useAuth();
 
   const experience = useMemo(() => (id ? getExperienceById(id) : undefined), [id]);
