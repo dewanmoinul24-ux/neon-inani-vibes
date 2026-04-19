@@ -16,6 +16,7 @@ export type Database = {
     Tables: {
       bookings: {
         Row: {
+          category: string
           check_in: string
           check_out: string
           created_at: string
@@ -35,6 +36,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          category?: string
           check_in: string
           check_out: string
           created_at?: string
@@ -54,6 +56,7 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          category?: string
           check_in?: string
           check_out?: string
           created_at?: string
