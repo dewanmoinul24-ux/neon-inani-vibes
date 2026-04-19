@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, User, LogOut, Settings, History, ChevronDown, Wallet, Sparkles } from "lucide-react";
+import { Menu, X, User, LogOut, Settings, History, ChevronDown, Wallet, Sparkles, Shield } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { useAuth } from "@/contexts/AuthContext";
 import { useVibes } from "@/hooks/useVibes";
+import { useIsSuperAdmin } from "@/hooks/useUserRole";
 import AuthModal from "@/components/AuthModal";
 import {
   DropdownMenu,
@@ -37,6 +38,7 @@ const Navbar = () => {
   const [authOpen, setAuthOpen] = useState(false);
   const { user, profile, signOut, currency, setCurrency } = useAuth();
   const { tier: vibesTier, completedTrips } = useVibes();
+  const { isSuperAdmin } = useIsSuperAdmin();
   const navigate = useNavigate();
   const tierClass = tierAccentClass[vibesTier.accent] ?? tierAccentClass.cyan;
 
@@ -162,6 +164,14 @@ const Navbar = () => {
                   <DropdownMenuItem onClick={() => navigate("/profile?tab=preferences")} className="cursor-pointer">
                     <Settings className="w-4 h-4 mr-2" /> Preferences
                   </DropdownMenuItem>
+                  {isSuperAdmin && (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={() => navigate("/admin")} className="cursor-pointer text-neon-pink focus:text-neon-pink">
+                        <Shield className="w-4 h-4 mr-2" /> Admin Panel
+                      </DropdownMenuItem>
+                    </>
+                  )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-destructive focus:text-destructive">
                     <LogOut className="w-4 h-4 mr-2" /> Sign Out
