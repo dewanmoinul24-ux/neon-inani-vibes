@@ -16,12 +16,14 @@ import {
   CalendarDays,
   User,
   ArrowRight,
+  Sparkles,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { vehicles } from "@/data/vehicles";
 import vehiclesBanner from "@/assets/vehicles-banner.jpg";
 import { useCurrency } from "@/hooks/useCurrency";
+import { useVibes } from "@/hooks/useVibes";
 
 const iconMap: Record<string, React.ElementType> = {
   Sedan: Car,
@@ -50,6 +52,8 @@ const accentTextMap: Record<string, string> = {
 const Vehicles = () => {
   const navigate = useNavigate();
   const { formatPrice } = useCurrency();
+  const { tier: vibesTier } = useVibes();
+  const vehicleDiscountPct = Math.round(vibesTier.vehicleDiscount * 100);
   const [rentalType, setRentalType] = useState<"hourly" | "daily">("daily");
 
   return (
@@ -128,9 +132,17 @@ const Vehicles = () => {
             return (
               <div
                 key={v.id}
-                className={`glass rounded-xl overflow-hidden ${accentMap[v.accentColor]} transition-all duration-500 hover:scale-[1.02] animate-slide-up flex flex-col`}
+                className={`glass rounded-xl overflow-hidden ${accentMap[v.accentColor]} transition-all duration-500 hover:scale-[1.02] animate-slide-up flex flex-col relative`}
                 style={{ animationDelay: `${i * 100}ms` }}
               >
+                {vehicleDiscountPct > 0 && (
+                  <div className="absolute top-3 right-3 z-10 rounded-full px-2.5 py-1 flex items-center gap-1 gradient-neon text-primary-foreground neon-glow-pink">
+                    <Sparkles size={12} />
+                    <span className="font-ui text-[10px] uppercase tracking-wider font-bold">
+                      Vibes perk: {vehicleDiscountPct}% off
+                    </span>
+                  </div>
+                )}
                 {/* Card Header */}
                 <div className="p-6 pb-4 flex-1">
                   <div className="flex items-start justify-between mb-4">

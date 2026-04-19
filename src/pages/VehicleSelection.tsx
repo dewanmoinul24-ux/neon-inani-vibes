@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useParams, Navigate } from "react-router-dom";
 import {
   ChevronLeft,
@@ -29,7 +29,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useVibes } from "@/hooks/useVibes";
 import { supabase } from "@/integrations/supabase/client";
 import AuthModal from "@/components/AuthModal";
-import { addDays, addHours, format } from "date-fns";
+import { addHours, format } from "date-fns";
 
 const accentTextMap: Record<string, string> = {
   pink: "text-neon-pink",
@@ -50,7 +50,7 @@ const accentBorderMap: Record<string, string> = {
 const VehicleSelection = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
   const { formatPrice } = useCurrency();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const { tier: vibesTier } = useVibes();
   const vehicle = useMemo(() => vehicles.find((v) => v.id === categoryId), [categoryId]);
 
@@ -66,9 +66,17 @@ const VehicleSelection = () => {
   const [guestName, setGuestName] = useState("");
   const [guestPhone, setGuestPhone] = useState("");
   const [guestEmail, setGuestEmail] = useState("");
-  const [pickupDate, setPickupDate] = useState("");
+  const [pickupDateTime, setPickupDateTime] = useState(""); // datetime-local string
   const [licenseNo, setLicenseNo] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Pre-fill from logged-in user's profile.
+  useEffect(() => {
+    if (profile?.display_name && !guestName) setGuestName(profile.display_name);
+    if (user?.email && !guestEmail) setGuestEmail(user.email);
+    if (profile?.phone && !guestPhone) setGuestPhone(profile.phone);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, profile]);
 
   if (!vehicle) {
     return <Navigate to="/vehicles" replace />;
@@ -98,8 +106,12 @@ const VehicleSelection = () => {
 
   const handleConfirm = async () => {
     if (!selectedUnit) return;
-    if (!guestName || !guestPhone || !pickupDate) {
-      toast.error("Please fill in all required fields");
+    if (!guestName || !guestPhone) {
+      toast.error("Please fill in your name and phone number");
+      return;
+    }
+    if (!pickupDateTime) {
+      toast.error("Pickup date & time is required");
       return;
     }
     if (vehicle.requiresLicense && !licenseNo) {
@@ -108,9 +120,10 @@ const VehicleSelection = () => {
     }
     setIsSubmitting(true);
 
-    const pickup = new Date(pickupDate);
+    const pickup = new Date(pickupDateTime);
+    // Daily rentals = 8 hours per "day" from pickup time (per the policy on /vehicles).
     const dropoff =
-      rentalType === "hourly" ? addHours(pickup, hours) : addDays(pickup, days);
+      rentalType === "hourly" ? addHours(pickup, hours) : addHours(pickup, days * 8);
 
     const { error } = await supabase.from("bookings").insert({
       category: "vehicle",
@@ -152,10 +165,7 @@ const VehicleSelection = () => {
       description: `${selectedUnit.modelName} — Advance Due: ${formatPrice(advance)}`,
     });
     setSelectedUnit(null);
-    setGuestName("");
-    setGuestPhone("");
-    setGuestEmail("");
-    setPickupDate("");
+    setPickupDateTime("");
     setLicenseNo("");
   };
 
@@ -229,8 +239,12 @@ const VehicleSelection = () => {
             >
               −
             </button>
-            <span className="font-display text-base w-20 text-center">
-              {rentalType === "hourly" ? `${hours} hrs` : `${days} day${days > 1 ? "s" : ""}`}
+            <span className="font-display text-base w-32 text-center">
+              {rentalType === "hourly"
+                ? `${hours} hr${hours > 1 ? "s" : ""}`
+                : days === 1
+                ? "Whole Day (8 hrs)"
+                : `${days} days (${days * 8} hrs)`}
             </span>
             <button
               onClick={() =>
@@ -430,8 +444,12 @@ const VehicleSelection = () => {
               {selectedUnit.modelName} • {selectedUnit.registrationNo}
             </p>
             <p className="text-xs text-muted-foreground font-ui mb-5">
-              {rentalType === "hourly" ? `${hours} hour(s)` : `${days} day(s)`} —{" "}
-              <span className="text-foreground">Total {formatPrice(total)}</span> •{" "}
+              {rentalType === "hourly"
+                ? `${hours} hour${hours > 1 ? "s" : ""}`
+                : days === 1
+                ? "Whole Day · 8 hours"
+                : `${days} days · ${days * 8} hours`}{" "}
+              — <span className="text-foreground">Total {formatPrice(total)}</span> •{" "}
               <span className="text-neon-cyan">Advance {formatPrice(advance)}</span>
             </p>
 
@@ -492,7 +510,7 @@ const VehicleSelection = () => {
               </div>
               <div>
                 <label className="text-xs font-ui text-muted-foreground uppercase tracking-wider mb-1 block">
-                  Pickup Date *
+                  Pickup Date & Time *
                 </label>
                 <div className="relative">
                   <CalendarDays
@@ -500,13 +518,21 @@ const VehicleSelection = () => {
                     className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
                   />
                   <input
-                    type="date"
-                    value={pickupDate}
-                    onChange={(e) => setPickupDate(e.target.value)}
-                    min={new Date().toISOString().split("T")[0]}
+                    type="datetime-local"
+                    required
+                    value={pickupDateTime}
+                    onChange={(e) => setPickupDateTime(e.target.value)}
+                    min={new Date().toISOString().slice(0, 16)}
                     className="w-full pl-9 pr-3 py-2.5 rounded-lg glass border border-border text-sm text-foreground focus:outline-none focus:border-primary bg-transparent"
                   />
                 </div>
+                <p className="text-[10px] text-muted-foreground mt-1 font-ui">
+                  {rentalType === "hourly"
+                    ? `Drop-off: ${hours}h after pickup`
+                    : days === 1
+                    ? "Whole Day = 8 hours from pickup time"
+                    : `${days} days = ${days * 8} hours from pickup time`}
+                </p>
               </div>
 
               {vehicle.requiresLicense && (

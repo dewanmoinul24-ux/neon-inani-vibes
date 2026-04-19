@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useParams, useSearchParams, Link } from "react-router-dom";
 import {
   Star,
@@ -36,7 +36,7 @@ const HotelDetail = () => {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const hotel = hotels.find((h) => h.id === id);
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const { formatPrice } = useCurrency();
   const { tier: vibesTier } = useVibes();
 
@@ -61,6 +61,14 @@ const HotelDetail = () => {
   const [guestPhone, setGuestPhone] = useState("");
   const [specialRequests, setSpecialRequests] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Pre-fill from logged-in user's profile (only when fields are still blank).
+  useEffect(() => {
+    if (profile?.display_name && !guestName) setGuestName(profile.display_name);
+    if (user?.email && !guestEmail) setGuestEmail(user.email);
+    if (profile?.phone && !guestPhone) setGuestPhone(profile.phone);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, profile]);
 
   if (!hotel) {
     return (
