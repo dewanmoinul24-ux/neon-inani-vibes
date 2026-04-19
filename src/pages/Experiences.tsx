@@ -264,11 +264,11 @@ const Experiences = () => {
                         </div>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="font-display font-bold text-primary text-lg">
+                        <span className="font-display font-bold text-primary text-[1.375rem]">
                           {format(e.priceBdt)}
                           <span className="text-xs text-muted-foreground font-normal ml-1">/ ticket</span>
                         </span>
-                        <span className="px-3 py-1.5 rounded-lg text-[11px] font-ui uppercase tracking-widest glass neon-border-pink text-primary group-hover:scale-105 transition-transform inline-flex items-center gap-1">
+                        <span className="px-3 py-1.5 rounded-lg text-[11px] font-ui uppercase tracking-widest glass border border-neon-orange/60 text-neon-orange group-hover:scale-105 transition-transform inline-flex items-center gap-1" style={{ boxShadow: "0 0 14px hsl(25 100% 55% / 0.45)" }}>
                           <Ticket className="w-3 h-3" /> View
                         </span>
                       </div>
@@ -363,11 +363,11 @@ const Experiences = () => {
                         </div>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="font-display font-bold text-neon-cyan text-lg">
+                        <span className="font-display font-bold text-neon-cyan text-[1.375rem]">
                           {format(s.priceBdt)}
                           <span className="text-xs text-muted-foreground font-normal ml-1">/ session</span>
                         </span>
-                        <span className="px-3 py-1.5 rounded-lg text-[11px] font-ui uppercase tracking-widest glass neon-border-cyan text-neon-cyan group-hover:scale-105 transition-transform inline-flex items-center gap-1">
+                        <span className="px-3 py-1.5 rounded-lg text-[11px] font-ui uppercase tracking-widest glass border border-neon-orange/60 text-neon-orange group-hover:scale-105 transition-transform inline-flex items-center gap-1" style={{ boxShadow: "0 0 14px hsl(25 100% 55% / 0.45)" }}>
                           Book
                         </span>
                       </div>
