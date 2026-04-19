@@ -89,8 +89,12 @@ const Profile = () => {
   };
 
   const today = new Date();
-  const upcoming = bookings.filter((b) => isAfter(parseISO(b.check_in), today) || isAfter(parseISO(b.check_out), today));
-  const past = bookings.filter((b) => !isAfter(parseISO(b.check_out), today));
+  const upcoming = bookings.filter(
+    (b) => b.status !== "cancelled" && isAfter(parseISO(b.check_out), today)
+  );
+  const past = bookings.filter(
+    (b) => b.status === "cancelled" || !isAfter(parseISO(b.check_out), today)
+  );
 
   if (loading || !user) {
     return (
