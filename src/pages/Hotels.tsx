@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { Search, Star, MapPin, SlidersHorizontal, X, Users, Wifi, Waves, Dumbbell, UtensilsCrossed, Car } from "lucide-react";
+import { Search, Star, MapPin, SlidersHorizontal, X, Users, Wifi, Waves, Dumbbell, UtensilsCrossed, Car, Sparkles } from "lucide-react";
 import { format } from "date-fns";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -12,6 +12,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { useCurrency } from "@/hooks/useCurrency";
+import { useVibes } from "@/hooks/useVibes";
 
 const amenityIcons: Record<string, React.ReactNode> = {
   "Free WiFi": <Wifi size={14} />,
@@ -26,6 +27,8 @@ const allTags = Array.from(new Set(hotels.flatMap((h) => h.tags)));
 
 const Hotels = () => {
   const { formatPrice } = useCurrency();
+  const { tier: vibesTier } = useVibes();
+  const hotelDiscountPct = Math.round(vibesTier.hotelDiscount * 100);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 60000]);
@@ -297,6 +300,14 @@ const Hotels = () => {
                       <span className="font-ui text-sm text-foreground">{hotel.rating}</span>
                       <span className="text-muted-foreground text-xs">({hotel.reviewCount})</span>
                     </div>
+                    {hotelDiscountPct > 0 && (
+                      <div className="absolute top-3 right-3 rounded-full px-2.5 py-1 flex items-center gap-1 gradient-neon text-primary-foreground neon-glow-pink">
+                        <Sparkles size={12} />
+                        <span className="font-ui text-[10px] uppercase tracking-wider font-bold">
+                          Vibes perk: {hotelDiscountPct}% off
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   {/* Info */}
