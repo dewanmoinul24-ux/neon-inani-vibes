@@ -25,6 +25,10 @@ import { vehicles, type VehicleUnit } from "@/data/vehicles";
 import vehiclesBanner from "@/assets/vehicles-banner.jpg";
 import { toast } from "@/components/ui/sonner";
 import { useCurrency } from "@/hooks/useCurrency";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import AuthModal from "@/components/AuthModal";
+import { addDays, addHours, format } from "date-fns";
 
 const accentTextMap: Record<string, string> = {
   pink: "text-neon-pink",
@@ -45,6 +49,7 @@ const accentBorderMap: Record<string, string> = {
 const VehicleSelection = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
   const { formatPrice } = useCurrency();
+  const { user } = useAuth();
   const vehicle = useMemo(() => vehicles.find((v) => v.id === categoryId), [categoryId]);
 
   const [rentalType, setRentalType] = useState<"hourly" | "daily">("daily");
@@ -53,6 +58,7 @@ const VehicleSelection = () => {
 
   const [selectedUnit, setSelectedUnit] = useState<VehicleUnit | null>(null);
   const [showBooking, setShowBooking] = useState(false);
+  const [authOpen, setAuthOpen] = useState(false);
 
   // Booking form
   const [guestName, setGuestName] = useState("");
@@ -77,6 +83,11 @@ const VehicleSelection = () => {
   const advance = Math.ceil(total * (vehicle.bookingAdvance / 100));
 
   const openBooking = (unit: VehicleUnit) => {
+    if (!user) {
+      toast.info("Please sign in to confirm your booking.");
+      setAuthOpen(true);
+      return;
+    }
     setSelectedUnit(unit);
     setShowBooking(true);
   };
@@ -92,8 +103,46 @@ const VehicleSelection = () => {
       return;
     }
     setIsSubmitting(true);
-    await new Promise((r) => setTimeout(r, 1200));
+
+    const pickup = new Date(pickupDate);
+    const dropoff =
+      rentalType === "hourly" ? addHours(pickup, hours) : addDays(pickup, days);
+
+    const { error } = await supabase.from("bookings").insert({
+      category: "vehicle",
+      hotel_id: vehicle.id,
+      hotel_name: `${vehicle.name} — ${selectedUnit.modelName}`,
+      guest_name: guestName,
+      guest_email: guestEmail || (user?.email ?? ""),
+      check_in: format(pickup, "yyyy-MM-dd"),
+      check_out: format(dropoff, "yyyy-MM-dd"),
+      guests: 1,
+      rooms: [
+        {
+          modelName: selectedUnit.modelName,
+          rentalType,
+          duration,
+          unitPrice,
+          advance,
+          licenseNo: licenseNo || null,
+          pickupDateTime: pickup.toISOString(),
+          dropoffDateTime: dropoff.toISOString(),
+        },
+      ],
+      subtotal,
+      tax_and_fees: platformFee,
+      total,
+      special_requests: vehicle.requiresLicense ? `License: ${licenseNo}` : null,
+      user_id: user?.id ?? null,
+    });
+
     setIsSubmitting(false);
+
+    if (error) {
+      toast.error("Booking failed. Please try again.", { description: error.message });
+      return;
+    }
+
     setShowBooking(false);
     toast.success("Booking confirmed! Pay 50% advance to secure your ride.", {
       description: `${selectedUnit.modelName} — Advance Due: ${formatPrice(advance)}`,
