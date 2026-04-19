@@ -94,7 +94,7 @@ const VehicleSelection = () => {
     setIsSubmitting(false);
     setShowBooking(false);
     toast.success("Booking confirmed! Pay 50% advance to secure your ride.", {
-      description: `${selectedUnit.modelName} — Advance Due: ৳${advance.toLocaleString()}`,
+      description: `${selectedUnit.modelName} — Advance Due: ${formatPrice(advance)}`,
     });
     setSelectedUnit(null);
     setGuestName("");
@@ -197,7 +197,7 @@ const VehicleSelection = () => {
               Estimated Total
             </p>
             <p className="font-display text-xl md:text-2xl font-bold gradient-neon-text">
-              ৳{total.toLocaleString()}
+              {formatPrice(total)}
             </p>
           </div>
           <div>
@@ -205,7 +205,7 @@ const VehicleSelection = () => {
               50% Booking Advance
             </p>
             <p className="font-display text-lg md:text-xl font-bold text-neon-cyan neon-text-cyan">
-              ৳{advance.toLocaleString()}
+              {formatPrice(advance)}
             </p>
           </div>
           <p className="text-xs text-muted-foreground max-w-[220px] font-body">
@@ -341,10 +341,10 @@ const VehicleSelection = () => {
                       Total ({rentalType === "hourly" ? `${hours}h` : `${days}d`})
                     </p>
                     <p className="font-display text-lg font-bold text-foreground">
-                      ৳{total.toLocaleString()}
+                      {formatPrice(total)}
                     </p>
                     <p className="text-[10px] text-neon-cyan neon-text-cyan font-ui uppercase tracking-wider">
-                      50% Advance ৳{advance.toLocaleString()}
+                      50% Advance {formatPrice(advance)}
                     </p>
                   </div>
                   <button
@@ -376,8 +376,8 @@ const VehicleSelection = () => {
             </p>
             <p className="text-xs text-muted-foreground font-ui mb-5">
               {rentalType === "hourly" ? `${hours} hour(s)` : `${days} day(s)`} —{" "}
-              <span className="text-foreground">Total ৳{total.toLocaleString()}</span> •{" "}
-              <span className="text-neon-cyan">Advance ৳{advance.toLocaleString()}</span>
+              <span className="text-foreground">Total {formatPrice(total)}</span> •{" "}
+              <span className="text-neon-cyan">Advance {formatPrice(advance)}</span>
             </p>
 
             <div className="space-y-4">
@@ -487,12 +487,12 @@ const VehicleSelection = () => {
               <div className="pt-2 space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Rental Total</span>
-                  <span className="text-foreground">৳{total.toLocaleString()}</span>
+                  <span className="text-foreground">{formatPrice(total)}</span>
                 </div>
                 <div className="flex justify-between text-sm font-semibold border-t border-border pt-2">
                   <span className="text-neon-cyan neon-text-cyan">50% Booking Advance</span>
                   <span className="text-neon-cyan neon-text-cyan">
-                    ৳{advance.toLocaleString()}
+                    {formatPrice(advance)}
                   </span>
                 </div>
               </div>
