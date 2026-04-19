@@ -40,6 +40,8 @@ import {
   ChevronRight,
   Star,
   Sparkles,
+  Hotel as HotelIcon,
+  Car as CarIcon,
 } from "lucide-react";
 import { format, isAfter, parseISO } from "date-fns";
 import { useCurrency } from "@/hooks/useCurrency";
