@@ -122,7 +122,7 @@ const ExperienceDetail = () => {
                 {isEvent ? "Event" : "Adventure Sport"}
               </span>
             </div>
-            <h1 className="font-display text-3xl md:text-5xl lg:text-6xl font-bold gradient-neon-text max-w-4xl leading-tight">
+            <h1 className="font-display text-3xl md:text-5xl font-bold gradient-neon-text max-w-4xl leading-tight py-[20px] lg:text-7xl">
               {experience.title}
             </h1>
             <p className="mt-2 text-base md:text-lg text-muted-foreground max-w-2xl">
