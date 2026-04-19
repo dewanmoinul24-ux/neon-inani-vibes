@@ -51,6 +51,7 @@ const ExperienceDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [preferredDate, setPreferredDate] = useState(experience?.date || "");
   const [preferredTime, setPreferredTime] = useState("");
+  const [specialRequests, setSpecialRequests] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   if (!experience) {
@@ -69,8 +70,19 @@ const ExperienceDetail = () => {
   const isEvent = experience.type === "event";
   const total = experience.priceBdt * quantity;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!user) {
+      toast({
+        title: "Please sign in",
+        description: "You need an account to request a reservation.",
+        variant: "destructive",
+      });
+      navigate("/?auth=1");
+      return;
+    }
+
     if (!name || !email || !phone) {
       toast({ title: "Missing details", description: "Please fill name, email and phone.", variant: "destructive" });
       return;
@@ -83,15 +95,43 @@ const ExperienceDetail = () => {
       });
       return;
     }
+
     setSubmitting(true);
-    // Reservation request only — UI confirmation, no DB persistence by design.
-    setTimeout(() => {
-      setSubmitting(false);
+    const { error } = await supabase.from("experience_reservations").insert({
+      user_id: user.id,
+      experience_id: experience.id,
+      experience_title: experience.title,
+      experience_type: experience.type,
+      category: experience.category,
+      organizer: experience.organizer,
+      location: experience.location,
+      preferred_date: isEvent ? experience.date! : preferredDate,
+      preferred_time: isEvent ? experience.startTime ?? null : preferredTime,
+      quantity,
+      unit_price: experience.priceBdt,
+      total_price: total,
+      guest_name: name,
+      guest_email: email,
+      guest_phone: phone,
+      special_requests: specialRequests || null,
+      status: "pending",
+    });
+    setSubmitting(false);
+
+    if (error) {
       toast({
-        title: "Reservation requested! 🎉",
-        description: `${experience.organizer} will confirm your spot via email within 30 minutes.`,
+        title: "Could not submit",
+        description: error.message,
+        variant: "destructive",
       });
-    }, 700);
+      return;
+    }
+
+    toast({
+      title: "Reservation requested! 🎉",
+      description: "Pending confirmation by the Inani Vibes team. Track it in Profile → My reservations.",
+    });
+    navigate("/profile?tab=reservations");
   };
 
   return (
