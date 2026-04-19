@@ -63,6 +63,24 @@ interface Booking {
   category?: string;
 }
 
+interface ExperienceReservation {
+  id: string;
+  experience_id: string;
+  experience_title: string;
+  experience_type: string;
+  category: string | null;
+  organizer: string | null;
+  location: string | null;
+  preferred_date: string;
+  preferred_time: string | null;
+  quantity: number;
+  unit_price: number;
+  total_price: number;
+  status: string;
+  special_requests: string | null;
+  created_at: string;
+}
+
 type SectionKey =
   | "personal"
   | "security"
@@ -71,6 +89,7 @@ type SectionKey =
   | "vibes"
   | "upcoming"
   | "history"
+  | "reservations"
   | "saved"
   | "reviews"
   | "notifications";
@@ -88,6 +107,7 @@ const sections: {
   { key: "notifications", label: "Email notifications", icon: Bell, group: "manage" },
   { key: "vibes", label: "Vibes Level", icon: Sparkles, group: "trips" },
   { key: "upcoming", label: "Upcoming trips", icon: Calendar, group: "trips" },
+  { key: "reservations", label: "My reservations", icon: Ticket, group: "trips" },
   { key: "history", label: "Trip history", icon: Calendar, group: "trips" },
   { key: "saved", label: "Saved", icon: Heart, group: "trips" },
   { key: "reviews", label: "My reviews", icon: Star, group: "trips" },
