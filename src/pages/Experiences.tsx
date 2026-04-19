@@ -67,20 +67,30 @@ const Experiences = () => {
             width={1920}
             height={832}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/30 to-background" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/50 to-background" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+          <div className="absolute inset-0 bg-background/25" />
 
           <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-end pb-12 md:pb-20">
             <p
               className="font-ui text-xs md:text-sm uppercase tracking-[0.4em] text-neon-pink mb-3"
-              style={{ textShadow: "0 0 14px hsl(330 100% 65% / 0.85)" }}
+              style={{ textShadow: "0 0 14px hsl(330 100% 65% / 0.95), 0 2px 8px hsl(0 0% 0% / 0.8)" }}
             >
               Marine Drive · After Dark
             </p>
-            <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-bold gradient-neon-text max-w-3xl leading-tight">
+            <h1
+              className="font-display text-5xl md:text-7xl lg:text-8xl font-bold gradient-neon-text max-w-4xl leading-[1.05]"
+              style={{
+                filter:
+                  "drop-shadow(0 0 24px hsl(330 100% 65% / 0.55)) drop-shadow(0 4px 16px hsl(0 0% 0% / 0.9))",
+              }}
+            >
               Experiences & Adventure Sports
             </h1>
-            <p className="mt-4 max-w-2xl text-base md:text-lg text-muted-foreground">
+            <p
+              className="mt-5 max-w-2xl text-base md:text-xl text-foreground/90"
+              style={{ textShadow: "0 2px 12px hsl(0 0% 0% / 0.9)" }}
+            >
               Beach raves, music festivals, parasailing, jet skis, scuba and more — curated
               along the world's longest beach. Pick a vibe, book your spot.
             </p>
