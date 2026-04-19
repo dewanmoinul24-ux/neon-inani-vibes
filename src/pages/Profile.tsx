@@ -643,6 +643,8 @@ const BookingList = ({
     <div className="grid gap-3">
       {bookings.map((b) => {
         const cancelled = b.status === "cancelled";
+        const isVehicle = b.category === "vehicle";
+        const TypeIcon = isVehicle ? CarIcon : HotelIcon;
         return (
           <Card
             key={b.id}
@@ -651,7 +653,18 @@ const BookingList = ({
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="min-w-0">
                 <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-                  <h3 className="font-display text-base">{b.hotel_name}</h3>
+                  <Badge
+                    variant="outline"
+                    className={
+                      isVehicle
+                        ? "border-neon-pink/40 text-neon-pink"
+                        : "border-neon-cyan/40 text-neon-cyan"
+                    }
+                  >
+                    <TypeIcon className="w-3 h-3 mr-1" />
+                    {isVehicle ? "Vehicle" : "Hotel"}
+                  </Badge>
+                  <h3 className="font-display text-base truncate">{b.hotel_name}</h3>
                   {cancelled ? (
                     <Badge variant="outline" className="border-destructive/40 text-destructive">
                       <XCircle className="w-3 h-3 mr-1" /> Cancelled
@@ -665,12 +678,15 @@ const BookingList = ({
                 <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground font-ui">
                   <span className="flex items-center gap-1">
                     <Calendar className="w-3.5 h-3.5" />
+                    {isVehicle ? "Pickup " : ""}
                     {format(parseISO(b.check_in), "MMM d")} – {format(parseISO(b.check_out), "MMM d, yyyy")}
                   </span>
-                  <span className="flex items-center gap-1">
-                    <Users className="w-3.5 h-3.5" />
-                    {b.guests} guest{b.guests > 1 ? "s" : ""}
-                  </span>
+                  {!isVehicle && (
+                    <span className="flex items-center gap-1">
+                      <Users className="w-3.5 h-3.5" />
+                      {b.guests} guest{b.guests > 1 ? "s" : ""}
+                    </span>
+                  )}
                 </div>
               </div>
               <div className="flex items-center gap-3 md:flex-col md:items-end">
