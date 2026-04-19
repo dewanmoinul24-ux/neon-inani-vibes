@@ -30,7 +30,7 @@ const HeroSection = () => {
           <h1 className="font-display text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6">
             <span className="gradient-neon-text">Experience</span>
             <br className="sm:hidden" />
-            <span className="gradient-neon-text">{" "}Cox's Bazar</span>
+            <span className="gradient-neon-text text-5xl sm:text-4xl md:text-6xl lg:text-7xl">{" "}Cox's Bazar</span>
             <br />
             <span className="text-foreground">Like Never Before</span>
           </h1>
