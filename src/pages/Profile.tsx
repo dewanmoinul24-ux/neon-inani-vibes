@@ -517,7 +517,7 @@ const Profile = () => {
               </SectionShell>
             )}
 
-
+            {active === "history" && (
               <SectionShell title="Trip history" description="Past and cancelled bookings.">
                 <BookingList
                   bookings={history}
