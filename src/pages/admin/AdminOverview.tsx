@@ -22,14 +22,14 @@ interface KpiCardProps {
 }
 
 const KpiCard = ({ label, value, icon: Icon, accent }: KpiCardProps) => (
-  <div className={`glass rounded-xl p-5 border ${accent} transition-all hover:scale-[1.02]`}>
-    <div className="flex items-center justify-between mb-3">
-      <span className="font-ui text-[10px] uppercase tracking-widest text-muted-foreground">
+  <div className={`glass rounded-xl p-3 md:p-5 border ${accent} transition-all hover:scale-[1.02]`}>
+    <div className="flex items-center justify-between mb-2 md:mb-3">
+      <span className="font-ui text-[9px] md:text-[10px] uppercase tracking-widest text-muted-foreground leading-tight">
         {label}
       </span>
-      <Icon className="w-4 h-4 text-neon-cyan" />
+      <Icon className="w-3.5 h-3.5 md:w-4 md:h-4 text-neon-cyan shrink-0" />
     </div>
-    <p className="font-display text-2xl md:text-3xl font-bold text-foreground">{value}</p>
+    <p className="font-display text-lg md:text-3xl font-bold text-foreground leading-tight break-words">{value}</p>
   </div>
 );
 
