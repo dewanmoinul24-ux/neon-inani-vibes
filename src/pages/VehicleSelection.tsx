@@ -134,7 +134,7 @@ const VehicleSelection = () => {
         },
       ],
       subtotal,
-      tax_and_fees: platformFee,
+      tax_and_fees: platformFee - vibesDiscount,
       total,
       special_requests: vehicle.requiresLicense ? `License: ${licenseNo}` : null,
       user_id: user?.id ?? null,
