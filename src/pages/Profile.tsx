@@ -39,10 +39,13 @@ import {
   MapPin,
   ChevronRight,
   Star,
+  Sparkles,
 } from "lucide-react";
 import { format, isAfter, parseISO } from "date-fns";
 import { useCurrency } from "@/hooks/useCurrency";
 import { CURRENCY_LABEL } from "@/lib/currency";
+import { countCompletedTrips, getVibesTier } from "@/lib/vibesLevel";
+import VibesLevelCard from "@/components/VibesLevelCard";
 
 interface Booking {
   id: string;
@@ -60,6 +63,7 @@ type SectionKey =
   | "security"
   | "payment"
   | "preferences"
+  | "vibes"
   | "upcoming"
   | "history"
   | "saved"
@@ -77,6 +81,7 @@ const sections: {
   { key: "payment", label: "Payment methods", icon: CreditCard, group: "manage" },
   { key: "preferences", label: "Preferences", icon: SettingsIcon, group: "manage" },
   { key: "notifications", label: "Email notifications", icon: Bell, group: "manage" },
+  { key: "vibes", label: "Vibes Level", icon: Sparkles, group: "trips" },
   { key: "upcoming", label: "Upcoming trips", icon: Calendar, group: "trips" },
   { key: "history", label: "Trip history", icon: Calendar, group: "trips" },
   { key: "saved", label: "Saved", icon: Heart, group: "trips" },
@@ -194,6 +199,9 @@ const Profile = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bookings]);
 
+  const completedTrips = useMemo(() => countCompletedTrips(bookings), [bookings]);
+  const vibesTier = useMemo(() => getVibesTier(completedTrips), [completedTrips]);
+
   if (loading || !user) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -223,8 +231,13 @@ const Profile = () => {
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground font-ui mt-1">
               <span className="flex items-center gap-1"><Mail className="w-3.5 h-3.5" />{user.email}</span>
               <span>Member since {memberSince}</span>
-              <Badge variant="outline" className="border-neon-cyan/40 text-neon-cyan">
-                Vibes Level 1
+              <Badge
+                variant="outline"
+                className="border-neon-cyan/40 text-neon-cyan cursor-pointer hover:bg-neon-cyan/10"
+                onClick={() => setActive("vibes")}
+              >
+                <Sparkles className="w-3 h-3 mr-1" />
+                Vibes Level {vibesTier.level} · {vibesTier.name}
               </Badge>
             </div>
           </div>
@@ -401,6 +414,15 @@ const Profile = () => {
                   checked={notif.newsletter}
                   onChange={(v) => setNotif({ ...notif, newsletter: v })}
                 />
+              </SectionShell>
+            )}
+
+            {active === "vibes" && (
+              <SectionShell
+                title="Vibes Level"
+                description="Earn perks the more you travel with InaniVibes — every completed trip moves you up."
+              >
+                <VibesLevelCard completedTrips={completedTrips} />
               </SectionShell>
             )}
 
