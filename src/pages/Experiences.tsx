@@ -67,9 +67,8 @@ const Experiences = () => {
             width={1920}
             height={832}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/50 to-background" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
-          <div className="absolute inset-0 bg-background/25" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-transparent to-background" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
 
           <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-end pb-12 md:pb-20">
             <p
