@@ -464,6 +464,14 @@ const HotelDetail = () => {
                         </span>
                         <span className="text-foreground">{formatPrice(totalPrice)}</span>
                       </div>
+                      {vibesDiscount > 0 && (
+                        <div className="flex justify-between text-sm font-body">
+                          <span className="text-neon-cyan">
+                            Vibes Lvl {vibesTier.level} discount ({Math.round(vibesTier.hotelDiscount * 100)}%)
+                          </span>
+                          <span className="text-neon-cyan">−{formatPrice(vibesDiscount)}</span>
+                        </div>
+                      )}
                       <div className="flex justify-between text-sm font-body">
                         <span className="text-muted-foreground">Taxes & fees (15%)</span>
                         <span className="text-foreground">{formatPrice(taxes)}</span>
