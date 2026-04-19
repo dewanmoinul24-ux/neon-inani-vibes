@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, User, LogOut, Settings, History, ChevronDown, Wallet } from "lucide-react";
+import { Menu, X, User, LogOut, Settings, History, ChevronDown, Wallet, Sparkles } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { useAuth } from "@/contexts/AuthContext";
+import { useVibes } from "@/hooks/useVibes";
 import AuthModal from "@/components/AuthModal";
 import {
   DropdownMenu,
@@ -13,6 +14,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
+const tierAccentClass: Record<string, string> = {
+  cyan: "text-neon-cyan border-neon-cyan/40 bg-neon-cyan/10",
+  pink: "text-neon-pink border-neon-pink/40 bg-neon-pink/10",
+  purple: "text-neon-purple border-neon-purple/40 bg-neon-purple/10",
+  orange: "text-neon-orange border-neon-orange/40 bg-neon-orange/10",
+};
 
 const navLinks = [
   { label: "Home", href: "/", isRoute: true },
@@ -28,7 +36,9 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
   const { user, profile, signOut, currency, setCurrency } = useAuth();
+  const { tier: vibesTier, completedTrips } = useVibes();
   const navigate = useNavigate();
+  const tierClass = tierAccentClass[vibesTier.accent] ?? tierAccentClass.cyan;
 
   const handleSignOut = async () => {
     await signOut();
@@ -109,13 +119,39 @@ const Navbar = () => {
                     <AvatarImage src={profile?.avatar_url || undefined} />
                     <AvatarFallback className="bg-muted text-xs font-display">{initials}</AvatarFallback>
                   </Avatar>
+                  <span
+                    className={`hidden xl:inline-flex items-center gap-1 px-2 py-0.5 rounded-full border text-[10px] font-ui uppercase tracking-wider ${tierClass}`}
+                    aria-label={`Vibes tier: ${vibesTier.name}`}
+                  >
+                    <Sparkles className="w-3 h-3" />
+                    Lvl {vibesTier.level}
+                  </span>
                   <ChevronDown className="w-4 h-4 text-muted-foreground" />
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56 glass-strong border-primary/30">
+                <DropdownMenuContent align="end" className="w-64 glass-strong border-primary/30">
                   <DropdownMenuLabel className="font-ui">
                     <p className="text-sm font-semibold truncate">{profile?.display_name || "Traveler"}</p>
                     <p className="text-xs text-muted-foreground truncate">{user.email}</p>
                   </DropdownMenuLabel>
+                  <button
+                    onClick={() => navigate("/profile?tab=vibes")}
+                    className={`mx-2 my-2 w-[calc(100%-1rem)] flex items-center justify-between gap-2 px-3 py-2 rounded-lg border ${tierClass} hover:opacity-90 transition-opacity`}
+                  >
+                    <span className="flex items-center gap-2">
+                      <Sparkles className="w-4 h-4" />
+                      <span className="text-left">
+                        <span className="block text-xs font-ui uppercase tracking-widest opacity-80">
+                          Vibes Level {vibesTier.level}
+                        </span>
+                        <span className="block text-sm font-display font-bold leading-tight">
+                          {vibesTier.name}
+                        </span>
+                      </span>
+                    </span>
+                    <span className="text-[10px] font-ui opacity-80">
+                      {completedTrips} trip{completedTrips === 1 ? "" : "s"}
+                    </span>
+                  </button>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => navigate("/profile")} className="cursor-pointer">
                     <User className="w-4 h-4 mr-2" /> Profile
