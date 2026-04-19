@@ -98,6 +98,7 @@ const HotelDetail = () => {
     setIsSubmitting(true);
     try {
       const { error } = await supabase.from("bookings").insert({
+        category: "hotel",
         hotel_id: hotel.id,
         hotel_name: hotel.name,
         guest_name: guestName,
