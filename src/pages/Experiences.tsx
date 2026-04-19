@@ -70,7 +70,7 @@ const Experiences = () => {
           <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-transparent to-background" />
           <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
 
-          <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-end pb-12 md:pb-20">
+          <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-end pb-12 md:pb-20 shadow-inner">
             <p
               className="font-ui text-xs md:text-sm uppercase tracking-[0.4em] text-neon-pink mb-3"
               style={{ textShadow: "0 0 14px hsl(330 100% 65% / 0.95), 0 2px 8px hsl(0 0% 0% / 0.8)" }}
