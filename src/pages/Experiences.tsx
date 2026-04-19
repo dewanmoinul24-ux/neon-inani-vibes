@@ -235,6 +235,50 @@ const Experiences = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-transparent" />
 
+                  {/* Capacity status badge */}
+                  {typeof e.capacity === "number" && (() => {
+                    if (e.capacity <= 0) {
+                      return (
+                        <div className="absolute top-3 left-3 z-20 px-2.5 py-1 rounded-full bg-destructive/90 backdrop-blur-sm border border-destructive flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-destructive-foreground" />
+                          <span className="font-ui text-[9px] uppercase tracking-widest text-destructive-foreground font-bold">
+                            Sold Out
+                          </span>
+                        </div>
+                      );
+                    }
+                    if (e.capacity <= 20) {
+                      return (
+                        <div
+                          className="absolute top-3 left-3 z-20 px-2.5 py-1 rounded-full bg-neon-orange/20 backdrop-blur-sm border border-neon-orange/70 flex items-center gap-1.5"
+                          style={{ boxShadow: "0 0 14px hsl(25 100% 55% / 0.5)" }}
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-neon-orange animate-pulse" />
+                          <span
+                            className="font-ui text-[9px] uppercase tracking-widest text-neon-orange font-bold"
+                            style={{ textShadow: "0 0 8px hsl(25 100% 55% / 0.9)" }}
+                          >
+                            Few Spots Left · {e.capacity}
+                          </span>
+                        </div>
+                      );
+                    }
+                    if (e.capacity <= 50) {
+                      return (
+                        <div className="absolute top-3 left-3 z-20 px-2.5 py-1 rounded-full bg-neon-pink/20 backdrop-blur-sm border border-neon-pink/60 flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-neon-pink animate-pulse" />
+                          <span
+                            className="font-ui text-[9px] uppercase tracking-widest text-neon-pink font-bold"
+                            style={{ textShadow: "0 0 8px hsl(330 100% 65% / 0.9)" }}
+                          >
+                            Selling Fast
+                          </span>
+                        </div>
+                      );
+                    }
+                    return null;
+                  })()}
+
                   <div className="relative z-10 h-full flex flex-col justify-between p-5">
                     <div className="flex items-center justify-between">
                       <span className="px-3 py-1 rounded-full text-[10px] font-ui uppercase tracking-wider gradient-neon text-primary-foreground">
