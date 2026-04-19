@@ -61,6 +61,16 @@ const EventCountdownMarquee = () => {
             Live · Next Up
           </span>
         </div>
+        {/* Mobile compact label */}
+        <div className="md:hidden shrink-0 flex items-center gap-1.5 pl-3 pr-2 py-2 border-r border-neon-cyan/20">
+          <span className="w-1.5 h-1.5 rounded-full bg-neon-pink animate-pulse" />
+          <span
+            className="font-ui text-[9px] uppercase tracking-[0.2em] text-neon-cyan"
+            style={{ textShadow: "0 0 8px hsl(180 100% 55% / 0.8)" }}
+          >
+            Live
+          </span>
+        </div>
 
         <div
           className="flex-1 overflow-hidden"

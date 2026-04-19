@@ -45,22 +45,22 @@ const FeaturedTonight = () => {
   return (
     <section
       aria-label="Events happening within 24 hours"
-      className="relative py-10 md:py-14 overflow-hidden"
+      className="relative py-8 sm:py-10 md:py-14 overflow-hidden"
     >
       <div className="absolute inset-0 bg-gradient-to-b from-neon-pink/5 via-background to-background pointer-events-none" />
-      <div className="absolute -top-20 left-1/4 w-96 h-96 bg-neon-pink/10 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute -top-20 right-1/4 w-96 h-96 bg-neon-cyan/10 rounded-full blur-[140px] pointer-events-none" />
+      <div className="pointer-events-none absolute -top-20 left-1/4 w-72 sm:w-96 h-72 sm:h-96 bg-neon-pink/10 rounded-full blur-[100px] sm:blur-[140px]" />
+      <div className="pointer-events-none absolute -top-20 right-1/4 w-72 sm:w-96 h-72 sm:h-96 bg-neon-cyan/10 rounded-full blur-[100px] sm:blur-[140px]" />
 
-      <div className="container mx-auto px-4 relative">
-        <div className="flex items-center gap-3 mb-6">
+      <div className="container mx-auto relative">
+        <div className="flex items-center gap-3 mb-5 sm:mb-6">
           <motion.div
             animate={{ scale: [1, 1.15, 1], rotate: [0, -8, 8, 0] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="w-9 h-9 rounded-full bg-gradient-to-br from-neon-pink to-neon-orange flex items-center justify-center neon-glow-pink"
+            className="w-9 h-9 rounded-full bg-gradient-to-br from-neon-pink to-neon-orange flex items-center justify-center neon-glow-pink shrink-0"
           >
             <Flame className="w-4 h-4 text-primary-foreground" />
           </motion.div>
-          <div>
+          <div className="min-w-0">
             <p
               className="font-ui text-[10px] uppercase tracking-[0.4em] text-neon-pink"
               style={{ textShadow: "0 0 10px hsl(330 100% 65% / 0.8)" }}
@@ -68,7 +68,7 @@ const FeaturedTonight = () => {
               Within 24 hours
             </p>
             <h2
-              className="font-display text-2xl md:text-3xl font-bold gradient-neon-text leading-tight"
+              className="font-display text-xl sm:text-2xl md:text-3xl font-bold gradient-neon-text leading-tight"
               style={{ filter: "drop-shadow(0 2px 12px hsl(0 0% 0% / 0.6))" }}
             >
               Featured Tonight
@@ -76,7 +76,7 @@ const FeaturedTonight = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
           {tonightEvents.map((e, i) => (
             <Link
               key={e.id}
