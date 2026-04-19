@@ -149,7 +149,7 @@ const Experiences = () => {
                   "drop-shadow(0 4px 18px hsl(0 0% 0% / 0.95)) drop-shadow(0 0 24px hsl(330 100% 65% / 0.55)) drop-shadow(0 8px 24px hsl(0 0% 0% / 0.85))",
               }}
             >
-              Experiences & Adventure Sports
+              Experience Inani Vibes
             </h1>
             <p
               className="mt-3 sm:mt-5 max-w-2xl text-sm sm:text-base text-foreground/90"
