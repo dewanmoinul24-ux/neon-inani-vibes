@@ -1,5 +1,6 @@
 import { Bike, Car, Truck, User, Clock, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useCurrency } from "@/hooks/useCurrency";
 
 const vehicles = [
   {
@@ -29,6 +30,7 @@ const vehicles = [
 ];
 
 const VehicleSection = () => {
+  const { formatPrice } = useCurrency();
   return (
     <section id="vehicles" className="py-20 md:py-32 relative">
       <div className="absolute bottom-0 left-0 w-80 h-80 bg-neon-blue/5 rounded-full blur-[120px]" />
@@ -66,7 +68,7 @@ const VehicleSection = () => {
                       <Clock size={14} /> Per Hour
                     </span>
                     <span className="font-display font-bold text-primary">
-                      ৳{v.priceHour}
+                      {formatPrice(v.priceHour)}
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
@@ -74,7 +76,7 @@ const VehicleSection = () => {
                       <Clock size={14} /> Per Day
                     </span>
                     <span className="font-display font-bold text-secondary">
-                      ৳{v.priceDay.toLocaleString()}
+                      {formatPrice(v.priceDay)}
                     </span>
                   </div>
                 </div>

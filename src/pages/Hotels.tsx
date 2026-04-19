@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { useCurrency } from "@/hooks/useCurrency";
 
 const amenityIcons: Record<string, React.ReactNode> = {
   "Free WiFi": <Wifi size={14} />,
@@ -24,6 +25,7 @@ const amenityIcons: Record<string, React.ReactNode> = {
 const allTags = Array.from(new Set(hotels.flatMap((h) => h.tags)));
 
 const Hotels = () => {
+  const { formatPrice } = useCurrency();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 60000]);
@@ -340,7 +342,7 @@ const Hotels = () => {
                     <div className="flex items-center justify-between mt-4 pt-4 border-t border-border">
                       <div>
                         <span className="font-display text-xl md:text-2xl font-bold text-primary">
-                          ৳{hotel.price.toLocaleString()}
+                          {formatPrice(hotel.price)}
                         </span>
                         <span className="text-muted-foreground text-sm"> / night</span>
                       </div>

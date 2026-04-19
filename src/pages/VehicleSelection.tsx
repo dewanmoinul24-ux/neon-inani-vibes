@@ -24,6 +24,7 @@ import Footer from "@/components/Footer";
 import { vehicles, type VehicleUnit } from "@/data/vehicles";
 import vehiclesBanner from "@/assets/vehicles-banner.jpg";
 import { toast } from "@/components/ui/sonner";
+import { useCurrency } from "@/hooks/useCurrency";
 
 const accentTextMap: Record<string, string> = {
   pink: "text-neon-pink",
@@ -43,6 +44,7 @@ const accentBorderMap: Record<string, string> = {
 
 const VehicleSelection = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
+  const { formatPrice } = useCurrency();
   const vehicle = useMemo(() => vehicles.find((v) => v.id === categoryId), [categoryId]);
 
   const [rentalType, setRentalType] = useState<"hourly" | "daily">("daily");
