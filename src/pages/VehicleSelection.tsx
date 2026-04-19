@@ -29,6 +29,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useVibes } from "@/hooks/useVibes";
 import { supabase } from "@/integrations/supabase/client";
 import AuthModal from "@/components/AuthModal";
+import StickyBookingBar from "@/components/StickyBookingBar";
 import { addHours, format } from "date-fns";
 
 const accentTextMap: Record<string, string> = {
@@ -175,7 +176,7 @@ const VehicleSelection = () => {
 
       {/* Banner */}
       <section className="relative pt-16 md:pt-20">
-        <div className="relative h-[260px] md:h-[340px] overflow-hidden">
+        <div className="relative h-[220px] sm:h-[260px] md:h-[340px] overflow-hidden">
           <img
             src={vehiclesBanner}
             alt="Neon cars on Marine Drive Cox's Bazar"
@@ -184,29 +185,29 @@ const VehicleSelection = () => {
             height={640}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-transparent" />
-          <div className="absolute bottom-8 md:bottom-10 left-0 right-0 container mx-auto px-4">
+          <div className="absolute bottom-6 sm:bottom-8 md:bottom-10 left-0 right-0 container mx-auto">
             <Link
               to="/vehicles"
-              className="inline-flex items-center gap-1 text-muted-foreground hover:text-primary transition-colors font-ui text-sm mb-3"
+              className="inline-flex items-center gap-1 text-muted-foreground hover:text-primary transition-colors font-ui text-xs sm:text-sm mb-2 sm:mb-3"
             >
               <ChevronLeft size={16} /> Back to Vehicles
             </Link>
-            <p className={`font-ui text-xs uppercase tracking-[0.3em] ${accentText} mb-2`}>
+            <p className={`font-ui text-[10px] sm:text-xs uppercase tracking-[0.3em] ${accentText} mb-1.5 sm:mb-2`}>
               Choose your ride
             </p>
-            <h1 className="font-display text-3xl md:text-5xl font-bold gradient-neon-text">
+            <h1 className="font-display text-2xl sm:text-3xl md:text-5xl font-bold gradient-neon-text">
               {vehicle.name}
             </h1>
             {vehicle.nameLocal && (
-              <p className="text-sm text-muted-foreground mt-1 font-body">{vehicle.nameLocal}</p>
+              <p className="text-xs sm:text-sm text-muted-foreground mt-1 font-body">{vehicle.nameLocal}</p>
             )}
           </div>
         </div>
       </section>
 
       {/* Rental Type & Duration */}
-      <section className="container mx-auto px-4 py-8">
-        <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
+      <section className="container mx-auto py-6 sm:py-8">
+        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-6 sm:mb-8">
           <button
             onClick={() => setRentalType("hourly")}
             className={`px-5 py-2 rounded-lg font-ui text-xs uppercase tracking-widest transition-all ${
@@ -228,18 +229,19 @@ const VehicleSelection = () => {
             <CalendarDays size={14} className="inline mr-2" /> Full Day
           </button>
 
-          <div className="flex items-center gap-3 glass rounded-lg px-4 py-1.5 ml-2">
+          <div className="flex items-center gap-2 sm:gap-3 glass rounded-lg px-3 sm:px-4 py-1.5 w-full sm:w-auto sm:ml-2 justify-center">
             <button
               onClick={() =>
                 rentalType === "hourly"
                   ? setHours(Math.max(1, hours - 1))
                   : setDays(Math.max(1, days - 1))
               }
-              className="w-7 h-7 rounded-full glass flex items-center justify-center text-foreground hover:text-primary transition-colors"
+              aria-label="Decrease duration"
+              className="w-9 h-9 rounded-full glass flex items-center justify-center text-foreground hover:text-primary transition-colors"
             >
               −
             </button>
-            <span className="font-display text-base w-32 text-center">
+            <span className="font-display text-sm sm:text-base w-28 sm:w-32 text-center">
               {rentalType === "hourly"
                 ? `${hours} hr${hours > 1 ? "s" : ""}`
                 : days === 1
@@ -252,7 +254,8 @@ const VehicleSelection = () => {
                   ? setHours(Math.min(12, hours + 1))
                   : setDays(Math.min(30, days + 1))
               }
-              className="w-7 h-7 rounded-full glass flex items-center justify-center text-foreground hover:text-primary transition-colors"
+              aria-label="Increase duration"
+              className="w-9 h-9 rounded-full glass flex items-center justify-center text-foreground hover:text-primary transition-colors"
             >
               +
             </button>
@@ -260,7 +263,7 @@ const VehicleSelection = () => {
         </div>
 
         {/* Subtotal Strip */}
-        <div className="max-w-3xl mx-auto glass rounded-xl p-4 md:p-5 mb-8 flex flex-wrap items-center justify-between gap-4 neon-border-blue">
+        <div className="max-w-3xl mx-auto glass rounded-xl p-4 md:p-5 mb-6 sm:mb-8 flex flex-wrap items-center justify-between gap-3 sm:gap-4 neon-border-blue">
           <div>
             <p className="text-[11px] uppercase tracking-widest font-ui text-muted-foreground">
               Estimated Total
@@ -283,11 +286,11 @@ const VehicleSelection = () => {
         </div>
 
         {/* Units Grid */}
-        <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-6 text-center">
+        <h2 className="font-display text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-5 sm:mb-6 text-center">
           Available {vehicle.requiresLicense ? "Vehicles" : "Vehicles & Drivers"}
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 max-w-6xl mx-auto">
           {vehicle.units.map((unit, i) => (
             <div
               key={unit.id}
@@ -418,7 +421,7 @@ const VehicleSelection = () => {
                   </div>
                   <button
                     onClick={() => openBooking(unit)}
-                    className="px-5 py-2.5 rounded-lg font-ui text-xs uppercase tracking-widest gradient-neon text-primary-foreground transition-transform hover:scale-105"
+                    className="px-5 py-2.5 min-h-[44px] rounded-lg font-ui text-xs uppercase tracking-widest gradient-neon text-primary-foreground transition-transform hover:scale-105 active:scale-95 shrink-0"
                   >
                     Rent Now
                   </button>
@@ -431,12 +434,12 @@ const VehicleSelection = () => {
 
       {/* Booking Modal */}
       {showBooking && selectedUnit && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center sm:p-4">
           <div
             className="absolute inset-0 bg-background/80 backdrop-blur-sm"
             onClick={() => setShowBooking(false)}
           />
-          <div className="relative glass-strong rounded-2xl p-6 md:p-8 max-w-md w-full neon-border-pink animate-slide-up max-h-[90vh] overflow-y-auto">
+          <div className="relative glass-strong rounded-t-2xl sm:rounded-2xl p-5 sm:p-6 md:p-8 w-full sm:max-w-md neon-border-pink animate-slide-up max-h-[92vh] overflow-y-auto">
             <h3 className="font-display text-xl font-bold gradient-neon-text mb-1">
               Booking Details
             </h3>
