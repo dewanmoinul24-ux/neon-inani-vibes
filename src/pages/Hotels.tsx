@@ -68,7 +68,7 @@ const Hotels = () => {
 
       {/* Banner */}
       <section className="relative pt-16 md:pt-20">
-        <div className="relative h-[320px] md:h-[420px] overflow-hidden">
+        <div className="relative h-[260px] sm:h-[320px] md:h-[420px] overflow-hidden">
           <img
             src={hotelsBanner}
             alt="Neon-lit luxury hotels along Cox's Bazar Marine Drive at night"
@@ -79,15 +79,15 @@ const Hotels = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/30" />
           <div className="absolute inset-0 bg-gradient-to-r from-background/60 to-transparent" />
           <div className="absolute inset-0 bg-background/20" />
-          <div className="absolute bottom-8 md:bottom-12 left-0 right-0 container mx-auto px-4">
+          <div className="absolute bottom-6 sm:bottom-8 md:bottom-12 left-0 right-0 container mx-auto">
             <p
-              className="font-ui text-sm uppercase tracking-[0.3em] text-neon-cyan neon-text-cyan mb-2"
+              className="font-ui text-xs sm:text-sm uppercase tracking-[0.3em] text-neon-cyan neon-text-cyan mb-2"
               style={{ textShadow: "0 0 14px hsl(180 100% 55% / 0.95), 0 2px 8px hsl(0 0% 0% / 0.8)" }}
             >
               Stay in style
             </p>
             <h1
-              className="font-display text-5xl md:text-7xl font-bold gradient-neon-text leading-[1.05] lg:text-6xl"
+              className="font-display text-3xl sm:text-5xl md:text-7xl font-bold gradient-neon-text leading-[1.05] lg:text-6xl"
               style={{
                 filter:
                   "drop-shadow(0 0 24px hsl(180 100% 55% / 0.55)) drop-shadow(0 4px 16px hsl(0 0% 0% / 0.9))",
@@ -96,7 +96,7 @@ const Hotels = () => {
               Find Your Perfect Stay
             </h1>
             <p
-              className="mt-4 max-w-xl font-body text-base md:text-xl text-foreground/90"
+              className="mt-3 sm:mt-4 max-w-xl font-body text-sm sm:text-base md:text-xl text-foreground/90"
               style={{ textShadow: "0 2px 12px hsl(0 0% 0% / 0.9)" }}
             >
               Beachfront luxury along Marine Drive. Search Cox's Bazar hotels — best rates guaranteed.
@@ -106,13 +106,13 @@ const Hotels = () => {
       </section>
 
       {/* Search Bar */}
-      <section className="pt-8 pb-8 md:pt-12 md:pb-12 relative">
+      <section className="pt-6 pb-6 sm:pt-8 sm:pb-8 md:pt-12 md:pb-12 relative">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
-        <div className="container mx-auto px-4 relative">
+        <div className="container mx-auto relative">
 
           {/* Search Bar — Booking.com style */}
           <div className="glass-strong rounded-xl p-4 md:p-6 neon-border-pink max-w-5xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 items-end">
               {/* Destination */}
               <div>
                 <label className="font-ui text-xs uppercase tracking-widest text-muted-foreground mb-1 block">
@@ -124,7 +124,8 @@ const Hotels = () => {
                     placeholder="Cox's Bazar"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-9 bg-muted border-border font-body"
+                    autoComplete="off"
+                    className="pl-9 bg-muted border-border font-body h-11"
                   />
                 </div>
               </div>
@@ -139,7 +140,7 @@ const Hotels = () => {
                     <Button
                       variant="outline"
                       className={cn(
-                        "w-full justify-start text-left font-body",
+                        "w-full justify-start text-left font-body h-11",
                         !checkIn && "text-muted-foreground"
                       )}
                     >
@@ -169,7 +170,7 @@ const Hotels = () => {
                     <Button
                       variant="outline"
                       className={cn(
-                        "w-full justify-start text-left font-body",
+                        "w-full justify-start text-left font-body h-11",
                         !checkOut && "text-muted-foreground"
                       )}
                     >
@@ -195,7 +196,7 @@ const Hotels = () => {
                   <label className="font-ui text-xs uppercase tracking-widest text-muted-foreground mb-1 block">
                     Guests
                   </label>
-                  <div className="flex items-center gap-2 bg-muted border border-border rounded-md px-3 h-10">
+                  <div className="flex items-center gap-2 bg-muted border border-border rounded-md px-3 h-11">
                     <Users size={16} className="text-muted-foreground" />
                     <select
                       value={guests}
@@ -215,7 +216,8 @@ const Hotels = () => {
                     onClick={() => setShowFilters(!showFilters)}
                     variant="outline"
                     size="icon"
-                    className="h-10 w-10 border-border"
+                    className="h-11 w-11 border-border"
+                    aria-label="Toggle filters"
                   >
                     <SlidersHorizontal size={16} />
                   </Button>
@@ -285,13 +287,13 @@ const Hotels = () => {
       </section>
 
       {/* Results */}
-      <section className="pb-20">
-        <div className="container mx-auto px-4">
-          <p className="font-ui text-sm text-muted-foreground mb-6">
+      <section className="pb-16 sm:pb-20">
+        <div className="container mx-auto">
+          <p className="font-ui text-xs sm:text-sm text-muted-foreground mb-4 sm:mb-6">
             {filtered.length} {filtered.length === 1 ? "property" : "properties"} found
           </p>
 
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-4 sm:gap-6">
             {filtered.map((hotel, i) => (
               <Link
                 to={`/hotels/${hotel.id}${checkIn ? `?checkIn=${checkIn.toISOString()}` : ""}${checkOut ? `${checkIn ? "&" : "?"}checkOut=${checkOut.toISOString()}` : ""}${`${checkIn || checkOut ? "&" : "?"}guests=${guests}`}`}
@@ -301,7 +303,7 @@ const Hotels = () => {
               >
                 <div className="flex flex-col md:flex-row">
                   {/* Image */}
-                  <div className="relative w-full md:w-80 h-56 md:h-auto flex-shrink-0 overflow-hidden">
+                  <div className="relative w-full md:w-72 lg:w-80 h-44 sm:h-56 md:h-auto flex-shrink-0 overflow-hidden">
                     <img
                       src={hotel.image}
                       alt={hotel.name}
@@ -324,53 +326,53 @@ const Hotels = () => {
                   </div>
 
                   {/* Info */}
-                  <div className="flex-1 p-5 md:p-6 flex flex-col justify-between">
+                  <div className="flex-1 p-4 sm:p-5 md:p-6 flex flex-col justify-between">
                     <div>
-                      <h3 className="font-display text-lg md:text-xl font-semibold text-foreground mb-1">
+                      <h3 className="font-display text-base sm:text-lg md:text-xl font-semibold text-foreground mb-1">
                         {hotel.name}
                       </h3>
-                      <p className="flex items-center gap-1 text-muted-foreground text-sm mb-3">
-                        <MapPin size={14} /> {hotel.location}
+                      <p className="flex items-center gap-1 text-muted-foreground text-xs sm:text-sm mb-2 sm:mb-3">
+                        <MapPin size={14} className="shrink-0" /> {hotel.location}
                       </p>
-                      <div className="flex flex-wrap gap-2 mb-3">
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-2 sm:mb-3">
                         {hotel.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="px-2 py-0.5 rounded-full text-xs font-ui uppercase tracking-wider glass text-neon-cyan border border-neon-cyan/20"
+                            className="px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-ui uppercase tracking-wider glass text-neon-cyan border border-neon-cyan/20"
                           >
                             {tag}
                           </span>
                         ))}
                       </div>
-                      <p className="text-muted-foreground text-sm line-clamp-2 font-body mb-3">
+                      <p className="text-muted-foreground text-xs sm:text-sm line-clamp-2 font-body mb-2 sm:mb-3">
                         {hotel.description}
                       </p>
-                      <div className="flex flex-wrap gap-3">
+                      <div className="flex flex-wrap gap-2 sm:gap-3">
                         {hotel.amenities.slice(0, 5).map((amenity) => (
                           <span
                             key={amenity}
-                            className="flex items-center gap-1 text-xs text-muted-foreground font-ui"
+                            className="flex items-center gap-1 text-[11px] sm:text-xs text-muted-foreground font-ui"
                           >
                             {amenityIcons[amenity] || null}
                             {amenity}
                           </span>
                         ))}
                         {hotel.amenities.length > 5 && (
-                          <span className="text-xs text-primary font-ui">
+                          <span className="text-[11px] sm:text-xs text-primary font-ui">
                             +{hotel.amenities.length - 5} more
                           </span>
                         )}
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between mt-4 pt-4 border-t border-border">
-                      <div>
-                        <span className="font-display text-xl md:text-2xl font-bold text-primary">
+                    <div className="flex items-center justify-between gap-2 mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-border">
+                      <div className="min-w-0">
+                        <span className="font-display text-lg sm:text-xl md:text-2xl font-bold text-primary">
                           {formatPrice(hotel.price)}
                         </span>
-                        <span className="text-muted-foreground text-sm"> / night</span>
+                        <span className="text-muted-foreground text-xs sm:text-sm"> / night</span>
                       </div>
-                      <span className="px-5 py-2 rounded-lg font-ui text-xs uppercase tracking-widest gradient-neon text-primary-foreground transition-transform group-hover:scale-105">
+                      <span className="px-4 sm:px-5 py-2 min-h-[40px] inline-flex items-center rounded-lg font-ui text-[11px] sm:text-xs uppercase tracking-widest gradient-neon text-primary-foreground transition-transform group-hover:scale-105 shrink-0">
                         View Details
                       </span>
                     </div>
