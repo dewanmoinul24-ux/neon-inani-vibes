@@ -105,6 +105,7 @@ const HotelDetail = () => {
         tax_and_fees: taxes,
         total: grandTotal,
         special_requests: specialRequests || null,
+        user_id: user?.id ?? null,
       });
 
       if (error) throw error;
