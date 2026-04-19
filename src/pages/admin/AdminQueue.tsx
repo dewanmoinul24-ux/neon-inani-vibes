@@ -2,17 +2,37 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { RequireSuperAdmin } from "@/components/admin/RequireRole";
-import { Check, X, Calendar, User, Phone, Mail, MapPin, Clock, Loader2 } from "lucide-react";
+import {
+  Check,
+  X,
+  Calendar,
+  User,
+  Phone,
+  Mail,
+  MapPin,
+  Clock,
+  Loader2,
+  RefreshCw,
+} from "lucide-react";
 import { toast } from "sonner";
 import { useCurrency } from "@/hooks/useCurrency";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { formatDistanceToNow } from "date-fns";
+import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 
 const AdminQueueInner = () => {
   const queryClient = useQueryClient();
   const { formatPrice } = useCurrency();
   const [actingId, setActingId] = useState<string | null>(null);
+  const [now, setNow] = useState(() => Date.now());
 
-  const { data: pending, isLoading } = useQuery({
+  const {
+    data: pending,
+    isLoading,
+    isFetching,
+    dataUpdatedAt,
+    refetch,
+  } = useQuery({
     queryKey: ["admin-pending-reservations"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -24,6 +44,26 @@ const AdminQueueInner = () => {
       return data ?? [];
     },
   });
+
+  // Tick every 30s so the relative timestamp stays fresh
+  useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), 30_000);
+    return () => clearInterval(t);
+  }, []);
+
+  const { pullDistance, isRefreshing, progress } = usePullToRefresh({
+    onRefresh: async () => {
+      await refetch();
+      toast.success("Queue updated");
+    },
+  });
+
+  const lastUpdatedLabel = dataUpdatedAt
+    ? formatDistanceToNow(new Date(dataUpdatedAt), { addSuffix: true })
+    : "just now";
+  // Reference `now` so this re-renders on the interval tick
+  void now;
+
 
   const updateStatus = async (id: string, status: "confirmed" | "rejected") => {
     setActingId(id);
