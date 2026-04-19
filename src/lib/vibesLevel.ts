@@ -11,6 +11,10 @@ export interface VibesTier {
   accent: "cyan" | "pink" | "purple" | "orange";
   tagline: string;
   perks: string[];
+  /** Discount applied to hotel bookings (0–1). */
+  hotelDiscount: number;
+  /** Discount applied to vehicle bookings (0–1). */
+  vehicleDiscount: number;
 }
 
 export const VIBES_TIERS: VibesTier[] = [
@@ -26,6 +30,8 @@ export const VIBES_TIERS: VibesTier[] = [
       "Switch between BDT & USD anytime",
       "Saved properties & wishlists",
     ],
+    hotelDiscount: 0,
+    vehicleDiscount: 0,
   },
   {
     level: 2,
@@ -39,6 +45,8 @@ export const VIBES_TIERS: VibesTier[] = [
       "Priority customer support",
       "Early check-in when available",
     ],
+    hotelDiscount: 0,
+    vehicleDiscount: 0.05,
   },
   {
     level: 3,
@@ -53,6 +61,8 @@ export const VIBES_TIERS: VibesTier[] = [
       "Late check-out included",
       "All Wanderer perks",
     ],
+    hotelDiscount: 0.10,
+    vehicleDiscount: 0.05,
   },
   {
     level: 4,
@@ -68,6 +78,8 @@ export const VIBES_TIERS: VibesTier[] = [
       "Complimentary airport pickup",
       "All Voyager perks",
     ],
+    hotelDiscount: 0.15,
+    vehicleDiscount: 0.15,
   },
 ];
 
