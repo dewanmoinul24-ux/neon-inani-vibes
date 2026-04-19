@@ -199,6 +199,9 @@ const Profile = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bookings]);
 
+  const completedTrips = useMemo(() => countCompletedTrips(bookings), [bookings]);
+  const vibesTier = useMemo(() => getVibesTier(completedTrips), [completedTrips]);
+
   if (loading || !user) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -228,8 +231,13 @@ const Profile = () => {
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground font-ui mt-1">
               <span className="flex items-center gap-1"><Mail className="w-3.5 h-3.5" />{user.email}</span>
               <span>Member since {memberSince}</span>
-              <Badge variant="outline" className="border-neon-cyan/40 text-neon-cyan">
-                Vibes Level 1
+              <Badge
+                variant="outline"
+                className="border-neon-cyan/40 text-neon-cyan cursor-pointer hover:bg-neon-cyan/10"
+                onClick={() => setActive("vibes")}
+              >
+                <Sparkles className="w-3 h-3 mr-1" />
+                Vibes Level {vibesTier.level} · {vibesTier.name}
               </Badge>
             </div>
           </div>
