@@ -42,6 +42,8 @@ import {
   Sparkles,
   Hotel as HotelIcon,
   Car as CarIcon,
+  Ticket,
+  Clock as ClockIcon,
 } from "lucide-react";
 import { format, isAfter, parseISO } from "date-fns";
 import { useCurrency } from "@/hooks/useCurrency";
