@@ -135,15 +135,15 @@ const Experiences = () => {
           <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-transparent to-background" />
           <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
 
-          <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-end pb-12 md:pb-20 shadow-inner">
+          <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-end pb-8 sm:pb-12 md:pb-20 shadow-inner">
             <p
-              className="font-ui text-xs md:text-sm uppercase tracking-[0.4em] text-neon-cyan mb-3"
+              className="font-ui text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.4em] text-neon-cyan mb-2 sm:mb-3"
               style={{ textShadow: "0 0 14px hsl(180 100% 55% / 0.95), 0 2px 8px hsl(0 0% 0% / 0.85)" }}
             >
               Marine Drive · After Dark
             </p>
             <h1
-              className="font-display text-5xl md:text-7xl font-bold gradient-neon-text max-w-4xl leading-[1.05] lg:text-6xl"
+              className="font-display text-[2.25rem] sm:text-5xl md:text-7xl lg:text-6xl font-bold gradient-neon-text max-w-4xl leading-[1.05]"
               style={{
                 filter:
                   "drop-shadow(0 4px 18px hsl(0 0% 0% / 0.95)) drop-shadow(0 0 24px hsl(330 100% 65% / 0.55)) drop-shadow(0 8px 24px hsl(0 0% 0% / 0.85))",
@@ -152,22 +152,22 @@ const Experiences = () => {
               Experiences & Adventure Sports
             </h1>
             <p
-              className="mt-5 max-w-2xl text-base text-foreground/90 md:text-base"
+              className="mt-3 sm:mt-5 max-w-2xl text-sm sm:text-base text-foreground/90"
               style={{ textShadow: "0 2px 12px hsl(0 0% 0% / 0.9)" }}
             >
               Beach raves, music festivals, parasailing, jet skis, scuba and more — curated
               along the world's longest beach. Pick a vibe, book your spot.
             </p>
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-4 sm:mt-6 flex flex-wrap gap-2 sm:gap-3">
               <a
                 href="#upcoming"
-                className="px-5 py-2.5 rounded-lg font-ui text-xs uppercase tracking-widest gradient-neon text-primary-foreground neon-glow-pink hover:scale-105 transition-transform"
+                className="px-4 sm:px-5 py-2.5 rounded-lg font-ui text-[11px] sm:text-xs uppercase tracking-widest gradient-neon text-primary-foreground neon-glow-pink hover:scale-105 transition-transform"
               >
                 Upcoming Events
               </a>
               <a
                 href="#sports"
-                className="px-5 py-2.5 rounded-lg font-ui text-xs uppercase tracking-widest glass neon-border-cyan text-neon-cyan hover:scale-105 transition-transform"
+                className="px-4 sm:px-5 py-2.5 rounded-lg font-ui text-[11px] sm:text-xs uppercase tracking-widest glass neon-border-cyan text-neon-cyan hover:scale-105 transition-transform"
               >
                 Adventure Sports
               </a>
