@@ -4,23 +4,25 @@ const HeroSection = () => {
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background image */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 overflow-hidden">
         <img
           src={heroBg}
           alt="Cox's Bazar Marine Drive at sunset"
           className="w-full h-full object-cover"
           width={1920}
           height={1080}
+          loading="eager"
+          fetchPriority="high"
         />
         {/* Overlay gradient */}
         <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/40 to-background" />
         <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-transparent to-background/60" />
-      </div>
 
-      {/* Animated neon light leaks */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-neon-pink/10 blur-[120px] animate-float" />
-      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full bg-neon-blue/10 blur-[100px] animate-float" style={{ animationDelay: "2s" }} />
-      <div className="absolute top-1/2 left-1/2 w-64 h-64 rounded-full bg-neon-purple/8 blur-[80px] animate-float" style={{ animationDelay: "4s" }} />
+        {/* Animated neon light leaks - contained within hero bounds to prevent horizontal overflow */}
+        <div className="pointer-events-none absolute top-1/4 left-1/4 w-72 sm:w-96 h-72 sm:h-96 rounded-full bg-neon-pink/10 blur-[80px] sm:blur-[120px] animate-float" />
+        <div className="pointer-events-none absolute bottom-1/4 right-1/4 w-64 sm:w-80 h-64 sm:h-80 rounded-full bg-neon-blue/10 blur-[70px] sm:blur-[100px] animate-float" style={{ animationDelay: "2s" }} />
+        <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 sm:w-64 h-48 sm:h-64 rounded-full bg-neon-purple/10 blur-[60px] sm:blur-[80px] animate-float" style={{ animationDelay: "4s" }} />
+      </div>
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 text-center">
