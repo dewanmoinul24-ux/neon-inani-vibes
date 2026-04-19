@@ -33,6 +33,7 @@ const HotelDetail = () => {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const hotel = hotels.find((h) => h.id === id);
+  const { user } = useAuth();
 
   const [activeImage, setActiveImage] = useState(0);
   const [checkIn, setCheckIn] = useState<Date | undefined>(
