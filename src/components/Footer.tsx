@@ -12,7 +12,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand */}
           <div>
-            <img src={logo} alt="InaniVibes" className="h-10 mb-4 animate-neon-flicker" />
+            <img src={logo} alt="InaniVibes" className="h-16 md:h-20 w-auto mb-4 animate-neon-flicker" />
             <p className="text-muted-foreground text-sm leading-relaxed mb-4">
               Your premium gateway to Cox's Bazar. Neon nights, golden sunsets, and unforgettable vibes.
             </p>
