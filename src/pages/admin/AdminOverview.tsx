@@ -22,14 +22,14 @@ interface KpiCardProps {
 }
 
 const KpiCard = ({ label, value, icon: Icon, accent }: KpiCardProps) => (
-  <div className={`glass rounded-xl p-5 border ${accent} transition-all hover:scale-[1.02]`}>
-    <div className="flex items-center justify-between mb-3">
-      <span className="font-ui text-[10px] uppercase tracking-widest text-muted-foreground">
+  <div className={`glass rounded-xl p-3 md:p-5 border ${accent} transition-all hover:scale-[1.02]`}>
+    <div className="flex items-center justify-between mb-2 md:mb-3">
+      <span className="font-ui text-[9px] md:text-[10px] uppercase tracking-widest text-muted-foreground leading-tight">
         {label}
       </span>
-      <Icon className="w-4 h-4 text-neon-cyan" />
+      <Icon className="w-3.5 h-3.5 md:w-4 md:h-4 text-neon-cyan shrink-0" />
     </div>
-    <p className="font-display text-2xl md:text-3xl font-bold text-foreground">{value}</p>
+    <p className="font-display text-lg md:text-3xl font-bold text-foreground leading-tight break-words">{value}</p>
   </div>
 );
 
@@ -92,7 +92,7 @@ const AdminOverviewInner = () => {
 
   return (
     <>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8">
         <KpiCard
           label="Total Bookings"
           value={totalBookings}
@@ -119,19 +119,19 @@ const AdminOverviewInner = () => {
         />
       </div>
 
-      <div className="glass rounded-xl p-6 neon-border-blue">
-        <div className="flex items-center gap-2 mb-4">
+      <div className="glass rounded-xl p-4 md:p-6 neon-border-blue">
+        <div className="flex items-center gap-2 mb-3 md:mb-4">
           <TrendingUp className="w-4 h-4 text-neon-cyan" />
-          <h2 className="font-display text-lg font-semibold text-foreground">
+          <h2 className="font-display text-base md:text-lg font-semibold text-foreground">
             Bookings — Last 7 days
           </h2>
         </div>
-        <div className="h-64">
+        <div className="h-48 md:h-64 -ml-2 md:ml-0">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={chartData}>
+            <BarChart data={chartData} margin={{ top: 5, right: 8, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
-              <XAxis dataKey="day" stroke="hsl(var(--muted-foreground))" fontSize={11} />
-              <YAxis stroke="hsl(var(--muted-foreground))" fontSize={11} allowDecimals={false} />
+              <XAxis dataKey="day" stroke="hsl(var(--muted-foreground))" fontSize={10} />
+              <YAxis stroke="hsl(var(--muted-foreground))" fontSize={10} allowDecimals={false} width={28} />
               <Tooltip
                 contentStyle={{
                   background: "hsl(var(--card))",

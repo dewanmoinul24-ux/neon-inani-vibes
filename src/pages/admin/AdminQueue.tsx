@@ -67,80 +67,80 @@ const AdminQueueInner = () => {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 md:space-y-4">
       {pending.map((r) => {
         const isActing = actingId === r.id;
         return (
           <div
             key={r.id}
-            className="glass rounded-xl p-5 md:p-6 neon-border-pink transition-all hover:scale-[1.005]"
+            className="glass rounded-xl p-4 md:p-6 neon-border-pink transition-all hover:scale-[1.005]"
           >
             <div className="flex flex-col lg:flex-row lg:items-start gap-4">
               <div className="flex-1 min-w-0">
-                <div className="flex items-start justify-between gap-3 mb-3">
-                  <div>
-                    <p className="font-ui text-[10px] uppercase tracking-widest text-neon-pink mb-1">
+                <div className="flex items-start justify-between gap-2 mb-3">
+                  <div className="min-w-0">
+                    <p className="font-ui text-[9px] md:text-[10px] uppercase tracking-widest text-neon-pink mb-1 truncate">
                       {r.experience_type} {r.category && `• ${r.category}`}
                     </p>
-                    <h3 className="font-display text-lg md:text-xl font-bold text-foreground">
+                    <h3 className="font-display text-base md:text-xl font-bold text-foreground leading-tight break-words">
                       {r.experience_title}
                     </h3>
                   </div>
-                  <span className="px-2 py-1 rounded-full text-[10px] font-ui uppercase tracking-wider bg-neon-orange/15 text-neon-orange border border-neon-orange/40 shrink-0">
+                  <span className="px-2 py-1 rounded-full text-[9px] md:text-[10px] font-ui uppercase tracking-wider bg-neon-orange/15 text-neon-orange border border-neon-orange/40 shrink-0">
                     Pending
                   </span>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-sm font-body">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <User className="w-3.5 h-3.5" />
-                    <span className="text-foreground">{r.guest_name}</span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1.5 md:gap-y-2 text-xs md:text-sm font-body">
+                  <div className="flex items-center gap-2 text-muted-foreground min-w-0">
+                    <User className="w-3.5 h-3.5 shrink-0" />
+                    <span className="text-foreground truncate">{r.guest_name}</span>
                   </div>
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Mail className="w-3.5 h-3.5" />
+                  <div className="flex items-center gap-2 text-muted-foreground min-w-0">
+                    <Mail className="w-3.5 h-3.5 shrink-0" />
                     <span className="text-foreground truncate">{r.guest_email}</span>
                   </div>
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Phone className="w-3.5 h-3.5" />
-                    <span className="text-foreground">{r.guest_phone}</span>
+                  <div className="flex items-center gap-2 text-muted-foreground min-w-0">
+                    <Phone className="w-3.5 h-3.5 shrink-0" />
+                    <span className="text-foreground truncate">{r.guest_phone}</span>
                   </div>
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Calendar className="w-3.5 h-3.5" />
-                    <span className="text-foreground">
+                  <div className="flex items-center gap-2 text-muted-foreground min-w-0">
+                    <Calendar className="w-3.5 h-3.5 shrink-0" />
+                    <span className="text-foreground truncate">
                       {new Date(r.preferred_date).toLocaleDateString()}
                       {r.preferred_time && ` • ${r.preferred_time}`}
                     </span>
                   </div>
                   {r.location && (
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <MapPin className="w-3.5 h-3.5" />
-                      <span className="text-foreground">{r.location}</span>
+                    <div className="flex items-center gap-2 text-muted-foreground min-w-0">
+                      <MapPin className="w-3.5 h-3.5 shrink-0" />
+                      <span className="text-foreground truncate">{r.location}</span>
                     </div>
                   )}
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Clock className="w-3.5 h-3.5" />
-                    <span className="text-foreground">
+                  <div className="flex items-center gap-2 text-muted-foreground min-w-0">
+                    <Clock className="w-3.5 h-3.5 shrink-0" />
+                    <span className="text-foreground truncate">
                       Requested {new Date(r.created_at).toLocaleDateString()}
                     </span>
                   </div>
                 </div>
 
                 {r.special_requests && (
-                  <div className="mt-3 p-3 rounded-lg bg-muted/30 border border-border/40">
-                    <p className="text-[10px] font-ui uppercase tracking-widest text-muted-foreground mb-1">
+                  <div className="mt-3 p-2.5 md:p-3 rounded-lg bg-muted/30 border border-border/40">
+                    <p className="text-[9px] md:text-[10px] font-ui uppercase tracking-widest text-muted-foreground mb-1">
                       Special requests
                     </p>
-                    <p className="text-sm font-body text-foreground">{r.special_requests}</p>
+                    <p className="text-xs md:text-sm font-body text-foreground break-words">{r.special_requests}</p>
                   </div>
                 )}
               </div>
 
-              <div className="flex flex-col items-stretch lg:items-end gap-3 lg:min-w-[180px]">
-                <div className="text-right">
-                  <p className="text-[10px] font-ui uppercase tracking-widest text-muted-foreground">
+              <div className="flex flex-row lg:flex-col items-center lg:items-end justify-between gap-3 lg:min-w-[180px] pt-3 lg:pt-0 border-t lg:border-t-0 border-border/30">
+                <div className="text-left lg:text-right">
+                  <p className="text-[9px] md:text-[10px] font-ui uppercase tracking-widest text-muted-foreground">
                     Total ({r.quantity}× {formatPrice(Number(r.unit_price))})
                   </p>
-                  <p className="font-display text-xl font-bold gradient-neon-text">
+                  <p className="font-display text-lg md:text-xl font-bold gradient-neon-text">
                     {formatPrice(Number(r.total_price))}
                   </p>
                 </div>
@@ -148,14 +148,14 @@ const AdminQueueInner = () => {
                   <button
                     onClick={() => updateStatus(r.id, "rejected")}
                     disabled={isActing}
-                    className="flex-1 lg:flex-none px-4 py-2 rounded-lg font-ui text-xs uppercase tracking-widest border border-destructive/40 text-destructive hover:bg-destructive/10 transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5"
+                    className="px-3 md:px-4 py-2 rounded-lg font-ui text-[11px] md:text-xs uppercase tracking-widest border border-destructive/40 text-destructive hover:bg-destructive/10 transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5"
                   >
                     <X className="w-3.5 h-3.5" /> Reject
                   </button>
                   <button
                     onClick={() => updateStatus(r.id, "confirmed")}
                     disabled={isActing}
-                    className="flex-1 lg:flex-none px-4 py-2 rounded-lg font-ui text-xs uppercase tracking-widest gradient-neon text-primary-foreground hover:scale-105 transition-transform disabled:opacity-50 flex items-center justify-center gap-1.5"
+                    className="px-3 md:px-4 py-2 rounded-lg font-ui text-[11px] md:text-xs uppercase tracking-widest gradient-neon text-primary-foreground hover:scale-105 transition-transform disabled:opacity-50 flex items-center justify-center gap-1.5"
                   >
                     {isActing ? (
                       <Loader2 className="w-3.5 h-3.5 animate-spin" />
