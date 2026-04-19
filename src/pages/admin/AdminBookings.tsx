@@ -107,69 +107,113 @@ const AdminBookingsInner = () => {
 
   return (
     <>
-      <div className="glass rounded-xl p-4 mb-6 flex flex-col md:flex-row gap-3">
+      <div className="glass rounded-xl p-3 md:p-4 mb-4 md:mb-6 flex flex-col md:flex-row gap-2 md:gap-3">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by guest, email, or listing…"
+            placeholder="Search guest, email, listing…"
             className="w-full pl-9 pr-3 py-2 rounded-lg bg-background/50 border border-border/40 font-body text-sm focus:outline-none focus:border-primary/60"
           />
         </div>
-        <select
-          value={sourceFilter}
-          onChange={(e) => setSourceFilter(e.target.value)}
-          className="px-3 py-2 rounded-lg bg-background/50 border border-border/40 font-ui text-sm uppercase tracking-wider"
-        >
-          <option value="all">All sources</option>
-          <option value="Hotel">Hotels</option>
-          <option value="Experience">Experiences</option>
-        </select>
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="px-3 py-2 rounded-lg bg-background/50 border border-border/40 font-ui text-sm uppercase tracking-wider"
-        >
-          <option value="all">All statuses</option>
-          <option value="pending">Pending</option>
-          <option value="confirmed">Confirmed</option>
-          <option value="rejected">Rejected</option>
-          <option value="cancelled">Cancelled</option>
-        </select>
+        <div className="grid grid-cols-2 md:flex gap-2 md:gap-3">
+          <select
+            value={sourceFilter}
+            onChange={(e) => setSourceFilter(e.target.value)}
+            className="px-2 md:px-3 py-2 rounded-lg bg-background/50 border border-border/40 font-ui text-xs md:text-sm uppercase tracking-wider"
+          >
+            <option value="all">All sources</option>
+            <option value="Hotel">Hotels</option>
+            <option value="Experience">Experiences</option>
+          </select>
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="px-2 md:px-3 py-2 rounded-lg bg-background/50 border border-border/40 font-ui text-xs md:text-sm uppercase tracking-wider"
+          >
+            <option value="all">All statuses</option>
+            <option value="pending">Pending</option>
+            <option value="confirmed">Confirmed</option>
+            <option value="rejected">Rejected</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
       </div>
 
       {isLoading ? (
         <div className="flex justify-center py-20">
           <Loader2 className="w-6 h-6 animate-spin text-neon-cyan" />
         </div>
+      ) : filtered.length === 0 ? (
+        <div className="glass rounded-xl p-8 md:p-12 text-center neon-border-blue">
+          <p className="font-body text-sm text-muted-foreground">
+            No bookings match the current filters.
+          </p>
+        </div>
       ) : (
-        <div className="glass rounded-xl overflow-hidden neon-border-blue">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-muted/30 border-b border-border/40">
-                <tr className="text-left font-ui text-[10px] uppercase tracking-widest text-muted-foreground">
-                  <th className="px-4 py-3">Source</th>
-                  <th className="px-4 py-3">Listing</th>
-                  <th className="px-4 py-3">Guest</th>
-                  <th className="px-4 py-3">Date</th>
-                  <th className="px-4 py-3 text-right">Total</th>
-                  <th className="px-4 py-3">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.length === 0 ? (
-                  <tr>
-                    <td
-                      colSpan={6}
-                      className="px-4 py-12 text-center text-muted-foreground font-body"
-                    >
-                      No bookings match the current filters.
-                    </td>
+        <>
+          {/* Mobile: card list */}
+          <div className="md:hidden space-y-3">
+            {filtered.map((r) => (
+              <div
+                key={`m-${r.source}-${r.id}`}
+                className="glass rounded-xl p-3 neon-border-blue"
+              >
+                <div className="flex items-start justify-between gap-2 mb-2">
+                  <span
+                    className={`px-2 py-0.5 rounded-full text-[9px] font-ui uppercase tracking-wider border shrink-0 ${
+                      r.source === "Hotel"
+                        ? "text-neon-cyan border-neon-cyan/40 bg-neon-cyan/10"
+                        : "text-neon-pink border-neon-pink/40 bg-neon-pink/10"
+                    }`}
+                  >
+                    {r.source}
+                  </span>
+                  <span
+                    className={`px-2 py-0.5 rounded-full text-[9px] font-ui uppercase tracking-wider border shrink-0 ${statusBadge(
+                      r.status
+                    )}`}
+                  >
+                    {r.status}
+                  </span>
+                </div>
+                <h3 className="font-display text-sm font-bold text-foreground leading-tight mb-1.5 break-words">
+                  {r.title}
+                </h3>
+                <div className="font-body text-xs text-foreground truncate">{r.guest}</div>
+                <div className="font-body text-[11px] text-muted-foreground truncate mb-2">
+                  {r.email}
+                </div>
+                <div className="flex items-center justify-between pt-2 border-t border-border/30">
+                  <span className="font-body text-xs text-muted-foreground">
+                    {new Date(r.date).toLocaleDateString()}
+                  </span>
+                  <span className="font-display text-sm font-bold gradient-neon-text">
+                    {formatPrice(r.total)}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop: table */}
+          <div className="hidden md:block glass rounded-xl overflow-hidden neon-border-blue">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-muted/30 border-b border-border/40">
+                  <tr className="text-left font-ui text-[10px] uppercase tracking-widest text-muted-foreground">
+                    <th className="px-4 py-3">Source</th>
+                    <th className="px-4 py-3">Listing</th>
+                    <th className="px-4 py-3">Guest</th>
+                    <th className="px-4 py-3">Date</th>
+                    <th className="px-4 py-3 text-right">Total</th>
+                    <th className="px-4 py-3">Status</th>
                   </tr>
-                ) : (
-                  filtered.map((r) => (
+                </thead>
+                <tbody>
+                  {filtered.map((r) => (
                     <tr
                       key={`${r.source}-${r.id}`}
                       className="border-b border-border/20 hover:bg-muted/20 transition-colors"
@@ -210,12 +254,12 @@ const AdminBookingsInner = () => {
                         </span>
                       </td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
+        </>
       )}
     </>
   );
