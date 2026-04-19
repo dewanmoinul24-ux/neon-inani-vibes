@@ -26,7 +26,7 @@ const navLinks = [
   { label: "Home", href: "/", isRoute: true },
   { label: "Hotels", href: "/hotels", isRoute: true },
   { label: "Vehicles", href: "/vehicles", isRoute: true },
-  { label: "Experiences", href: "/#experiences" },
+  { label: "Experiences", href: "/experiences", isRoute: true },
   { label: "Places", href: "/#places" },
   { label: "About", href: "/#about" },
   { label: "Contact", href: "/#contact" },

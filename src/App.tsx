@@ -11,6 +11,8 @@ import Hotels from "./pages/Hotels.tsx";
 import HotelDetail from "./pages/HotelDetail.tsx";
 import Vehicles from "./pages/Vehicles.tsx";
 import VehicleSelection from "./pages/VehicleSelection.tsx";
+import Experiences from "./pages/Experiences.tsx";
+import ExperienceDetail from "./pages/ExperienceDetail.tsx";
 import Profile from "./pages/Profile.tsx";
 import ResetPassword from "./pages/ResetPassword.tsx";
 import NotFound from "./pages/NotFound.tsx";
@@ -32,6 +34,8 @@ const App = () => (
             <Route path="/hotels/:id" element={<HotelDetail />} />
             <Route path="/vehicles" element={<Vehicles />} />
             <Route path="/vehicles/:categoryId" element={<VehicleSelection />} />
+            <Route path="/experiences" element={<Experiences />} />
+            <Route path="/experiences/:id" element={<ExperienceDetail />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
