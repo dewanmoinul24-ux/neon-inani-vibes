@@ -417,6 +417,15 @@ const Profile = () => {
               </SectionShell>
             )}
 
+            {active === "vibes" && (
+              <SectionShell
+                title="Vibes Level"
+                description="Earn perks the more you travel with InaniVibes — every completed trip moves you up."
+              >
+                <VibesLevelCard completedTrips={completedTrips} />
+              </SectionShell>
+            )}
+
             {active === "upcoming" && (
               <SectionShell title="Upcoming trips" description="Your confirmed bookings ahead.">
                 <BookingList
