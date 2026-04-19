@@ -34,7 +34,7 @@ const HeroSection = () => {
             <br />
             <span className="text-foreground">Like Never Before</span>
           </h1>
-          <p className="font-body text-base md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
+          <p className="font-body text-base md:text-xl text-foreground/90 max-w-2xl mx-auto mb-10">
             Book hotels, rides, and experiences in one place. Your premium neon beach city adventure starts here.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
