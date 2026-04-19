@@ -28,6 +28,7 @@ import { getExperienceById } from "@/data/experiences";
 import { useCurrency } from "@/hooks/useCurrency";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import StickyBookingBar from "@/components/StickyBookingBar";
 
 const formatEventDate = (iso: string) =>
   new Date(iso + "T00:00:00").toLocaleDateString(undefined, {
@@ -279,9 +280,10 @@ const ExperienceDetail = () => {
             </div>
           </div>
 
-          {/* Right — booking form (sticky) */}
-          <aside className="lg:col-span-1">
+          {/* Right — booking form (sticky on desktop, hidden on mobile in favor of StickyBookingBar) */}
+          <aside className="lg:col-span-1 hidden lg:block">
             <form
+              id="booking-form"
               onSubmit={handleSubmit}
               className="glass-strong rounded-xl p-6 border border-primary/40 lg:sticky lg:top-24 space-y-4"
             >
@@ -405,6 +407,138 @@ const ExperienceDetail = () => {
           </aside>
         </div>
       </section>
+
+      {/* Mobile booking form (full-width, below content) */}
+      <section className="lg:hidden pb-8">
+        <div className="container mx-auto">
+          <form
+            onSubmit={handleSubmit}
+            className="glass-strong rounded-xl p-5 border border-primary/40 space-y-4"
+          >
+            <div>
+              <p className="font-ui text-xs uppercase tracking-widest text-muted-foreground">
+                {isEvent ? "Reserve your ticket" : "Book a session"}
+              </p>
+              <p className="font-display text-2xl font-bold gradient-neon-text mt-1">
+                {format(experience.priceBdt)}
+                <span className="text-sm text-muted-foreground font-normal ml-1">
+                  / {isEvent ? "ticket" : "session"}
+                </span>
+              </p>
+            </div>
+
+            {!isEvent && (
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label htmlFor="date-m" className="text-xs">Preferred date *</Label>
+                  <Input
+                    id="date-m"
+                    type="date"
+                    required
+                    min={new Date().toISOString().slice(0, 10)}
+                    value={preferredDate}
+                    onChange={(e) => setPreferredDate(e.target.value)}
+                    className="h-11"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="time-m" className="text-xs">Preferred time *</Label>
+                  <Input
+                    id="time-m"
+                    type="time"
+                    required
+                    value={preferredTime}
+                    onChange={(e) => setPreferredTime(e.target.value)}
+                    className="h-11"
+                  />
+                </div>
+              </div>
+            )}
+
+            <div>
+              <Label htmlFor="qty-m" className="text-xs">
+                {isEvent ? "Tickets" : "Riders / participants"}
+              </Label>
+              <Input
+                id="qty-m"
+                type="number"
+                inputMode="numeric"
+                min={1}
+                max={10}
+                value={quantity}
+                onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                className="h-11"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="name-m" className="text-xs">Full name *</Label>
+              <Input id="name-m" required autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} className="h-11" />
+            </div>
+
+            <div>
+              <Label htmlFor="email-m" className="text-xs">Email *</Label>
+              <Input
+                id="email-m"
+                type="email"
+                inputMode="email"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="h-11"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="phone-m" className="text-xs">Phone *</Label>
+              <Input
+                id="phone-m"
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel"
+                required
+                placeholder="+880 ..."
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="h-11"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="notes-m" className="text-xs">Special requests (optional)</Label>
+              <Textarea
+                id="notes-m"
+                rows={2}
+                maxLength={500}
+                placeholder="Allergies, group ages, accessibility..."
+                value={specialRequests}
+                onChange={(e) => setSpecialRequests(e.target.value)}
+              />
+            </div>
+
+            <div className="border-t border-border/60 pt-3 flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">Total</span>
+              <span className="font-display text-2xl font-bold text-primary">{format(total)}</span>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      {/* Mobile sticky CTA */}
+      <StickyBookingBar
+        priceLabel={`${format(total)} total`}
+        subLabel={`${quantity} × ${format(experience.priceBdt)}`}
+        ctaLabel={user ? "Reserve" : "Sign in"}
+        disabled={submitting}
+        onCta={() => {
+          // Submit the visible form (mobile or desktop)
+          const form = document.querySelector<HTMLFormElement>(
+            "form.glass-strong"
+          );
+          form?.requestSubmit();
+        }}
+      />
 
       <Footer />
     </div>

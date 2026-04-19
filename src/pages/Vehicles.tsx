@@ -62,7 +62,7 @@ const Vehicles = () => {
 
       {/* Banner */}
       <section className="relative pt-16 md:pt-20">
-        <div className="relative h-[320px] md:h-[420px] overflow-hidden">
+        <div className="relative h-[260px] sm:h-[320px] md:h-[420px] overflow-hidden">
           <img
             src={vehiclesBanner}
             alt="Neon cars on Marine Drive Cox's Bazar"
@@ -73,21 +73,21 @@ const Vehicles = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/30" />
           <div className="absolute inset-0 bg-gradient-to-r from-background/60 to-transparent" />
           <div className="absolute inset-0 bg-background/20" />
-          <div className="absolute bottom-8 md:bottom-12 left-0 right-0 container mx-auto px-4">
+          <div className="absolute bottom-6 sm:bottom-8 md:bottom-12 left-0 right-0 container mx-auto">
             <Link
               to="/"
-              className="inline-flex items-center gap-1 text-muted-foreground hover:text-primary transition-colors font-ui text-sm mb-4"
+              className="inline-flex items-center gap-1 text-muted-foreground hover:text-primary transition-colors font-ui text-xs sm:text-sm mb-3 sm:mb-4"
             >
               <ChevronLeft size={16} /> Back to Home
             </Link>
             <p
-              className="font-ui text-sm uppercase tracking-[0.3em] text-neon-cyan neon-text-cyan mb-2"
+              className="font-ui text-xs sm:text-sm uppercase tracking-[0.3em] text-neon-cyan neon-text-cyan mb-2"
               style={{ textShadow: "0 0 14px hsl(180 100% 55% / 0.95), 0 2px 8px hsl(0 0% 0% / 0.8)" }}
             >
               Ride the coast
             </p>
             <h1
-              className="font-display text-5xl md:text-7xl font-bold gradient-neon-text leading-[1.05] lg:text-6xl"
+              className="font-display text-3xl sm:text-5xl md:text-7xl font-bold gradient-neon-text leading-[1.05] lg:text-6xl"
               style={{
                 filter:
                   "drop-shadow(0 0 24px hsl(180 100% 55% / 0.55)) drop-shadow(0 4px 16px hsl(0 0% 0% / 0.9))",
@@ -96,7 +96,7 @@ const Vehicles = () => {
               Vehicle Rental
             </h1>
             <p
-              className="mt-4 max-w-xl font-body text-base text-foreground/90 md:text-lg"
+              className="mt-3 sm:mt-4 max-w-xl font-body text-sm sm:text-base text-foreground/90 md:text-lg"
               style={{ textShadow: "0 2px 12px hsl(0 0% 0% / 0.9)" }}
             >
               Explore Cox's Bazar at your own pace. From iconic Chander Garis to self-drive scooters —
@@ -107,36 +107,36 @@ const Vehicles = () => {
       </section>
 
       {/* Rental Type Toggle */}
-      <section className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-center gap-4 mb-12">
+      <section className="container mx-auto py-6 sm:py-8">
+        <div className="flex items-center justify-center gap-2 sm:gap-4 mb-8 sm:mb-12">
           <button
             onClick={() => setRentalType("hourly")}
-            className={`px-6 py-2.5 rounded-lg font-ui text-sm uppercase tracking-widest transition-all duration-300 ${
+            className={`px-4 sm:px-6 py-2.5 min-h-[44px] rounded-lg font-ui text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 ${
               rentalType === "hourly"
                 ? "gradient-neon text-primary-foreground neon-glow-pink"
                 : "glass text-muted-foreground hover:text-foreground"
             }`}
           >
-            <Clock size={14} className="inline mr-2" /> Hourly
+            <Clock size={14} className="inline mr-1.5 sm:mr-2" /> Hourly
           </button>
           <button
             onClick={() => setRentalType("daily")}
-            className={`px-6 py-2.5 rounded-lg font-ui text-sm uppercase tracking-widest transition-all duration-300 ${
+            className={`px-4 sm:px-6 py-2.5 min-h-[44px] rounded-lg font-ui text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 ${
               rentalType === "daily"
                 ? "gradient-neon text-primary-foreground neon-glow-pink"
                 : "glass text-muted-foreground hover:text-foreground"
             }`}
           >
-            <CalendarDays size={14} className="inline mr-2" /> Full Day
+            <CalendarDays size={14} className="inline mr-1.5 sm:mr-2" /> Full Day
           </button>
         </div>
-        <p className="text-center text-xs md:text-sm font-ui text-neon-cyan neon-text-cyan -mt-8 mb-12">
+        <p className="text-center text-[11px] sm:text-xs md:text-sm font-ui text-neon-cyan neon-text-cyan -mt-6 sm:-mt-8 mb-8 sm:mb-12">
           <Clock size={12} className="inline mr-1.5 -mt-0.5" />
           Whole Day = 8 hours from pickup time
         </p>
 
         {/* Vehicle Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 max-w-6xl mx-auto">
           {vehicles.map((v, i) => {
             const Icon = iconMap[v.category] || Car;
             const startingPrice =
@@ -252,7 +252,7 @@ const Vehicles = () => {
                   </p>
                   <button
                     onClick={() => navigate(`/vehicles/${v.id}`)}
-                    className="w-full px-4 py-2.5 rounded-lg font-ui text-xs uppercase tracking-widest gradient-neon text-primary-foreground transition-transform hover:scale-105 flex items-center justify-center gap-2"
+                    className="w-full px-4 py-3 min-h-[44px] rounded-lg font-ui text-xs uppercase tracking-widest gradient-neon text-primary-foreground transition-transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
                   >
                     Select <ArrowRight size={14} />
                   </button>
@@ -263,7 +263,7 @@ const Vehicles = () => {
         </div>
 
         {/* Notes Section */}
-        <div className="max-w-3xl mx-auto mt-16 glass rounded-xl p-6 md:p-8 neon-border-blue">
+        <div className="max-w-3xl mx-auto mt-12 sm:mt-16 glass rounded-xl p-5 sm:p-6 md:p-8 neon-border-blue">
           <h3 className="font-display text-lg font-semibold gradient-neon-text mb-4 flex items-center gap-2">
             <AlertTriangle size={18} className="text-neon-orange" /> Important Information
           </h3>
