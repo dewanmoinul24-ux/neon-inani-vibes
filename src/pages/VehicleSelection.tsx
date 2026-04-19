@@ -610,6 +610,22 @@ const VehicleSelection = () => {
         </div>
       )}
 
+      {/* Mobile sticky CTA — scrolls user to vehicle units */}
+      {!showBooking && vehicle.units.length > 0 && (
+        <StickyBookingBar
+          priceLabel={`${formatPrice(total)} total`}
+          subLabel={`50% advance ${formatPrice(advance)} · ${
+            rentalType === "hourly" ? `${hours}h` : `${days}d`
+          }`}
+          ctaLabel="Choose Unit"
+          onCta={() => {
+            document
+              .querySelector('h2.font-display')
+              ?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }}
+        />
+      )}
+
       <Footer />
       <AuthModal open={authOpen} onOpenChange={setAuthOpen} />
     </div>
