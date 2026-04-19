@@ -236,6 +236,8 @@ const Profile = () => {
     toast.success("Reservation cancelled");
     loadReservations();
   };
+
+  const handleSignOut = async () => {
     await signOut();
     toast.success("Signed out");
     navigate("/");
