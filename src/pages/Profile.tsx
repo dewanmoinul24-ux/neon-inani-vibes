@@ -867,4 +867,148 @@ const BookingListItems = ({
   );
 };
 
+const ReservationList = ({
+  reservations,
+  loading,
+  formatPrice,
+  onCancel,
+  onBrowse,
+}: {
+  reservations: ExperienceReservation[];
+  loading: boolean;
+  formatPrice: (n: number) => string;
+  onCancel: (id: string) => void;
+  onBrowse: () => void;
+}) => {
+  if (loading)
+    return (
+      <div className="flex justify-center py-12">
+        <Loader2 className="w-6 h-6 animate-spin text-primary" />
+      </div>
+    );
+
+  if (reservations.length === 0)
+    return (
+      <div className="text-center py-12 border border-dashed border-border rounded-xl">
+        <Ticket className="w-10 h-10 mx-auto text-muted-foreground mb-3" />
+        <p className="font-ui text-foreground mb-1">No reservation requests yet</p>
+        <p className="text-sm text-muted-foreground font-body mb-4">
+          Reserve a session or grab a ticket to an event — it'll show up here.
+        </p>
+        <Button className="gradient-neon text-primary-foreground" onClick={onBrowse}>
+          Browse experiences
+        </Button>
+      </div>
+    );
+
+  return (
+    <div className="grid gap-3">
+      {reservations.map((r) => {
+        const isEvent = r.experience_type === "event";
+        const statusBadge = (() => {
+          switch (r.status) {
+            case "confirmed":
+              return (
+                <Badge className="bg-neon-cyan/15 text-neon-cyan border-neon-cyan/30">
+                  <CheckCircle2 className="w-3 h-3 mr-1" /> Confirmed
+                </Badge>
+              );
+            case "rejected":
+              return (
+                <Badge variant="outline" className="border-destructive/40 text-destructive">
+                  <XCircle className="w-3 h-3 mr-1" /> Rejected
+                </Badge>
+              );
+            case "cancelled":
+              return (
+                <Badge variant="outline" className="border-muted-foreground/40 text-muted-foreground">
+                  <XCircle className="w-3 h-3 mr-1" /> Cancelled
+                </Badge>
+              );
+            default:
+              return (
+                <Badge className="bg-neon-orange/15 text-neon-orange border-neon-orange/30 animate-pulse">
+                  <ClockIcon className="w-3 h-3 mr-1" /> Pending confirmation
+                </Badge>
+              );
+          }
+        })();
+
+        return (
+          <Card
+            key={r.id}
+            className="p-5 border-border hover:border-primary/40 transition-colors bg-card/40"
+          >
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="min-w-0">
+                <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                  <Badge
+                    variant="outline"
+                    className={
+                      isEvent
+                        ? "border-neon-pink/40 text-neon-pink"
+                        : "border-neon-cyan/40 text-neon-cyan"
+                    }
+                  >
+                    <Ticket className="w-3 h-3 mr-1" />
+                    {isEvent ? "Event" : "Adventure"}
+                  </Badge>
+                  <h3 className="font-display text-base truncate">{r.experience_title}</h3>
+                  {statusBadge}
+                </div>
+                <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground font-ui">
+                  <span className="flex items-center gap-1">
+                    <Calendar className="w-3.5 h-3.5" />
+                    {format(parseISO(r.preferred_date), "MMM d, yyyy")}
+                    {r.preferred_time ? ` · ${r.preferred_time}` : ""}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Users className="w-3.5 h-3.5" />
+                    {r.quantity} {isEvent ? "ticket" : "rider"}
+                    {r.quantity > 1 ? "s" : ""}
+                  </span>
+                  {r.location && (
+                    <span className="flex items-center gap-1">
+                      <MapPin className="w-3.5 h-3.5" />
+                      {r.location}
+                    </span>
+                  )}
+                </div>
+                {r.status === "pending" && (
+                  <p className="text-xs text-muted-foreground font-body mt-2">
+                    Awaiting confirmation by the {r.organizer || "Inani Vibes"} team. You'll receive payment instructions on confirmation.
+                  </p>
+                )}
+                {r.status === "confirmed" && (
+                  <p className="text-xs text-neon-cyan font-body mt-2">
+                    Confirmed! Online payment is coming soon — instructions will follow shortly.
+                  </p>
+                )}
+              </div>
+              <div className="flex items-center gap-3 md:flex-col md:items-end">
+                <div className="text-right">
+                  <p className="text-[10px] text-muted-foreground font-ui uppercase tracking-widest">
+                    Total
+                  </p>
+                  <p className="font-display text-lg text-primary">{formatPrice(r.total_price)}</p>
+                </div>
+                {(r.status === "pending" || r.status === "confirmed") && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="border-destructive/40 text-destructive hover:bg-destructive/10"
+                    onClick={() => onCancel(r.id)}
+                  >
+                    Cancel
+                  </Button>
+                )}
+              </div>
+            </div>
+          </Card>
+        );
+      })}
+    </div>
+  );
+};
+
 export default Profile;
