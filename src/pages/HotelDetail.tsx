@@ -27,6 +27,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const HotelDetail = () => {
   const { id } = useParams();
