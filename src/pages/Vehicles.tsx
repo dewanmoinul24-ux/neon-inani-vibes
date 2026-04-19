@@ -87,7 +87,7 @@ const Vehicles = () => {
               Ride the coast
             </p>
             <h1
-              className="font-display text-5xl md:text-7xl lg:text-8xl font-bold gradient-neon-text leading-[1.05]"
+              className="font-display text-5xl md:text-7xl font-bold gradient-neon-text leading-[1.05] lg:text-6xl"
               style={{
                 filter:
                   "drop-shadow(0 0 24px hsl(180 100% 55% / 0.55)) drop-shadow(0 4px 16px hsl(0 0% 0% / 0.9))",
@@ -96,7 +96,7 @@ const Vehicles = () => {
               Vehicle Rental
             </h1>
             <p
-              className="mt-4 max-w-xl font-body text-base md:text-xl text-foreground/90"
+              className="mt-4 max-w-xl font-body text-base text-foreground/90 md:text-lg"
               style={{ textShadow: "0 2px 12px hsl(0 0% 0% / 0.9)" }}
             >
               Explore Cox's Bazar at your own pace. From iconic Chander Garis to self-drive scooters —
