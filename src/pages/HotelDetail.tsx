@@ -748,6 +748,68 @@ const HotelDetail = () => {
       )}
 
       <AuthModal open={authOpen} onOpenChange={setAuthOpen} />
+
+      {/* Room Photos modal */}
+      <Dialog open={!!photosRoom} onOpenChange={(open) => !open && setPhotosRoom(null)}>
+        <DialogContent className="max-w-3xl p-0 overflow-hidden bg-background border-border">
+          <DialogTitle className="sr-only">
+            {photosRoom?.name} photos
+          </DialogTitle>
+          {photosRoom && (
+            <div>
+              <div className="px-5 pt-5 pb-3">
+                <h3 className="font-display text-lg font-semibold text-foreground">
+                  {photosRoom.name}
+                </h3>
+                <p className="text-xs text-muted-foreground font-ui uppercase tracking-widest mt-0.5">
+                  {getRoomGallery(photosRoom).length} photos
+                </p>
+              </div>
+              <Carousel opts={{ loop: true }} className="w-full">
+                <CarouselContent>
+                  {getRoomGallery(photosRoom).map((img, i) => (
+                    <CarouselItem key={i}>
+                      <div className="aspect-[4/3] sm:aspect-[16/10] bg-muted overflow-hidden">
+                        <img
+                          src={img}
+                          alt={`${photosRoom.name} photo ${i + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="left-2" />
+                <CarouselNext className="right-2" />
+              </Carousel>
+              <div className="p-4 flex justify-end">
+                <Button
+                  className="gradient-neon text-primary-foreground font-ui text-xs uppercase tracking-widest h-11"
+                  onClick={() => {
+                    const room = photosRoom;
+                    setPhotosRoom(null);
+                    setSelectedRoom(room);
+                    if (!checkIn || !checkOut) {
+                      toast.info("Please select your check-in & check-out dates first.");
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                      return;
+                    }
+                    if (!user) {
+                      setAuthOpen(true);
+                      return;
+                    }
+                    setShowBookingForm(true);
+                  }}
+                >
+                  Proceed
+                  <ArrowRight size={14} className="ml-2" />
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
       <Footer />
     </div>
   );
