@@ -403,7 +403,7 @@ const HotelDetail = () => {
                           </span>
                         </Button>
                         <Button
-                          className="h-11 sm:flex-1 gradient-neon text-primary-foreground font-ui text-xs uppercase tracking-widest neon-glow-pink hover:scale-[1.02] transition-transform"
+                          className="hidden sm:inline-flex h-11 sm:flex-1 gradient-neon text-primary-foreground font-ui text-xs uppercase tracking-widest neon-glow-pink hover:scale-[1.02] transition-transform"
                           onClick={(e) => {
                             e.stopPropagation();
                             setSelectedRoom(room);
