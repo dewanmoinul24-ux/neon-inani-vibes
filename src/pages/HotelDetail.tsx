@@ -322,9 +322,10 @@ const HotelDetail = () => {
                                   e.stopPropagation();
                                   setRoomCount(Math.max(1, roomCount - 1));
                                 }}
-                                className="w-7 h-7 rounded-md glass flex items-center justify-center text-foreground hover:text-primary"
+                                aria-label="Decrease room count"
+                                className="w-10 h-10 rounded-md glass flex items-center justify-center text-foreground hover:text-primary"
                               >
-                                <Minus size={14} />
+                                <Minus size={16} />
                               </button>
                               <span className="font-ui text-sm text-foreground w-6 text-center">{roomCount}</span>
                               <button
@@ -332,9 +333,10 @@ const HotelDetail = () => {
                                   e.stopPropagation();
                                   setRoomCount(Math.min(room.available, roomCount + 1));
                                 }}
-                                className="w-7 h-7 rounded-md glass flex items-center justify-center text-foreground hover:text-primary"
+                                aria-label="Increase room count"
+                                className="w-10 h-10 rounded-md glass flex items-center justify-center text-foreground hover:text-primary"
                               >
-                                <Plus size={14} />
+                                <Plus size={16} />
                               </button>
                             </div>
                           )}
@@ -536,7 +538,11 @@ const HotelDetail = () => {
           <div className="glass-strong rounded-t-2xl sm:rounded-xl p-5 sm:p-6 md:p-8 w-full sm:max-w-lg neon-border-pink animate-slide-up max-h-[92vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <h2 className="font-display text-xl font-bold text-foreground">Complete Your Booking</h2>
-              <button onClick={() => setShowBookingForm(false)} className="text-muted-foreground hover:text-foreground">
+              <button
+                onClick={() => setShowBookingForm(false)}
+                aria-label="Close booking form"
+                className="w-11 h-11 -mr-2 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-colors text-lg"
+              >
                 ✕
               </button>
             </div>

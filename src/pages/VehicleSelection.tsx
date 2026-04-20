@@ -237,7 +237,7 @@ const VehicleSelection = () => {
                   : setDays(Math.max(1, days - 1))
               }
               aria-label="Decrease duration"
-              className="w-9 h-9 rounded-full glass flex items-center justify-center text-foreground hover:text-primary transition-colors"
+              className="w-11 h-11 rounded-full glass flex items-center justify-center text-foreground hover:text-primary transition-colors text-lg"
             >
               −
             </button>
@@ -255,7 +255,7 @@ const VehicleSelection = () => {
                   : setDays(Math.min(30, days + 1))
               }
               aria-label="Increase duration"
-              className="w-9 h-9 rounded-full glass flex items-center justify-center text-foreground hover:text-primary transition-colors"
+              className="w-11 h-11 rounded-full glass flex items-center justify-center text-foreground hover:text-primary transition-colors text-lg"
             >
               +
             </button>
