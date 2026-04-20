@@ -15,7 +15,15 @@ export interface HotelRoom {
   price: number;
   amenities: string[];
   available: number;
+  gallery?: string[];
 }
+
+// Default photo gallery (≥6 images) for each room — reuses property
+// imagery so every room card has a "Photos" preview that works out of the box.
+const defaultRoomGallery = [hotel1, hotel2, hotel3, hotel4, hotel5, hotel6];
+
+export const getRoomGallery = (room: HotelRoom): string[] =>
+  room.gallery && room.gallery.length >= 6 ? room.gallery : defaultRoomGallery;
 
 export interface Hotel {
   id: string;
