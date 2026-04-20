@@ -229,7 +229,6 @@ const HotelDetail = () => {
             </div>
           </div>
         </div>
-        </div>
       </section>
 
       {/* Content */}
