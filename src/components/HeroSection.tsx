@@ -39,7 +39,7 @@ const HeroSection = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="#hotels"
+              href="/hotels"
               className="px-8 py-4 rounded-lg font-ui text-base uppercase tracking-widest gradient-neon text-primary-foreground animate-pulse-glow transition-transform duration-300 hover:scale-105"
             >
               Book Now

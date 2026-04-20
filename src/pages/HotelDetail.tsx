@@ -15,15 +15,25 @@ import {
   Minus,
   Plus,
   Loader2,
+  Image as ImageIcon,
+  ArrowRight,
 } from "lucide-react";
 import { format, differenceInDays } from "date-fns";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { hotels, type HotelRoom } from "@/data/hotels";
+import { hotels, getRoomGallery, type HotelRoom } from "@/data/hotels";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -62,6 +72,9 @@ const HotelDetail = () => {
   const [guestPhone, setGuestPhone] = useState("");
   const [specialRequests, setSpecialRequests] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Room photo viewer modal
+  const [photosRoom, setPhotosRoom] = useState<HotelRoom | null>(null);
 
   // Pre-fill from logged-in user's profile (only when fields are still blank).
   useEffect(() => {
@@ -159,18 +172,48 @@ const HotelDetail = () => {
         </div>
       </div>
 
-      {/* Gallery */}
+      {/* Gallery — swipeable carousel on mobile, grid on desktop */}
       <section className="pb-6">
         <div className="container mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-3 rounded-xl overflow-hidden">
-            <div className="md:col-span-3 h-56 sm:h-72 md:h-[420px] overflow-hidden relative">
+          {/* Mobile carousel */}
+          <div className="md:hidden">
+            <Carousel opts={{ loop: true }} className="rounded-xl overflow-hidden">
+              <CarouselContent>
+                {hotel.gallery.map((img, i) => (
+                  <CarouselItem key={i}>
+                    <div className="h-56 sm:h-72 overflow-hidden">
+                      <img
+                        src={img}
+                        alt={`${hotel.name} photo ${i + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="left-2" />
+              <CarouselNext className="right-2" />
+            </Carousel>
+            <div className="flex justify-center gap-1.5 mt-3">
+              {hotel.gallery.map((_, i) => (
+                <span
+                  key={i}
+                  className="h-1.5 w-1.5 rounded-full bg-muted-foreground/40"
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop grid */}
+          <div className="hidden md:grid grid-cols-4 gap-3 rounded-xl overflow-hidden">
+            <div className="col-span-3 h-[420px] overflow-hidden relative">
               <img
                 src={hotel.gallery[activeImage]}
                 alt={hotel.name}
                 className="w-full h-full object-cover transition-all duration-500"
               />
             </div>
-            <div className="hidden md:flex flex-col gap-3">
+            <div className="flex flex-col gap-3">
               {hotel.gallery.map((img, i) => (
                 <button
                   key={i}
@@ -341,6 +384,45 @@ const HotelDetail = () => {
                             </div>
                           )}
                         </div>
+                      </div>
+
+                      {/* Action row */}
+                      <div className="mt-4 pt-4 border-t border-border flex flex-col sm:flex-row gap-2 sm:gap-3">
+                        <Button
+                          variant="outline"
+                          className="h-11 sm:flex-1 font-ui text-xs uppercase tracking-widest"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setPhotosRoom(room);
+                          }}
+                        >
+                          <ImageIcon size={14} className="mr-2" />
+                          Photos
+                          <span className="ml-1.5 text-muted-foreground normal-case tracking-normal">
+                            ({getRoomGallery(room).length})
+                          </span>
+                        </Button>
+                        <Button
+                          className="h-11 sm:flex-1 gradient-neon text-primary-foreground font-ui text-xs uppercase tracking-widest neon-glow-pink hover:scale-[1.02] transition-transform"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedRoom(room);
+                            if (!checkIn || !checkOut) {
+                              toast.info("Please select your check-in & check-out dates first.");
+                              window.scrollTo({ top: 0, behavior: "smooth" });
+                              return;
+                            }
+                            if (!user) {
+                              toast.info("Please sign in to reserve.");
+                              setAuthOpen(true);
+                              return;
+                            }
+                            setShowBookingForm(true);
+                          }}
+                        >
+                          Proceed
+                          <ArrowRight size={14} className="ml-2" />
+                        </Button>
                       </div>
                     </div>
                   ))}
@@ -666,6 +748,68 @@ const HotelDetail = () => {
       )}
 
       <AuthModal open={authOpen} onOpenChange={setAuthOpen} />
+
+      {/* Room Photos modal */}
+      <Dialog open={!!photosRoom} onOpenChange={(open) => !open && setPhotosRoom(null)}>
+        <DialogContent className="max-w-3xl p-0 overflow-hidden bg-background border-border">
+          <DialogTitle className="sr-only">
+            {photosRoom?.name} photos
+          </DialogTitle>
+          {photosRoom && (
+            <div>
+              <div className="px-5 pt-5 pb-3">
+                <h3 className="font-display text-lg font-semibold text-foreground">
+                  {photosRoom.name}
+                </h3>
+                <p className="text-xs text-muted-foreground font-ui uppercase tracking-widest mt-0.5">
+                  {getRoomGallery(photosRoom).length} photos
+                </p>
+              </div>
+              <Carousel opts={{ loop: true }} className="w-full">
+                <CarouselContent>
+                  {getRoomGallery(photosRoom).map((img, i) => (
+                    <CarouselItem key={i}>
+                      <div className="aspect-[4/3] sm:aspect-[16/10] bg-muted overflow-hidden">
+                        <img
+                          src={img}
+                          alt={`${photosRoom.name} photo ${i + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="left-2" />
+                <CarouselNext className="right-2" />
+              </Carousel>
+              <div className="p-4 flex justify-end">
+                <Button
+                  className="gradient-neon text-primary-foreground font-ui text-xs uppercase tracking-widest h-11"
+                  onClick={() => {
+                    const room = photosRoom;
+                    setPhotosRoom(null);
+                    setSelectedRoom(room);
+                    if (!checkIn || !checkOut) {
+                      toast.info("Please select your check-in & check-out dates first.");
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                      return;
+                    }
+                    if (!user) {
+                      setAuthOpen(true);
+                      return;
+                    }
+                    setShowBookingForm(true);
+                  }}
+                >
+                  Proceed
+                  <ArrowRight size={14} className="ml-2" />
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
       <Footer />
     </div>
   );
