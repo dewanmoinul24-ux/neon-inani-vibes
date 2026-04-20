@@ -385,6 +385,45 @@ const HotelDetail = () => {
                           )}
                         </div>
                       </div>
+
+                      {/* Action row */}
+                      <div className="mt-4 pt-4 border-t border-border flex flex-col sm:flex-row gap-2 sm:gap-3">
+                        <Button
+                          variant="outline"
+                          className="h-11 sm:flex-1 font-ui text-xs uppercase tracking-widest"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setPhotosRoom(room);
+                          }}
+                        >
+                          <ImageIcon size={14} className="mr-2" />
+                          Photos
+                          <span className="ml-1.5 text-muted-foreground normal-case tracking-normal">
+                            ({getRoomGallery(room).length})
+                          </span>
+                        </Button>
+                        <Button
+                          className="h-11 sm:flex-1 gradient-neon text-primary-foreground font-ui text-xs uppercase tracking-widest neon-glow-pink hover:scale-[1.02] transition-transform"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedRoom(room);
+                            if (!checkIn || !checkOut) {
+                              toast.info("Please select your check-in & check-out dates first.");
+                              window.scrollTo({ top: 0, behavior: "smooth" });
+                              return;
+                            }
+                            if (!user) {
+                              toast.info("Please sign in to reserve.");
+                              setAuthOpen(true);
+                              return;
+                            }
+                            setShowBookingForm(true);
+                          }}
+                        >
+                          Proceed
+                          <ArrowRight size={14} className="ml-2" />
+                        </Button>
+                      </div>
                     </div>
                   ))}
                 </div>
