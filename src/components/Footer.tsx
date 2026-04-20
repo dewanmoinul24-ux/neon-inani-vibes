@@ -87,11 +87,11 @@ const Footer = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="your@email.com"
                 aria-label="Email address"
-                className="min-w-0 flex-1 px-3 py-2.5 rounded-lg glass text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:neon-glow-pink border border-border focus:border-primary transition-all"
+                className="min-w-0 flex-1 px-3 h-11 rounded-lg glass text-base sm:text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:neon-glow-pink border border-border focus:border-primary transition-all"
               />
               <button
                 aria-label="Subscribe"
-                className="px-3.5 py-2.5 rounded-lg gradient-neon text-primary-foreground transition-transform hover:scale-105 shrink-0"
+                className="w-11 h-11 rounded-lg gradient-neon text-primary-foreground flex items-center justify-center transition-transform hover:scale-105 shrink-0"
               >
                 <Send size={16} />
               </button>
