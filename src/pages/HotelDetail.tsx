@@ -15,15 +15,25 @@ import {
   Minus,
   Plus,
   Loader2,
+  Image as ImageIcon,
+  ArrowRight,
 } from "lucide-react";
 import { format, differenceInDays } from "date-fns";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { hotels, type HotelRoom } from "@/data/hotels";
+import { hotels, getRoomGallery, type HotelRoom } from "@/data/hotels";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
