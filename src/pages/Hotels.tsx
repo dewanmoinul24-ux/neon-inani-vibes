@@ -52,7 +52,21 @@ const Hotels = () => {
       const matchesTags =
         selectedTags.length === 0 || selectedTags.some((t) => h.tags.includes(t));
       const matchesPrice = h.price >= priceRange[0] && h.price <= priceRange[1];
-      return matchesSearch && matchesTags && matchesPrice;
+      // Availability: at least one room fits the guest count and has stock.
+      // When dates are picked we treat them as an "availability window" and
+      // require that the property still has bookable rooms for that party size.
+      const hasAvailableRoom = h.rooms.some(
+        (r) => r.maxGuests >= guests && r.available > 0
+      );
+      const matchesAvailability =
+        !checkIn && !checkOut ? true : hasAvailableRoom;
+      return (
+        matchesSearch &&
+        matchesTags &&
+        matchesPrice &&
+        hasAvailableRoom &&
+        matchesAvailability
+      );
     });
 
     if (sortBy === "price-low") result.sort((a, b) => a.price - b.price);
@@ -60,7 +74,7 @@ const Hotels = () => {
     else result.sort((a, b) => b.rating - a.rating);
 
     return result;
-  }, [searchQuery, selectedTags, priceRange, sortBy]);
+  }, [searchQuery, selectedTags, priceRange, sortBy, guests, checkIn, checkOut]);
 
   return (
     <div className="min-h-screen bg-background">
