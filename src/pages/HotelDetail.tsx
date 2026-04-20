@@ -403,7 +403,7 @@ const HotelDetail = () => {
                           </span>
                         </Button>
                         <Button
-                          className="h-11 sm:flex-1 gradient-neon text-primary-foreground font-ui text-xs uppercase tracking-widest neon-glow-pink hover:scale-[1.02] transition-transform"
+                          className="hidden sm:inline-flex h-11 sm:flex-1 gradient-neon text-primary-foreground font-ui text-xs uppercase tracking-widest neon-glow-pink hover:scale-[1.02] transition-transform"
                           onClick={(e) => {
                             e.stopPropagation();
                             setSelectedRoom(room);
@@ -782,7 +782,7 @@ const HotelDetail = () => {
                 <CarouselPrevious className="left-2" />
                 <CarouselNext className="right-2" />
               </Carousel>
-              <div className="p-4 flex justify-end">
+              <div className="hidden sm:flex p-4 justify-end">
                 <Button
                   className="gradient-neon text-primary-foreground font-ui text-xs uppercase tracking-widest h-11"
                   onClick={() => {
