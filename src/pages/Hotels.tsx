@@ -305,6 +305,14 @@ const Hotels = () => {
         <div className="container mx-auto">
           <p className="font-ui text-xs sm:text-sm text-muted-foreground mb-4 sm:mb-6">
             {filtered.length} {filtered.length === 1 ? "property" : "properties"} found
+            {(checkIn || checkOut) && (
+              <span className="ml-1">
+                · available for {guests} {guests === 1 ? "guest" : "guests"}
+                {checkIn && checkOut
+                  ? ` (${format(checkIn, "MMM dd")} → ${format(checkOut, "MMM dd")})`
+                  : ""}
+              </span>
+            )}
           </p>
 
           <div className="flex flex-col gap-4 sm:gap-6">
