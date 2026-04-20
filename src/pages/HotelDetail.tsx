@@ -782,7 +782,7 @@ const HotelDetail = () => {
                 <CarouselPrevious className="left-2" />
                 <CarouselNext className="right-2" />
               </Carousel>
-              <div className="p-4 flex justify-end">
+              <div className="hidden sm:flex p-4 justify-end">
                 <Button
                   className="gradient-neon text-primary-foreground font-ui text-xs uppercase tracking-widest h-11"
                   onClick={() => {
