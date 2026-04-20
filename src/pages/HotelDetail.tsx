@@ -172,18 +172,48 @@ const HotelDetail = () => {
         </div>
       </div>
 
-      {/* Gallery */}
+      {/* Gallery — swipeable carousel on mobile, grid on desktop */}
       <section className="pb-6">
         <div className="container mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-3 rounded-xl overflow-hidden">
-            <div className="md:col-span-3 h-56 sm:h-72 md:h-[420px] overflow-hidden relative">
+          {/* Mobile carousel */}
+          <div className="md:hidden">
+            <Carousel opts={{ loop: true }} className="rounded-xl overflow-hidden">
+              <CarouselContent>
+                {hotel.gallery.map((img, i) => (
+                  <CarouselItem key={i}>
+                    <div className="h-56 sm:h-72 overflow-hidden">
+                      <img
+                        src={img}
+                        alt={`${hotel.name} photo ${i + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="left-2" />
+              <CarouselNext className="right-2" />
+            </Carousel>
+            <div className="flex justify-center gap-1.5 mt-3">
+              {hotel.gallery.map((_, i) => (
+                <span
+                  key={i}
+                  className="h-1.5 w-1.5 rounded-full bg-muted-foreground/40"
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop grid */}
+          <div className="hidden md:grid grid-cols-4 gap-3 rounded-xl overflow-hidden">
+            <div className="col-span-3 h-[420px] overflow-hidden relative">
               <img
                 src={hotel.gallery[activeImage]}
                 alt={hotel.name}
                 className="w-full h-full object-cover transition-all duration-500"
               />
             </div>
-            <div className="hidden md:flex flex-col gap-3">
+            <div className="flex flex-col gap-3">
               {hotel.gallery.map((img, i) => (
                 <button
                   key={i}
@@ -198,6 +228,7 @@ const HotelDetail = () => {
               ))}
             </div>
           </div>
+        </div>
         </div>
       </section>
 
