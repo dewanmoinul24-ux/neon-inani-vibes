@@ -73,6 +73,9 @@ const HotelDetail = () => {
   const [specialRequests, setSpecialRequests] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Room photo viewer modal
+  const [photosRoom, setPhotosRoom] = useState<HotelRoom | null>(null);
+
   // Pre-fill from logged-in user's profile (only when fields are still blank).
   useEffect(() => {
     if (profile?.display_name && !guestName) setGuestName(profile.display_name);
