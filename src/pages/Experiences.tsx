@@ -194,7 +194,7 @@ const Experiences = () => {
               >
                 What's coming up
               </p>
-              <h2 className="font-display text-3xl sm:text-[2.25rem] md:text-[3.375rem] font-bold gradient-neon-text mt-1 mb-2">
+              <h2 className="font-display text-3xl sm:text-[2.25rem] font-bold gradient-neon-text mt-1 mb-2 md:text-3xl py-[8px]">
                 Upcoming Events
               </h2>
             </div>
