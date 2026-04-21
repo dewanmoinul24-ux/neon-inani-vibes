@@ -17,6 +17,8 @@ export interface ExperienceItem {
   tagline: string;
   description: string;
   image: string;
+  // Optional additional gallery images shown on the detail page
+  gallery?: string[];
   // FAQ rendered on the detail page
   faqs?: { q: string; a: string }[];
   // Event-only — ISO date + display time
