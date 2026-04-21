@@ -9,7 +9,6 @@ import {
   BedDouble,
   Maximize,
   Check,
-  Info,
   ShieldCheck,
   CalendarDays,
   Minus,
