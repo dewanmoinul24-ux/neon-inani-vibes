@@ -44,12 +44,17 @@ import {
   Car as CarIcon,
   Ticket,
   Clock as ClockIcon,
+  Download,
+  Hash,
+  CircleDot,
 } from "lucide-react";
 import { format, isAfter, parseISO } from "date-fns";
+import { addMinutes, formatDistanceToNowStrict } from "date-fns";
 import { useCurrency } from "@/hooks/useCurrency";
 import { CURRENCY_LABEL } from "@/lib/currency";
 import { countCompletedTrips, getVibesTier } from "@/lib/vibesLevel";
 import VibesLevelCard from "@/components/VibesLevelCard";
+import { downloadReceiptPdf, buildReferenceCode } from "@/lib/receipt";
 
 interface Booking {
   id: string;
@@ -79,6 +84,9 @@ interface ExperienceReservation {
   status: string;
   special_requests: string | null;
   created_at: string;
+  guest_name?: string;
+  guest_email?: string;
+  guest_phone?: string;
 }
 
 type SectionKey =
