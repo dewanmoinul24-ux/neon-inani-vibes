@@ -40,14 +40,14 @@ const Navbar = () => {
   const initials = (profile?.display_name || user?.email || "U").slice(0, 2).toUpperCase();
 
   const navLinks = [
-    { label: "Home", href: "/", isRoute: true },
-    { label: "Hotels", href: "/hotels", isRoute: true },
-    { label: "Vehicles", href: "/vehicles", isRoute: true },
-    { label: "Experiences", href: "/experiences", isRoute: true },
-    { label: "Places", href: "/places", isRoute: true },
-    { label: "Vibes Experts", href: "/vibes-experts", isRoute: true },
-    { label: "About", href: "/#about" },
-    { label: "Contact", href: "/#contact" },
+    { label: "Home", href: "/", isRoute: true, hideAtMd: false },
+    { label: "Hotels", href: "/hotels", isRoute: true, hideAtMd: false },
+    { label: "Vehicles", href: "/vehicles", isRoute: true, hideAtMd: false },
+    { label: "Experiences", href: "/experiences", isRoute: true, hideAtMd: false },
+    { label: "Places", href: "/places", isRoute: true, hideAtMd: false },
+    { label: "Vibes Experts", href: "/vibes-experts", isRoute: true, hideAtMd: false },
+    { label: "About", href: "/#about", hideAtMd: true },
+    { label: "Contact", href: "/#contact", hideAtMd: true },
   ];
 
   const CurrencySwitcher = ({ compact = false }: { compact?: boolean }) => (
@@ -98,7 +98,7 @@ const Navbar = () => {
                 <Link
                   key={l.href}
                   to={l.href}
-                  className="font-ui text-xs lg:text-sm uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors duration-300 whitespace-nowrap relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
+                  className={`font-ui text-xs lg:text-sm uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors duration-300 whitespace-nowrap relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-primary after:transition-all after:duration-300 hover:after:w-full ${l.hideAtMd ? "hidden lg:inline" : ""}`}
                 >
                   {l.label}
                 </Link>
@@ -106,7 +106,7 @@ const Navbar = () => {
                 <a
                   key={l.href}
                   href={l.href}
-                  className="font-ui text-xs lg:text-sm uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors duration-300 whitespace-nowrap relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
+                  className={`font-ui text-xs lg:text-sm uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors duration-300 whitespace-nowrap relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-primary after:transition-all after:duration-300 hover:after:w-full ${l.hideAtMd ? "hidden lg:inline" : ""}`}
                 >
                   {l.label}
                 </a>
