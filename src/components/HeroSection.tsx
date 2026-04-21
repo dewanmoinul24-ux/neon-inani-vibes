@@ -63,7 +63,7 @@ const HeroSection = () => {
       <div className="relative z-10 container mx-auto px-4 text-center">
         <div className="animate-slide-up">
           <h1
-            className="font-display text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6"
+            className="font-display text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 animate-neon-flicker"
             style={{
               filter:
                 "drop-shadow(0 4px 18px hsl(0 0% 0% / 0.95))",
