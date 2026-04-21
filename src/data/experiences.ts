@@ -518,3 +518,17 @@ export const getUpcomingEvents = () =>
 
 export const getAdventureSports = () =>
   experiences.filter((e) => e.type === "sport");
+
+// Localized field helpers — fall back to English if Bangla is missing.
+export const getLocalized = <K extends "title" | "tagline" | "description">(
+  e: ExperienceItem,
+  field: K,
+  lang: "en" | "bn",
+): string => {
+  if (lang === "bn") {
+    const bnKey = (field + "Bn") as keyof ExperienceItem;
+    const value = e[bnKey];
+    if (typeof value === "string" && value.length) return value;
+  }
+  return e[field] as string;
+};

@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, User, LogOut, Settings, History, ChevronDown, Wallet, Sparkles, Shield } from "lucide-react";
+import { Menu, X, User, LogOut, Settings, History, ChevronDown, Wallet, Sparkles, Shield, Languages } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useVibes } from "@/hooks/useVibes";
 import { useIsSuperAdmin } from "@/hooks/useUserRole";
 import AuthModal from "@/components/AuthModal";
@@ -37,6 +38,7 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
   const { user, profile, signOut, currency, setCurrency } = useAuth();
+  const { lang, setLang, t } = useLanguage();
   const { tier: vibesTier, completedTrips } = useVibes();
   const { isSuperAdmin } = useIsSuperAdmin();
   const navigate = useNavigate();
@@ -48,6 +50,45 @@ const Navbar = () => {
   };
 
   const initials = (profile?.display_name || user?.email || "U").slice(0, 2).toUpperCase();
+
+  const navLinks = [
+    { label: t("nav.home"), href: "/", isRoute: true },
+    { label: t("nav.hotels"), href: "/hotels", isRoute: true },
+    { label: t("nav.vehicles"), href: "/vehicles", isRoute: true },
+    { label: t("nav.experiences"), href: "/experiences", isRoute: true },
+    { label: t("nav.places"), href: "/#places" },
+    { label: t("nav.about"), href: "/#about" },
+    { label: t("nav.contact"), href: "/#contact" },
+  ];
+
+  const LanguageSwitcher = ({ compact = false }: { compact?: boolean }) => (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        className={`flex items-center gap-1.5 rounded-lg border border-border/60 hover:border-primary/50 transition-colors font-ui ${
+          compact ? "px-2 py-1 text-xs" : "px-3 py-1.5 text-xs uppercase tracking-widest"
+        }`}
+        aria-label={t("nav.language")}
+      >
+        <Languages className="w-3.5 h-3.5 text-neon-pink" />
+        <span className="text-foreground font-semibold">{lang === "en" ? "EN" : "বাং"}</span>
+        <ChevronDown className="w-3 h-3 text-muted-foreground" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-44 glass-strong border-primary/30">
+        <DropdownMenuLabel className="font-ui text-xs uppercase tracking-widest">
+          {t("nav.language")}
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => setLang("en")} className="cursor-pointer">
+          🇬🇧 English
+          {lang === "en" && <span className="ml-auto text-primary">✓</span>}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setLang("bn")} className="cursor-pointer">
+          🇧🇩 বাংলা
+          {lang === "bn" && <span className="ml-auto text-primary">✓</span>}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
 
   const CurrencySwitcher = ({ compact = false }: { compact?: boolean }) => (
     <DropdownMenu>
@@ -113,6 +154,7 @@ const Navbar = () => {
             )}
 
             <CurrencySwitcher />
+            <LanguageSwitcher />
 
             {user ? (
               <DropdownMenu>
@@ -192,13 +234,14 @@ const Navbar = () => {
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
               className="ml-1 px-5 py-2 rounded-lg font-ui text-sm uppercase tracking-widest gradient-neon text-primary-foreground neon-glow-pink transition-all duration-300 hover:scale-105"
             >
-              Book Now
+              {t("nav.bookNow")}
             </Link>
           </div>
 
           {/* Mobile right cluster */}
           <div className="lg:hidden flex items-center gap-2">
             <CurrencySwitcher compact />
+            <LanguageSwitcher compact />
             <button
               onClick={() => setOpen(!open)}
               className="text-foreground"
