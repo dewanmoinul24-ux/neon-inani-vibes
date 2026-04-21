@@ -47,6 +47,8 @@ import {
   Download,
   Hash,
   CircleDot,
+  Wallet,
+  CreditCard as CreditCardIcon,
 } from "lucide-react";
 import { format, isAfter, parseISO } from "date-fns";
 import { addMinutes, formatDistanceToNowStrict } from "date-fns";
@@ -87,6 +89,9 @@ interface ExperienceReservation {
   guest_name?: string;
   guest_email?: string;
   guest_phone?: string;
+  payment_status?: string | null;
+  paid_at?: string | null;
+  payment_method?: string | null;
 }
 
 type SectionKey =
@@ -990,6 +995,7 @@ const ReservationList = ({
                   </span>
                 </div>
                 <ReservationTimeline status={r.status} createdAt={r.created_at} organizer={r.organizer} />
+                <ReservationPayment reservation={r} formatPrice={formatPrice} />
               </div>
               <div className="flex items-center gap-3 md:flex-col md:items-end">
                 <div className="text-right">
@@ -1122,5 +1128,113 @@ const ReservationTimeline = ({
         );
       })}
     </ol>
+  );
+};
+
+/* ---------- Reservation payment status ---------- */
+
+const ReservationPayment = ({
+  reservation,
+  formatPrice,
+}: {
+  reservation: ExperienceReservation;
+  formatPrice: (n: number) => string;
+}) => {
+  const cancelled = reservation.status === "cancelled" || reservation.status === "rejected";
+  if (cancelled) return null;
+
+  const paymentStatus = (reservation.payment_status || "unpaid") as
+    | "unpaid"
+    | "pending"
+    | "paid";
+  const reservationConfirmed = reservation.status === "confirmed";
+  // Payment is "available" once the team has confirmed the reservation
+  const paymentAvailable = reservationConfirmed && paymentStatus !== "paid";
+
+  const config = (() => {
+    if (paymentStatus === "paid") {
+      return {
+        label: "Paid",
+        sub:
+          reservation.paid_at
+            ? `Received ${format(parseISO(reservation.paid_at), "MMM d, yyyy")}${
+                reservation.payment_method ? ` · ${reservation.payment_method}` : ""
+              }`
+            : "Payment received — see you soon!",
+        badgeClass: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
+        Icon: CheckCircle2,
+        accent: "border-emerald-500/30",
+      };
+    }
+    if (paymentStatus === "pending") {
+      return {
+        label: "Payment processing",
+        sub: "We're verifying your payment. This usually takes a few minutes.",
+        badgeClass: "bg-neon-orange/15 text-neon-orange border-neon-orange/30 animate-pulse",
+        Icon: ClockIcon,
+        accent: "border-neon-orange/30",
+      };
+    }
+    if (paymentAvailable) {
+      return {
+        label: "Pending payment",
+        sub: "Your spot is confirmed. Complete payment to secure your booking.",
+        badgeClass: "bg-neon-pink/15 text-neon-pink border-neon-pink/30",
+        Icon: Wallet,
+        accent: "border-neon-pink/30",
+      };
+    }
+    return {
+      label: "Pending payment",
+      sub: "Payment opens once the team confirms your reservation.",
+      badgeClass: "bg-muted text-muted-foreground border-border",
+      Icon: Wallet,
+      accent: "border-border",
+    };
+  })();
+
+  const { Icon } = config;
+
+  return (
+    <div className={`mt-3 rounded-lg border ${config.accent} bg-card/60 p-3`}>
+      <div className="flex items-start justify-between gap-3 flex-wrap">
+        <div className="flex items-start gap-2.5 min-w-0">
+          <Icon className="w-4 h-4 mt-0.5 shrink-0 text-muted-foreground" />
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 flex-wrap">
+              <Badge variant="outline" className={config.badgeClass}>
+                {config.label}
+              </Badge>
+              <span className="text-xs text-muted-foreground font-ui">
+                {formatPrice(reservation.total_price)}
+              </span>
+            </div>
+            <p className="text-[11px] text-muted-foreground font-body leading-snug mt-1">
+              {config.sub}
+            </p>
+          </div>
+        </div>
+        {paymentAvailable ? (
+          <Button
+            size="sm"
+            className="gradient-neon text-primary-foreground font-ui text-xs uppercase tracking-widest neon-glow-pink hover:opacity-90"
+            onClick={() =>
+              toast.info("Online payment is coming soon — the team will share instructions by email.")
+            }
+          >
+            <CreditCardIcon className="w-3.5 h-3.5" /> Pay now
+          </Button>
+        ) : paymentStatus === "unpaid" && !reservationConfirmed ? (
+          <Button
+            size="sm"
+            variant="outline"
+            disabled
+            className="text-xs uppercase tracking-widest opacity-60"
+          >
+            <CreditCardIcon className="w-3.5 h-3.5" /> Pay (locked)
+          </Button>
+        ) : null}
+      </div>
+    </div>
   );
 };

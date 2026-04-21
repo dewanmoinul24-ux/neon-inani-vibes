@@ -90,6 +90,9 @@ export type Database = {
           id: string
           location: string | null
           organizer: string | null
+          paid_at: string | null
+          payment_method: string | null
+          payment_status: string
           preferred_date: string
           preferred_time: string | null
           quantity: number
@@ -112,6 +115,9 @@ export type Database = {
           id?: string
           location?: string | null
           organizer?: string | null
+          paid_at?: string | null
+          payment_method?: string | null
+          payment_status?: string
           preferred_date: string
           preferred_time?: string | null
           quantity?: number
@@ -134,6 +140,9 @@ export type Database = {
           id?: string
           location?: string | null
           organizer?: string | null
+          paid_at?: string | null
+          payment_method?: string | null
+          payment_status?: string
           preferred_date?: string
           preferred_time?: string | null
           quantity?: number
