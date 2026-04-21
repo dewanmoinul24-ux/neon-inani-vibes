@@ -1,14 +1,49 @@
+import { useEffect, useRef } from "react";
 import heroBg from "@/assets/hero-bg.jpg";
 
 const HeroSection = () => {
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion) return;
+
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const el = imgRef.current;
+      if (!el) return;
+      // Only animate while hero is roughly in view (first viewport-and-a-half)
+      const y = window.scrollY;
+      if (y > window.innerHeight * 1.2) return;
+      // Subtle: image moves at ~30% of scroll speed, slight zoom for depth
+      const translate = y * 0.3;
+      const scale = 1 + Math.min(y / window.innerHeight, 1) * 0.06;
+      el.style.transform = `translate3d(0, ${translate}px, 0) scale(${scale})`;
+    };
+
+    const onScroll = () => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (raf) window.cancelAnimationFrame(raf);
+    };
+  }, []);
+
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background image */}
       <div className="absolute inset-0 overflow-hidden">
         <img
+          ref={imgRef}
           src={heroBg}
           alt="Cox's Bazar Marine Drive at sunset"
-          className="w-full h-full object-cover"
+          className="w-full h-[115%] object-cover will-change-transform origin-center -translate-y-[5%]"
           width={1920}
           height={1080}
           loading="eager"
