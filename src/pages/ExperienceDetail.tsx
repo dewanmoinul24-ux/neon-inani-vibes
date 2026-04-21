@@ -696,6 +696,70 @@ const ExperienceDetail = () => {
             >
               Close
             </Button>
+            {confirmation && (
+              <>
+                <Button
+                  variant="outline"
+                  className="w-full sm:w-auto border-neon-cyan/40 text-neon-cyan hover:bg-neon-cyan/10"
+                  onClick={() => {
+                    const data: ReceiptData = {
+                      referenceCode: confirmation.referenceCode,
+                      experienceTitle: experience.title,
+                      experienceType: experience.type,
+                      category: experience.category,
+                      organizer: experience.organizer,
+                      location: experience.location,
+                      date: formatEventDate(confirmation.date),
+                      time: confirmation.time || null,
+                      quantity: confirmation.quantity,
+                      unitPrice: format(experience.priceBdt),
+                      total: format(confirmation.total),
+                      guestName: confirmation.guestName,
+                      guestEmail: confirmation.guestEmail,
+                      guestPhone: confirmation.phone,
+                      status: "pending",
+                      createdAt: new Date(confirmation.createdAt).toLocaleString(),
+                      specialRequests: confirmation.specialRequests,
+                    };
+                    downloadReceiptPdf(data);
+                    toast({ title: "Receipt downloaded", description: `Saved as InaniVibes-${confirmation.referenceCode}.pdf` });
+                  }}
+                >
+                  <Download className="w-4 h-4" /> PDF
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full sm:w-auto border-neon-purple/40 text-neon-purple hover:bg-neon-purple/10"
+                  onClick={async () => {
+                    const data: ReceiptData = {
+                      referenceCode: confirmation.referenceCode,
+                      experienceTitle: experience.title,
+                      experienceType: experience.type,
+                      category: experience.category,
+                      organizer: experience.organizer,
+                      location: experience.location,
+                      date: formatEventDate(confirmation.date),
+                      time: confirmation.time || null,
+                      quantity: confirmation.quantity,
+                      unitPrice: format(experience.priceBdt),
+                      total: format(confirmation.total),
+                      guestName: confirmation.guestName,
+                      guestEmail: confirmation.guestEmail,
+                      guestPhone: confirmation.phone,
+                      status: "pending",
+                      createdAt: new Date(confirmation.createdAt).toLocaleString(),
+                      specialRequests: confirmation.specialRequests,
+                    };
+                    const result = await shareReceiptPdf(data);
+                    if (result === "downloaded") {
+                      toast({ title: "Receipt downloaded", description: "Sharing isn't supported here, so we saved it instead." });
+                    }
+                  }}
+                >
+                  <Share2 className="w-4 h-4" /> Share
+                </Button>
+              </>
+            )}
             <Button
               className="w-full sm:w-auto gradient-neon text-primary-foreground font-ui uppercase tracking-widest neon-glow-pink hover:opacity-90"
               onClick={() => {
