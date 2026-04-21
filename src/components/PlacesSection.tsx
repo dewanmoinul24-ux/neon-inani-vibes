@@ -1,4 +1,6 @@
 import { MapPin, Clock, Camera } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import inaniImg from "@/assets/place-inani.jpg";
 import marineImg from "@/assets/place-marine-drive.jpg";
 import himchariImg from "@/assets/place-himchari.jpg";
@@ -80,6 +82,16 @@ const PlacesSection = () => {
               </div>
             </div>
           ))}
+        </div>
+
+        <div className="mt-10 sm:mt-14 flex justify-center">
+          <Link
+            to="/places"
+            className="group inline-flex items-center gap-2 px-6 py-3 rounded-lg font-ui text-sm uppercase tracking-widest gradient-neon text-primary-foreground neon-glow-pink transition-transform duration-300 hover:scale-105"
+          >
+            See all places
+            <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+          </Link>
         </div>
       </div>
     </section>
