@@ -273,6 +273,10 @@ export const experiences: ExperienceItem[] = [
     tagline: "300 ft above the bay",
     description:
       "Strap into a tandem parachute and soar 300 feet above the Bay of Bengal with a panoramic view of the world's longest natural beach. Includes professional briefing and GoPro footage.",
+    titleBn: "মেরিন ড্রাইভে প্যারাসেইলিং",
+    taglineBn: "উপসাগরের ৩০০ ফুট উপরে",
+    descriptionBn:
+      "ট্যান্ডেম প্যারাশুটে বঙ্গোপসাগরের ৩০০ ফুট উপরে উড়ে বেড়ান এবং বিশ্বের দীর্ঘতম প্রাকৃতিক সৈকতের প্যানোরামিক দৃশ্য উপভোগ করুন। পেশাদার ব্রিফিং এবং গোপ্রো ফুটেজ অন্তর্ভুক্ত।",
     image: sportsImg,
     operatingHours: "9:00 AM – 5:00 PM daily",
     durationMinutes: 15,
@@ -299,6 +303,20 @@ export const experiences: ExperienceItem[] = [
       "Get a 1-hour time slot via email/SMS",
       "Pay on arrival and gear up at the booth",
     ],
+    faqs: [
+      {
+        q: "Will I get wet?",
+        a: "Only if you choose the splash-down option at the end. Otherwise you stay completely dry.",
+        qBn: "আমি কি ভিজে যাব?",
+        aBn: "শুধু যদি শেষের 'স্প্ল্যাশ-ডাউন' অপশন বেছে নেন। নাহলে পুরোপুরি শুকনো থাকবেন।",
+      },
+      {
+        q: "Is the GoPro video included?",
+        a: "Yes — you receive a 2 min edited clip via WhatsApp within 30 minutes after landing.",
+        qBn: "গোপ্রো ভিডিও কি অন্তর্ভুক্ত?",
+        aBn: "হ্যাঁ — অবতরণের ৩০ মিনিটের মধ্যে হোয়াটসঅ্যাপে ২ মিনিটের সম্পাদিত ক্লিপ পাবেন।",
+      },
+    ],
   },
   {
     id: "jetski-inani",
@@ -307,6 +325,10 @@ export const experiences: ExperienceItem[] = [
     tagline: "Throttle the turquoise",
     description:
       "Pilot a 130 HP Yamaha jet ski along a 3 km coastal route with an instructor escort. Beginner and expert routes available, calm-water bay or open-sea breakers.",
+    titleBn: "জেট স্কি কোস্টাল রান",
+    taglineBn: "নীল জলে গতি",
+    descriptionBn:
+      "ইন্সট্রাক্টরের সঙ্গে ১৩০ এইচপি ইয়ামাহা জেট স্কি চালিয়ে ৩ কিমি উপকূলীয় রুট পাড়ি দিন। নবীন ও অভিজ্ঞ — উভয় রুট, শান্ত বে অথবা উন্মুক্ত সাগরের ঢেউয়ে।",
     image: sportsImg,
     operatingHours: "8:00 AM – 6:00 PM daily",
     durationMinutes: 30,
@@ -328,6 +350,20 @@ export const experiences: ExperienceItem[] = [
       "Receive your time slot confirmation",
       "Show ID and pay at the watersports booth",
     ],
+    faqs: [
+      {
+        q: "Can I ride with a passenger?",
+        a: "Yes — our skis seat 2. Driver must be 16+, passenger 8+ (with adult).",
+        qBn: "একজন সঙ্গী নিয়ে চালাতে পারব?",
+        aBn: "হ্যাঁ — স্কিতে ২ জন বসতে পারে। চালকের বয়স ১৬+, সঙ্গীর ৮+ (অভিভাবকসহ)।",
+      },
+      {
+        q: "Do I need a license?",
+        a: "No license needed — a 10 min safety briefing covers everything before launch.",
+        qBn: "লাইসেন্স লাগবে?",
+        aBn: "কোনো লাইসেন্স লাগে না — চালু করার আগে ১০ মিনিটের নিরাপত্তা ব্রিফিং দেওয়া হয়।",
+      },
+    ],
   },
   {
     id: "banana-boat-himchari",
@@ -336,6 +372,10 @@ export const experiences: ExperienceItem[] = [
     tagline: "Hold tight, laugh loud",
     description:
       "A high-speed inflatable tow ride for groups of 4–6 along the Himchari shoreline. Friendly for first-timers and absolute chaos for the brave.",
+    titleBn: "বানানা বোট ও ডোনাট রাইড",
+    taglineBn: "জোরে ধরুন, প্রাণ খুলে হাসুন",
+    descriptionBn:
+      "৪–৬ জনের গ্রুপের জন্য হিমছড়ি উপকূলে উচ্চগতির ইনফ্লেটেবল টো রাইড। নবীনদের জন্য নিরাপদ, সাহসীদের জন্য দারুণ মজা।",
     image: sportsImg,
     operatingHours: "9:00 AM – 5:30 PM daily",
     durationMinutes: 20,
@@ -357,6 +397,14 @@ export const experiences: ExperienceItem[] = [
       "Confirm your slot at the booth",
       "Gear up & hop in",
     ],
+    faqs: [
+      {
+        q: "Will the boat tip us over?",
+        a: "Only if requested! Captains adjust speed to your group's comfort — say the word for chaos mode.",
+        qBn: "নৌকা কি আমাদের ফেলে দেবে?",
+        aBn: "শুধু চাইলে! ক্যাপ্টেন আপনার গ্রুপের আরাম অনুযায়ী গতি ঠিক করে — চাইলে চরম মজার মোড অনুরোধ করতে পারেন।",
+      },
+    ],
   },
   {
     id: "atv-beach-trail",
@@ -365,6 +413,10 @@ export const experiences: ExperienceItem[] = [
     tagline: "Sand, dunes, dust",
     description:
       "Ride a 250cc quad bike along a guided 5 km off-road trail through dunes and pine groves between Marine Drive and the beach. Helmets, goggles, and instructor included.",
+    titleBn: "এটিভি বিচ ট্রেইল রাইড",
+    taglineBn: "বালি, টিলা, ধুলো",
+    descriptionBn:
+      "মেরিন ড্রাইভ ও সৈকতের মাঝে ২৫০সিসি কোয়াড বাইকে গাইডেড ৫ কিমি অফ-রোড ট্রেইলে চালান। হেলমেট, গগলস ও ইন্সট্রাক্টর অন্তর্ভুক্ত।",
     image: sportsImg,
     operatingHours: "9:00 AM – 6:00 PM daily",
     durationMinutes: 45,
@@ -386,6 +438,14 @@ export const experiences: ExperienceItem[] = [
       "Confirm via email/SMS",
       "Arrive 20 minutes early for briefing",
     ],
+    faqs: [
+      {
+        q: "Do I need riding experience?",
+        a: "No — automatic-transmission ATVs and a 15 min training loop are included.",
+        qBn: "চালানোর অভিজ্ঞতা লাগবে?",
+        aBn: "না — অটোমেটিক এটিভি এবং ১৫ মিনিটের প্রশিক্ষণ লুপ অন্তর্ভুক্ত।",
+      },
+    ],
   },
   {
     id: "scuba-discovery-sonadia",
@@ -394,6 +454,10 @@ export const experiences: ExperienceItem[] = [
     tagline: "Meet the reef",
     description:
       "A guided beginner's scuba experience off Sonadia Island with PADI-certified instructors. Includes 30 min pool training, then a 25 min open-water dive to 8 m.",
+    titleBn: "স্কুবা ডিসকভারি ডাইভ — সোনাদিয়া",
+    taglineBn: "প্রবালপ্রাচীরের সঙ্গে দেখা",
+    descriptionBn:
+      "PADI-সার্টিফায়েড ইন্সট্রাক্টরের সাথে সোনাদিয়া দ্বীপের কাছে নবীনদের জন্য গাইডেড স্কুবা অভিজ্ঞতা। ৩০ মিনিট পুল প্রশিক্ষণ, এরপর ২৫ মিনিটের ৮ মিটার গভীর ওপেন-ওয়াটার ডাইভ।",
     image: sportsImg,
     operatingHours: "8:00 AM – 4:00 PM (weather permitting)",
     durationMinutes: 180,
@@ -419,6 +483,20 @@ export const experiences: ExperienceItem[] = [
       "Submit your medical form",
       "Receive boat departure time",
       "Pay at the dive center on arrival",
+    ],
+    faqs: [
+      {
+        q: "What if I can't equalize my ears?",
+        a: "Your instructor will help you ascend slightly and try again — if not possible, the dive is shortened with no extra cost.",
+        qBn: "কান যদি ইকুয়ালাইজ না হয়?",
+        aBn: "ইন্সট্রাক্টর আপনাকে একটু উপরে এনে আবার চেষ্টা করাবেন — না হলে অতিরিক্ত খরচ ছাড়াই ডাইভ ছোট করা হয়।",
+      },
+      {
+        q: "Will I see fish?",
+        a: "Yes — Sonadia reef is home to parrotfish, clownfish, sergeant majors and (in season) rays.",
+        qBn: "মাছ দেখা যাবে?",
+        aBn: "হ্যাঁ — সোনাদিয়া রিফে প্যারটফিশ, ক্লাউনফিশ, সার্জেন্ট মেজর ও মৌসুমে রে দেখা যায়।",
+      },
     ],
   },
 ];
