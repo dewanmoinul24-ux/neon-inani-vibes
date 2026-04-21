@@ -505,6 +505,92 @@ const HotelDetail = () => {
                 </div>
               </div>
 
+              {/* Guest Reviews */}
+              <div className="glass rounded-xl p-6">
+                <div className="flex items-center justify-between gap-4 mb-5">
+                  <h2 className="font-display text-lg font-semibold text-foreground">
+                    Guest Reviews
+                  </h2>
+                  <span className="text-xs text-muted-foreground font-ui">
+                    {hotel.reviewCount.toLocaleString()} reviews
+                  </span>
+                </div>
+
+                {/* Score header */}
+                <div className="flex items-center gap-4 mb-5">
+                  <div className="flex flex-col items-center justify-center min-w-[64px] h-16 rounded-lg gradient-neon text-primary-foreground neon-glow-pink">
+                    <span className="font-display text-xl font-bold leading-none">
+                      {getOverallScore(hotel).toFixed(1)}
+                    </span>
+                    <span className="text-[10px] font-ui uppercase tracking-widest opacity-80 mt-0.5">
+                      / 10
+                    </span>
+                  </div>
+                  <div>
+                    <p className="font-display text-base font-semibold text-foreground">
+                      {getScoreLabel(getOverallScore(hotel))}
+                    </p>
+                    <p className="text-xs text-muted-foreground font-body">
+                      Based on {hotel.reviewCount.toLocaleString()} verified guest reviews
+                    </p>
+                  </div>
+                </div>
+
+                {/* Sub-scores */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
+                  {Object.entries(getReviewScores(hotel)).map(([key, value]) => (
+                    <div key={key}>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs text-muted-foreground font-ui capitalize">
+                          {key}
+                        </span>
+                        <span className="text-xs font-display font-bold text-foreground">
+                          {value.toFixed(1)}
+                        </span>
+                      </div>
+                      <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-neon-cyan to-neon-pink"
+                          style={{ width: `${(value / 10) * 100}%` }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Sample reviews */}
+                <div className="space-y-3 pt-5 border-t border-border">
+                  {getReviews(hotel).slice(0, 3).map((rev) => (
+                    <div key={rev.id} className="rounded-lg border border-border p-4">
+                      <div className="flex items-start justify-between gap-3 mb-2">
+                        <div>
+                          <p className="font-body font-semibold text-foreground text-sm">
+                            {rev.author}
+                          </p>
+                          <p className="text-xs text-muted-foreground font-ui">
+                            {rev.country}
+                            {rev.tripType && ` · ${rev.tripType}`} ·{" "}
+                            {format(new Date(rev.date), "MMM yyyy")}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-1 px-2 py-1 rounded-md bg-primary/10 border border-primary/20 flex-shrink-0">
+                          <ThumbsUp size={12} className="text-primary" />
+                          <span className="font-display text-sm font-bold text-primary">
+                            {rev.score.toFixed(1)}
+                          </span>
+                        </div>
+                      </div>
+                      <p className="font-body text-sm font-semibold text-foreground mb-1">
+                        "{rev.title}"
+                      </p>
+                      <p className="text-sm text-muted-foreground font-body leading-relaxed">
+                        {rev.comment}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               {/* Policies */}
               <div className="glass rounded-xl p-6">
                 <h2 className="font-display text-lg font-semibold text-foreground mb-4">Hotel Policies</h2>
