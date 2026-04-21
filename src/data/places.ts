@@ -1,6 +1,22 @@
-import inaniImg from "@/assets/place-inani.jpg";
-import marineImg from "@/assets/place-marine-drive.jpg";
-import himchariImg from "@/assets/place-himchari.jpg";
+import inaniImg from "@/assets/places/inani-beach.jpg";
+import kolatoliImg from "@/assets/places/kolatoli-beach.jpg";
+import shugondhaImg from "@/assets/places/shugondha-beach.jpg";
+import laboniImg from "@/assets/places/laboni-beach.jpg";
+import marineImg from "@/assets/places/marine-drive.jpg";
+import patuartekImg from "@/assets/places/patuartek.jpg";
+import teknafImg from "@/assets/places/teknaf.jpg";
+import shahParirImg from "@/assets/places/shah-parir-dwip.jpg";
+import himchariImg from "@/assets/places/himchari.jpg";
+import saintMartinImg from "@/assets/places/saint-martin-island.jpg";
+import radiantImg from "@/assets/places/radiant-fish-world.jpg";
+import ramuImg from "@/assets/places/ramu-buddhist-temples.jpg";
+import maheshkhaliImg from "@/assets/places/maheshkhali-island.jpg";
+import sonadiaImg from "@/assets/places/sonadia-island.jpg";
+import dulahazaraImg from "@/assets/places/dulahazara-safari-park.jpg";
+import kutubdiaImg from "@/assets/places/kutubdia-island.jpg";
+import burmeseImg from "@/assets/places/burmese-market.jpg";
+import seaPearlImg from "@/assets/places/sea-pearl-water-park.jpg";
+import miniBandarbanImg from "@/assets/places/mini-bandarban.jpg";
 
 export type PlaceCategory = "Beach" | "Drive" | "Island" | "Nature" | "Cultural" | "Family" | "Market";
 
@@ -13,6 +29,12 @@ export interface Place {
   bestTime: string;
   tip: string;
   distance?: string;
+  /** Approx straight-line kilometers from Cox's Bazar town. Used for sorting + map. 0 = town center. */
+  distanceKm: number;
+  /** Map position in normalized 0–100 SVG-space coordinates (x = horizontal, y = vertical). */
+  map: { x: number; y: number };
+  /** First month the best-time window opens (1–12). Used for sorting. */
+  seasonStart: number;
 }
 
 // Curated list of Cox's Bazar destinations.
