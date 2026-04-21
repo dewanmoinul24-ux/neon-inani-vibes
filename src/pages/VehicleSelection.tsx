@@ -188,7 +188,7 @@ const VehicleSelection = () => {
           <div className="absolute bottom-6 sm:bottom-8 md:bottom-10 left-0 right-0 container mx-auto">
             <Link
               to="/vehicles"
-              className="inline-flex items-center gap-1 text-muted-foreground hover:text-primary transition-colors font-ui text-xs sm:text-sm mb-2 sm:mb-3"
+              className="inline-flex items-center gap-1 text-foreground/90 hover:text-primary transition-colors font-ui text-xs sm:text-sm mb-2 sm:mb-3"
             >
               <ChevronLeft size={16} /> Back to Vehicles
             </Link>

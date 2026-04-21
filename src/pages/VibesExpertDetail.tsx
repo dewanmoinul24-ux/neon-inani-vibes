@@ -70,7 +70,7 @@ const VibesExpertDetail = () => {
         <div className="container mx-auto px-4 py-8">
           <Link
             to="/vibes-experts"
-            className="inline-flex items-center gap-1 text-muted-foreground hover:text-primary transition-colors font-ui text-xs sm:text-sm mb-4"
+            className="inline-flex items-center gap-1 text-foreground/90 hover:text-primary transition-colors font-ui text-xs sm:text-sm mb-4"
           >
             <ChevronLeft size={16} /> Back to Vibes Experts
           </Link>
