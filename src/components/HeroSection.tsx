@@ -14,9 +14,9 @@ const HeroSection = () => {
           loading="eager"
           fetchPriority="high"
         />
-        {/* Overlay gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/40 to-background" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-transparent to-background/60" />
+        {/* Overlay gradient - lightened so banner image reads brighter */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background/50 via-background/15 to-background/85" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background/30 via-transparent to-background/30" />
 
         {/* Animated neon light leaks - contained within hero bounds to prevent horizontal overflow */}
         <div className="pointer-events-none absolute top-1/4 left-1/4 w-72 sm:w-96 h-72 sm:h-96 rounded-full bg-neon-pink/10 blur-[80px] sm:blur-[120px] animate-float" />
@@ -27,14 +27,23 @@ const HeroSection = () => {
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 text-center">
         <div className="animate-slide-up">
-          <h1 className="font-display text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6">
+          <h1
+            className="font-display text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6"
+            style={{
+              filter:
+                "drop-shadow(0 0 24px hsl(320 100% 60% / 0.45)) drop-shadow(0 4px 18px hsl(0 0% 0% / 0.95))",
+            }}
+          >
             <span className="gradient-neon-text">Experience</span>
             <br className="sm:hidden" />
             <span className="gradient-neon-text text-5xl sm:text-4xl md:text-6xl lg:text-7xl">{" "}Cox's Bazar</span>
             <br />
             <span className="text-foreground">Like Never Before</span>
           </h1>
-          <p className="font-body text-base md:text-xl text-foreground/90 max-w-2xl mx-auto mb-10">
+          <p
+            className="font-body text-base md:text-xl text-foreground/90 max-w-2xl mx-auto mb-10"
+            style={{ textShadow: "0 2px 14px hsl(0 0% 0% / 0.95)" }}
+          >
             Book hotels, rides, and experiences in one place. Your premium neon beach city adventure starts here.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
