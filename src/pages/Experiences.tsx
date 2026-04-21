@@ -140,7 +140,7 @@ const Experiences = () => {
               className="font-ui text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.4em] text-neon-cyan mb-2 sm:mb-3"
               style={{ textShadow: "0 0 14px hsl(180 100% 55% / 0.95), 0 2px 8px hsl(0 0% 0% / 0.85)" }}
             >
-              {t("exp.heroEyebrow")}
+              {'Marine Drive · After Dark'}
             </p>
             <h1
               className="font-display text-[2.25rem] sm:text-5xl md:text-7xl lg:text-6xl font-bold gradient-neon-text max-w-4xl leading-[1.05]"
@@ -149,26 +149,26 @@ const Experiences = () => {
                   "drop-shadow(0 4px 18px hsl(0 0% 0% / 0.95)) drop-shadow(0 0 24px hsl(330 100% 65% / 0.55)) drop-shadow(0 8px 24px hsl(0 0% 0% / 0.85))",
               }}
             >
-              {t("exp.heroTitle")}
+              {'Experience Inani Vibes'}
             </h1>
             <p
               className="mt-3 sm:mt-5 max-w-2xl text-sm sm:text-base text-foreground/90"
               style={{ textShadow: "0 2px 12px hsl(0 0% 0% / 0.9)" }}
             >
-              {t("exp.heroBody")}
+              {"Beach raves, music festivals, parasailing, jet skis, scuba and more — curated along the world's longest beach. Pick a vibe, book your spot."}
             </p>
             <div className="mt-4 sm:mt-6 flex flex-wrap gap-2 sm:gap-3">
               <a
                 href="#upcoming"
                 className="px-4 sm:px-5 py-2.5 rounded-lg font-ui text-[11px] sm:text-xs uppercase tracking-widest gradient-neon text-primary-foreground neon-glow-pink hover:scale-105 transition-transform"
               >
-                {t("exp.upcomingCta")}
+                {'Upcoming Events'}
               </a>
               <a
                 href="#sports"
                 className="px-4 sm:px-5 py-2.5 rounded-lg font-ui text-[11px] sm:text-xs uppercase tracking-widest glass neon-border-cyan text-neon-cyan hover:scale-105 transition-transform"
               >
-                {t("exp.sportsCta")}
+                {'Adventure Sports'}
               </a>
             </div>
           </div>
@@ -191,10 +191,10 @@ const Experiences = () => {
                 className="font-ui text-[10px] sm:text-xs uppercase tracking-[0.3em] text-neon-orange mb-1.5 sm:mb-2"
                 style={{ textShadow: "0 0 10px hsl(25 100% 55% / 0.8)" }}
               >
-                {t("exp.upcomingEyebrow")}
+                {"What's coming up"}
               </p>
               <h2 className="font-display text-3xl md:text-5xl font-bold gradient-neon-text mt-1 mb-2 py-[8px]">
-                {t("exp.upcomingCta")}
+                {'Upcoming Events'}
               </h2>
             </div>
             <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
@@ -209,14 +209,14 @@ const Experiences = () => {
                       : "border-border/60 text-muted-foreground hover:border-primary/60 hover:text-primary"
                   }`}
                 >
-                  {t(c.key)}
+                  {c.label}
                 </button>
               ))}
             </div>
           </div>
 
           {upcomingEvents.length === 0 ? (
-            <p className="text-muted-foreground">{t("exp.empty.events")}</p>
+            <p className="text-muted-foreground">{'No upcoming events in this category yet.'}</p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-7">
               {upcomingEvents.map((e, i) => (
@@ -234,7 +234,7 @@ const Experiences = () => {
                 >
                   <img
                     src={e.image}
-                    alt={getLocalized(e, "title", lang)}
+                    alt={e.title}
                     loading="lazy"
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
@@ -245,12 +245,12 @@ const Experiences = () => {
                   <div className="relative z-10 h-full flex flex-col justify-between p-5">
                     <div className="flex items-start justify-between gap-2">
                       <span className="px-3 py-1 rounded-full text-[10px] font-ui uppercase tracking-wider gradient-neon text-primary-foreground">
-                        {t(`exp.filter.${e.category}` as StringKey)}
+                        {e.category.charAt(0).toUpperCase() + e.category.slice(1)}
                       </span>
                       <div className="flex flex-col items-end gap-1.5">
                         <span className="flex items-center gap-1 px-2.5 py-1 rounded-full glass text-xs text-neon-cyan border border-neon-cyan/40">
                           <Calendar className="w-3 h-3" />
-                          {formatEventDate(e.date!, locale ?? "en")}
+                          {formatEventDate(e.date!)}
                         </span>
                         {/* Capacity status badge - under the date */}
                         {typeof e.capacity === "number" && (() => {
@@ -259,7 +259,7 @@ const Experiences = () => {
                               <div className="px-2.5 py-1 rounded-full bg-destructive/90 backdrop-blur-sm border border-destructive flex items-center gap-1.5">
                                 <span className="w-1.5 h-1.5 rounded-full bg-destructive-foreground" />
                                 <span className="font-ui text-[9px] uppercase tracking-widest text-destructive-foreground font-bold">
-                                  {t("exp.card.soldOut")}
+                                  {'Sold Out'}
                                 </span>
                               </div>
                             );
@@ -275,7 +275,7 @@ const Experiences = () => {
                                   className="font-ui text-[9px] uppercase tracking-widest text-neon-orange font-bold"
                                   style={{ textShadow: "0 0 8px hsl(25 100% 55% / 0.9)" }}
                                 >
-                                  {t("exp.card.fewLeft")} · {e.capacity}
+                                  {'Few Spots Left'} · {e.capacity}
                                 </span>
                               </div>
                             );
@@ -288,7 +288,7 @@ const Experiences = () => {
                                   className="font-ui text-[9px] uppercase tracking-widest text-neon-pink font-bold"
                                   style={{ textShadow: "0 0 8px hsl(330 100% 65% / 0.9)" }}
                                 >
-                                  {t("exp.card.sellingFast")}
+                                  {'Selling Fast'}
                                 </span>
                               </div>
                             );
@@ -300,10 +300,10 @@ const Experiences = () => {
 
                     <div>
                       <h3 className="font-display text-xl md:text-2xl font-bold text-foreground mb-1.5 leading-tight">
-                        {getLocalized(e, "title", lang)}
+                        {e.title}
                       </h3>
                       <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
-                        {getLocalized(e, "tagline", lang)}
+                        {e.tagline}
                       </p>
                       <div className="space-y-1.5 mb-4 text-xs">
                         <div className="flex items-center gap-2 text-muted-foreground">
@@ -318,10 +318,10 @@ const Experiences = () => {
                       <div className="flex items-center justify-between gap-2">
                         <span className="font-display font-bold text-primary text-[1.375rem]">
                           {format(e.priceBdt)}
-                          <span className="text-xs text-muted-foreground font-normal ml-1">{t("exp.card.ticket")}</span>
+                          <span className="text-xs text-muted-foreground font-normal ml-1">{'/ ticket'}</span>
                         </span>
                         <span className="shrink-0 min-w-[88px] justify-center px-3 py-2 rounded-lg text-[11px] font-ui uppercase tracking-widest glass border border-neon-orange/60 text-neon-orange group-hover:scale-105 transition-transform inline-flex items-center gap-1" style={{ boxShadow: "0 0 14px hsl(25 100% 55% / 0.45)" }}>
-                          <Ticket className="w-3 h-3" /> {t("exp.card.view")}
+                          <Ticket className="w-3 h-3" /> {'View'}
                         </span>
                       </div>
                     </div>
@@ -344,10 +344,10 @@ const Experiences = () => {
                 className="font-ui text-[10px] sm:text-xs uppercase tracking-[0.3em] text-neon-cyan mb-1.5 sm:mb-2"
                 style={{ textShadow: "0 0 10px hsl(180 100% 55% / 0.8)" }}
               >
-                {t("exp.sportsEyebrow")}
+                {'Adrenaline along the coast'}
               </p>
               <h2 className="font-display text-3xl md:text-5xl font-bold gradient-neon-text mt-1 mb-2 py-[8px]">
-                {t("exp.sportsCta")}
+                {'Adventure Sports'}
               </h2>
             </div>
             <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
@@ -362,14 +362,14 @@ const Experiences = () => {
                       : "border-border/60 text-muted-foreground hover:border-neon-cyan/60 hover:text-neon-cyan"
                   }`}
                 >
-                  {t(c.key)}
+                  {c.label}
                 </button>
               ))}
             </div>
           </div>
 
           {sports.length === 0 ? (
-            <p className="text-muted-foreground">{t("exp.empty.sports")}</p>
+            <p className="text-muted-foreground">{'No sports in this category yet.'}</p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-7">
               {sports.map((s, i) => (
@@ -387,7 +387,7 @@ const Experiences = () => {
                 >
                   <img
                     src={s.image}
-                    alt={getLocalized(s, "title", lang)}
+                    alt={s.title}
                     loading="lazy"
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
@@ -397,7 +397,7 @@ const Experiences = () => {
                   <div className="relative z-10 h-full flex flex-col justify-between p-5">
                     <div className="flex items-center justify-between">
                       <span className="px-3 py-1 rounded-full text-[10px] font-ui uppercase tracking-wider bg-neon-cyan text-background">
-                        {t(`exp.filter.${s.category}` as StringKey)}
+                        {s.category.charAt(0).toUpperCase() + s.category.slice(1)}
                       </span>
                       <span className="flex items-center gap-1 px-2.5 py-1 rounded-full glass text-xs text-neon-orange border border-neon-orange/40">
                         <Sparkles className="w-3 h-3" />
@@ -407,10 +407,10 @@ const Experiences = () => {
 
                     <div>
                       <h3 className="font-display text-xl md:text-2xl font-bold text-foreground mb-1.5 leading-tight">
-                        {getLocalized(s, "title", lang)}
+                        {s.title}
                       </h3>
                       <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
-                        {getLocalized(s, "tagline", lang)}
+                        {s.tagline}
                       </p>
                       <div className="space-y-1.5 mb-4 text-xs">
                         <div className="flex items-center gap-2 text-muted-foreground">
@@ -425,10 +425,10 @@ const Experiences = () => {
                       <div className="flex items-center justify-between gap-2">
                         <span className="font-display font-bold text-neon-cyan text-[1.375rem]">
                           {format(s.priceBdt)}
-                          <span className="text-xs text-muted-foreground font-normal ml-1">{t("exp.card.session")}</span>
+                          <span className="text-xs text-muted-foreground font-normal ml-1">{'/ session'}</span>
                         </span>
                         <span className="shrink-0 min-w-[88px] justify-center px-3 py-2 rounded-lg text-[11px] font-ui uppercase tracking-widest glass border border-neon-orange/60 text-neon-orange group-hover:scale-105 transition-transform inline-flex items-center gap-1" style={{ boxShadow: "0 0 14px hsl(25 100% 55% / 0.45)" }}>
-                          <Ticket className="w-3 h-3" /> {t("exp.card.book")}
+                          <Ticket className="w-3 h-3" /> {'Book'}
                         </span>
                       </div>
                     </div>
