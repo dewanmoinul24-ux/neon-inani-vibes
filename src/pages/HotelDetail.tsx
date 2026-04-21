@@ -62,8 +62,8 @@ const HotelDetail = () => {
   const [guests, setGuests] = useState(
     Number(searchParams.get("guests")) || 2
   );
-  const [selectedRoom, setSelectedRoom] = useState<HotelRoom | null>(null);
-  const [roomCount, setRoomCount] = useState(1);
+  // Multi-room-type selection: map of roomId -> count
+  const [selectedRooms, setSelectedRooms] = useState<Record<string, number>>({});
   const [showBookingForm, setShowBookingForm] = useState(false);
 
   // Booking form state
@@ -75,6 +75,30 @@ const HotelDetail = () => {
 
   // Room photo viewer modal
   const [photosRoom, setPhotosRoom] = useState<HotelRoom | null>(null);
+
+  // Helpers for multi-room selection
+  const getCount = (roomId: string) => selectedRooms[roomId] ?? 0;
+  const setCount = (room: HotelRoom, next: number) => {
+    setSelectedRooms((prev) => {
+      const clamped = Math.max(0, Math.min(room.available, next));
+      const updated = { ...prev };
+      if (clamped === 0) delete updated[room.id];
+      else updated[room.id] = clamped;
+      return updated;
+    });
+  };
+
+  const selectedRoomEntries = useMemo(
+    () =>
+      hotel
+        ? hotel.rooms
+            .filter((r) => (selectedRooms[r.id] ?? 0) > 0)
+            .map((r) => ({ room: r, count: selectedRooms[r.id] }))
+        : [],
+    [hotel, selectedRooms]
+  );
+  const totalRoomsSelected = selectedRoomEntries.reduce((s, e) => s + e.count, 0);
+  const hasSelection = totalRoomsSelected > 0;
 
   // Pre-fill from logged-in user's profile (only when fields are still blank).
   useEffect(() => {
