@@ -982,16 +982,14 @@ const ReservationList = ({
                     </span>
                   )}
                 </div>
-                {r.status === "pending" && (
-                  <p className="text-xs text-muted-foreground font-body mt-2">
-                    Awaiting confirmation by the {r.organizer || "Inani Vibes"} team. You'll receive payment instructions on confirmation.
-                  </p>
-                )}
-                {r.status === "confirmed" && (
-                  <p className="text-xs text-neon-cyan font-body mt-2">
-                    Confirmed! Online payment is coming soon — instructions will follow shortly.
-                  </p>
-                )}
+                <div className="mt-3 flex items-center gap-2 text-[11px] font-ui text-muted-foreground">
+                  <Hash className="w-3 h-3 text-neon-cyan" />
+                  <span className="uppercase tracking-widest">Ref</span>
+                  <span className="font-mono text-foreground tracking-wider">
+                    {buildReferenceCode(r.id)}
+                  </span>
+                </div>
+                <ReservationTimeline status={r.status} createdAt={r.created_at} organizer={r.organizer} />
               </div>
               <div className="flex items-center gap-3 md:flex-col md:items-end">
                 <div className="text-right">
@@ -1000,6 +998,34 @@ const ReservationList = ({
                   </p>
                   <p className="font-display text-lg text-primary">{formatPrice(r.total_price)}</p>
                 </div>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="border-neon-cyan/40 text-neon-cyan hover:bg-neon-cyan/10"
+                  onClick={() => {
+                    downloadReceiptPdf({
+                      referenceCode: buildReferenceCode(r.id),
+                      experienceTitle: r.experience_title,
+                      experienceType: r.experience_type,
+                      category: r.category,
+                      organizer: r.organizer,
+                      location: r.location,
+                      date: format(parseISO(r.preferred_date), "EEEE, MMMM d, yyyy"),
+                      time: r.preferred_time,
+                      quantity: r.quantity,
+                      unitPrice: formatPrice(r.unit_price),
+                      total: formatPrice(r.total_price),
+                      guestName: r.guest_name || "—",
+                      guestEmail: r.guest_email || "—",
+                      guestPhone: r.guest_phone,
+                      status: r.status,
+                      createdAt: format(parseISO(r.created_at), "MMM d, yyyy · h:mm a"),
+                      specialRequests: r.special_requests,
+                    });
+                  }}
+                >
+                  <Download className="w-3.5 h-3.5" /> Receipt
+                </Button>
                 {(r.status === "pending" || r.status === "confirmed") && (
                   <Button
                     size="sm"
