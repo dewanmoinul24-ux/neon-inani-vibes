@@ -28,8 +28,17 @@ import {
   getReviewScores,
   getReviews,
   getScoreLabel,
+  getLandmarks,
+  getFAQs,
 } from "@/data/hotels";
 import { ThumbsUp, Sparkles } from "lucide-react";
+import { Plane, Utensils, Waves, Landmark, Bus, Navigation, HelpCircle, Baby, PawPrint, Cigarette, XCircle } from "lucide-react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
