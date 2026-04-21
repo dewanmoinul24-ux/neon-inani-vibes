@@ -98,7 +98,7 @@ const Navbar = () => {
                 <Link
                   key={l.href}
                   to={l.href}
-                  className="font-ui text-xs lg:text-sm uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
+                  className="font-ui text-xs lg:text-sm uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors duration-300 whitespace-nowrap relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
                 >
                   {l.label}
                 </Link>
@@ -106,7 +106,7 @@ const Navbar = () => {
                 <a
                   key={l.href}
                   href={l.href}
-                  className="font-ui text-xs lg:text-sm uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
+                  className="font-ui text-xs lg:text-sm uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors duration-300 whitespace-nowrap relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
                 >
                   {l.label}
                 </a>
