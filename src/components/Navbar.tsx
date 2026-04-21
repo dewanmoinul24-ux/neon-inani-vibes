@@ -22,7 +22,6 @@ import {
   SheetTitle,
   SheetDescription,
 } from "@/components/ui/sheet";
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 const tierAccentClass: Record<string, string> = {
   cyan: "text-neon-cyan border-neon-cyan/40 bg-neon-cyan/10",
