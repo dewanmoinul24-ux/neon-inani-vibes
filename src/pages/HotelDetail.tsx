@@ -350,16 +350,18 @@ const HotelDetail = () => {
               <div>
                 <h2 className="font-display text-lg font-semibold text-foreground mb-4">Available Rooms</h2>
                 <div className="space-y-4">
-                  {hotel.rooms.map((room) => (
+                  {hotel.rooms.map((room) => {
+                    const count = getCount(room.id);
+                    const isSelected = count > 0;
+                    return (
                     <div
                       key={room.id}
                       className={cn(
-                        "glass rounded-xl p-5 transition-all duration-300 cursor-pointer",
-                        selectedRoom?.id === room.id
+                        "glass rounded-xl p-5 transition-all duration-300",
+                        isSelected
                           ? "neon-border-pink neon-glow-pink"
                           : "border border-border hover:border-primary/30"
                       )}
-                      onClick={() => setSelectedRoom(room)}
                     >
                       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div className="flex-1">
@@ -394,31 +396,37 @@ const HotelDetail = () => {
                           <p className="text-xs text-neon-cyan mt-1">
                             {room.available} {room.available === 1 ? "room" : "rooms"} left
                           </p>
-                          {selectedRoom?.id === room.id && (
-                            <div className="mt-2 flex items-center gap-2 justify-end">
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setRoomCount(Math.max(1, roomCount - 1));
-                                }}
-                                aria-label="Decrease room count"
-                                className="w-10 h-10 rounded-md glass flex items-center justify-center text-foreground hover:text-primary"
+                          <div className="mt-3 flex items-center gap-2 justify-end">
+                            {isSelected ? (
+                              <>
+                                <button
+                                  onClick={() => setCount(room, count - 1)}
+                                  aria-label="Decrease room count"
+                                  className="w-10 h-10 rounded-md glass flex items-center justify-center text-foreground hover:text-primary"
+                                >
+                                  <Minus size={16} />
+                                </button>
+                                <span className="font-ui text-sm text-foreground w-6 text-center">{count}</span>
+                                <button
+                                  onClick={() => setCount(room, count + 1)}
+                                  disabled={count >= room.available}
+                                  aria-label="Increase room count"
+                                  className="w-10 h-10 rounded-md glass flex items-center justify-center text-foreground hover:text-primary disabled:opacity-40 disabled:cursor-not-allowed"
+                                >
+                                  <Plus size={16} />
+                                </button>
+                              </>
+                            ) : (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="h-10 font-ui text-xs uppercase tracking-widest"
+                                onClick={() => setCount(room, 1)}
                               >
-                                <Minus size={16} />
-                              </button>
-                              <span className="font-ui text-sm text-foreground w-6 text-center">{roomCount}</span>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setRoomCount(Math.min(room.available, roomCount + 1));
-                                }}
-                                aria-label="Increase room count"
-                                className="w-10 h-10 rounded-md glass flex items-center justify-center text-foreground hover:text-primary"
-                              >
-                                <Plus size={16} />
-                              </button>
-                            </div>
-                          )}
+                                <Plus size={14} className="mr-1.5" /> Add
+                              </Button>
+                            )}
+                          </div>
                         </div>
                       </div>
 
@@ -442,7 +450,7 @@ const HotelDetail = () => {
                           className="hidden sm:inline-flex h-11 sm:flex-1 gradient-neon text-primary-foreground font-ui text-xs uppercase tracking-widest neon-glow-pink hover:scale-[1.02] transition-transform"
                           onClick={(e) => {
                             e.stopPropagation();
-                            setSelectedRoom(room);
+                            if (count === 0) setCount(room, 1);
                             if (!checkIn || !checkOut) {
                               toast.info("Please select your check-in & check-out dates first.");
                               window.scrollTo({ top: 0, behavior: "smooth" });
