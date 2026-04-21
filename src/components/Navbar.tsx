@@ -40,14 +40,14 @@ const Navbar = () => {
   const initials = (profile?.display_name || user?.email || "U").slice(0, 2).toUpperCase();
 
   const navLinks = [
-    { label: "Home", href: "/", isRoute: true },
-    { label: "Hotels", href: "/hotels", isRoute: true },
-    { label: "Vehicles", href: "/vehicles", isRoute: true },
-    { label: "Experiences", href: "/experiences", isRoute: true },
-    { label: "Places", href: "/places", isRoute: true },
-    { label: "Vibes Experts", href: "/vibes-experts", isRoute: true },
-    { label: "About", href: "/#about" },
-    { label: "Contact", href: "/#contact" },
+    { label: "Home", href: "/", isRoute: true, hideAtMd: false },
+    { label: "Hotels", href: "/hotels", isRoute: true, hideAtMd: false },
+    { label: "Vehicles", href: "/vehicles", isRoute: true, hideAtMd: false },
+    { label: "Experiences", href: "/experiences", isRoute: true, hideAtMd: false },
+    { label: "Places", href: "/places", isRoute: true, hideAtMd: false },
+    { label: "Vibes Experts", href: "/vibes-experts", isRoute: true, hideAtMd: false },
+    { label: "About", href: "/#about", hideAtMd: true },
+    { label: "Contact", href: "/#contact", hideAtMd: true },
   ];
 
   const CurrencySwitcher = ({ compact = false }: { compact?: boolean }) => (
@@ -87,18 +87,18 @@ const Navbar = () => {
             <img
               src={logo}
               alt="InaniVibes"
-              className="h-14 md:h-16 lg:h-20 w-auto animate-neon-flicker"
+              className="h-12 md:h-12 lg:h-20 w-auto animate-neon-flicker shrink-0"
             />
           </Link>
 
           {/* Desktop */}
-          <div className="hidden lg:flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-3 lg:gap-6 whitespace-nowrap">
             {navLinks.map((l) =>
               l.isRoute ? (
                 <Link
                   key={l.href}
                   to={l.href}
-                  className="font-ui text-sm uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
+                  className={`font-ui text-xs lg:text-sm uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors duration-300 whitespace-nowrap relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-primary after:transition-all after:duration-300 hover:after:w-full ${l.hideAtMd ? "hidden lg:inline" : ""}`}
                 >
                   {l.label}
                 </Link>
@@ -106,7 +106,7 @@ const Navbar = () => {
                 <a
                   key={l.href}
                   href={l.href}
-                  className="font-ui text-sm uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
+                  className={`font-ui text-xs lg:text-sm uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors duration-300 whitespace-nowrap relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-primary after:transition-all after:duration-300 hover:after:w-full ${l.hideAtMd ? "hidden lg:inline" : ""}`}
                 >
                   {l.label}
                 </a>
@@ -191,14 +191,14 @@ const Navbar = () => {
             <Link
               to="/hotels"
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              className="ml-1 px-5 py-2 rounded-lg font-ui text-sm uppercase tracking-widest gradient-neon text-primary-foreground neon-glow-pink transition-all duration-300 hover:scale-105"
+              className="ml-1 px-3 lg:px-5 py-2 rounded-lg font-ui text-xs lg:text-sm uppercase tracking-widest gradient-neon text-primary-foreground neon-glow-pink transition-all duration-300 hover:scale-105"
             >
               Book Now
             </Link>
           </div>
 
           {/* Mobile right cluster */}
-          <div className="lg:hidden flex items-center gap-2">
+          <div className="md:hidden flex items-center gap-2">
             <CurrencySwitcher compact />
             <button
               onClick={() => setOpen(!open)}
@@ -212,7 +212,7 @@ const Navbar = () => {
 
         {/* Mobile menu */}
         {open && (
-          <div className="lg:hidden glass-strong border-t border-border animate-slide-up">
+          <div className="md:hidden glass-strong border-t border-border animate-slide-up">
             <div className="container mx-auto px-4 py-6 flex flex-col gap-4">
               {navLinks.map((l) =>
                 l.isRoute ? (

@@ -75,7 +75,7 @@ const Vehicles = () => {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/45 to-background/10" />
           <div className="absolute inset-0 bg-gradient-to-r from-background/35 to-transparent" />
-          <div className="absolute bottom-6 sm:bottom-8 md:bottom-12 left-0 right-0 container mx-auto">
+          <div className="absolute bottom-6 sm:bottom-8 md:bottom-12 left-0 right-0 container mx-auto text-center md:text-left">
             <Link
               to="/"
               className="inline-flex items-center gap-1 text-foreground/90 hover:text-primary transition-colors font-ui text-xs sm:text-sm mb-3 sm:mb-4"
@@ -98,7 +98,7 @@ const Vehicles = () => {
               Vehicle Rental
             </h1>
             <p
-              className="mt-3 sm:mt-4 max-w-xl font-body text-sm sm:text-base text-foreground/90 md:text-lg"
+              className="mt-3 sm:mt-4 max-w-xl mx-auto md:mx-0 font-body text-sm sm:text-base text-foreground/90 md:text-lg"
               style={{ textShadow: "0 2px 14px hsl(0 0% 0% / 0.98)" }}
             >
               Explore Cox's Bazar at your own pace. From iconic Chander Garis to self-drive scooters —
