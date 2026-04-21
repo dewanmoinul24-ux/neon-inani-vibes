@@ -70,9 +70,8 @@ const Vehicles = () => {
             width={1920}
             height={640}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/30" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/60 to-transparent" />
-          <div className="absolute inset-0 bg-background/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/45 to-background/10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/35 to-transparent" />
           <div className="absolute bottom-6 sm:bottom-8 md:bottom-12 left-0 right-0 container mx-auto">
             <Link
               to="/"
@@ -82,7 +81,7 @@ const Vehicles = () => {
             </Link>
             <p
               className="font-ui text-xs sm:text-sm uppercase tracking-[0.3em] text-neon-cyan neon-text-cyan mb-2"
-              style={{ textShadow: "0 0 14px hsl(180 100% 55% / 0.95), 0 2px 8px hsl(0 0% 0% / 0.8)" }}
+              style={{ textShadow: "0 0 14px hsl(180 100% 55% / 0.95), 0 2px 10px hsl(0 0% 0% / 0.95)" }}
             >
               Ride the coast
             </p>
@@ -90,14 +89,14 @@ const Vehicles = () => {
               className="font-display text-3xl sm:text-5xl md:text-7xl font-bold gradient-neon-text leading-[1.05] lg:text-6xl"
               style={{
                 filter:
-                  "drop-shadow(0 0 24px hsl(180 100% 55% / 0.55)) drop-shadow(0 4px 16px hsl(0 0% 0% / 0.9))",
+                  "drop-shadow(0 0 26px hsl(180 100% 55% / 0.6)) drop-shadow(0 6px 20px hsl(0 0% 0% / 0.98))",
               }}
             >
               Vehicle Rental
             </h1>
             <p
               className="mt-3 sm:mt-4 max-w-xl font-body text-sm sm:text-base text-foreground/90 md:text-lg"
-              style={{ textShadow: "0 2px 12px hsl(0 0% 0% / 0.9)" }}
+              style={{ textShadow: "0 2px 14px hsl(0 0% 0% / 0.98)" }}
             >
               Explore Cox's Bazar at your own pace. From iconic Chander Garis to self-drive scooters —
               pick your ride and hit Marine Drive.
