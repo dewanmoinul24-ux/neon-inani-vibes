@@ -92,7 +92,7 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop */}
-          <div className="hidden md:flex items-center gap-3 lg:gap-6">
+          <div className="hidden md:flex items-center gap-3 lg:gap-6 whitespace-nowrap">
             {navLinks.map((l) =>
               l.isRoute ? (
                 <Link
