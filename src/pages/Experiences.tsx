@@ -11,30 +11,33 @@ import {
   experiences,
   getUpcomingEvents,
   getAdventureSports,
+  getLocalized,
   type ExperienceCategory,
   type SportCategory,
 } from "@/data/experiences";
 import { useCurrency } from "@/hooks/useCurrency";
+import { useLanguage } from "@/contexts/LanguageContext";
+import type { StringKey } from "@/i18n/strings";
 
-const eventCategories: { value: "all" | ExperienceCategory; label: string }[] = [
-  { value: "all", label: "All" },
-  { value: "party", label: "Party" },
-  { value: "music", label: "Music" },
-  { value: "festival", label: "Festival" },
-  { value: "cultural", label: "Cultural" },
-  { value: "food", label: "Food" },
+const eventCategories: { value: "all" | ExperienceCategory; key: StringKey }[] = [
+  { value: "all", key: "exp.filter.all" },
+  { value: "party", key: "exp.filter.party" },
+  { value: "music", key: "exp.filter.music" },
+  { value: "festival", key: "exp.filter.festival" },
+  { value: "cultural", key: "exp.filter.cultural" },
+  { value: "food", key: "exp.filter.food" },
 ];
 
-const sportCategories: { value: "all" | SportCategory; label: string }[] = [
-  { value: "all", label: "All" },
-  { value: "water", label: "Water" },
-  { value: "aerial", label: "Aerial" },
-  { value: "land", label: "Land" },
+const sportCategories: { value: "all" | SportCategory; key: StringKey }[] = [
+  { value: "all", key: "exp.filter.all" },
+  { value: "water", key: "exp.filter.water" },
+  { value: "aerial", key: "exp.filter.aerial" },
+  { value: "land", key: "exp.filter.land" },
 ];
 
-const formatEventDate = (iso: string) => {
+const formatEventDate = (iso: string, locale: string) => {
   const d = new Date(iso + "T00:00:00");
-  return d.toLocaleDateString(undefined, {
+  return d.toLocaleDateString(locale, {
     weekday: "short",
     month: "short",
     day: "numeric",
@@ -43,6 +46,8 @@ const formatEventDate = (iso: string) => {
 
 const Experiences = () => {
   const { formatPrice: format } = useCurrency();
+  const { lang, t } = useLanguage();
+  const locale = lang === "bn" ? "bn-BD" : undefined;
   const [eventFilter, setEventFilter] = useState<"all" | ExperienceCategory>("all");
   const [sportFilter, setSportFilter] = useState<"all" | SportCategory>("all");
   const { scrollY } = useScroll();
@@ -140,7 +145,7 @@ const Experiences = () => {
               className="font-ui text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.4em] text-neon-cyan mb-2 sm:mb-3"
               style={{ textShadow: "0 0 14px hsl(180 100% 55% / 0.95), 0 2px 8px hsl(0 0% 0% / 0.85)" }}
             >
-              Marine Drive · After Dark
+              {t("exp.heroEyebrow")}
             </p>
             <h1
               className="font-display text-[2.25rem] sm:text-5xl md:text-7xl lg:text-6xl font-bold gradient-neon-text max-w-4xl leading-[1.05]"
@@ -149,27 +154,26 @@ const Experiences = () => {
                   "drop-shadow(0 4px 18px hsl(0 0% 0% / 0.95)) drop-shadow(0 0 24px hsl(330 100% 65% / 0.55)) drop-shadow(0 8px 24px hsl(0 0% 0% / 0.85))",
               }}
             >
-              Experience Inani Vibes
+              {t("exp.heroTitle")}
             </h1>
             <p
               className="mt-3 sm:mt-5 max-w-2xl text-sm sm:text-base text-foreground/90"
               style={{ textShadow: "0 2px 12px hsl(0 0% 0% / 0.9)" }}
             >
-              Beach raves, music festivals, parasailing, jet skis, scuba and more — curated
-              along the world's longest beach. Pick a vibe, book your spot.
+              {t("exp.heroBody")}
             </p>
             <div className="mt-4 sm:mt-6 flex flex-wrap gap-2 sm:gap-3">
               <a
                 href="#upcoming"
                 className="px-4 sm:px-5 py-2.5 rounded-lg font-ui text-[11px] sm:text-xs uppercase tracking-widest gradient-neon text-primary-foreground neon-glow-pink hover:scale-105 transition-transform"
               >
-                Upcoming Events
+                {t("exp.upcomingCta")}
               </a>
               <a
                 href="#sports"
                 className="px-4 sm:px-5 py-2.5 rounded-lg font-ui text-[11px] sm:text-xs uppercase tracking-widest glass neon-border-cyan text-neon-cyan hover:scale-105 transition-transform"
               >
-                Adventure Sports
+                {t("exp.sportsCta")}
               </a>
             </div>
           </div>
@@ -183,19 +187,19 @@ const Experiences = () => {
       <FeaturedTonight />
 
       {/* ───────── Upcoming Events ───────── */}
-      <section id="upcoming" className="py-12 sm:py-16 md:py-24 relative">
+      <section id="upcoming" className="py-14 sm:py-20 md:py-24 relative scroll-mt-24">
         <div className="absolute top-1/4 left-0 w-96 h-96 bg-neon-pink/5 rounded-full blur-[150px]" />
         <div className="container mx-auto px-4 relative">
-          <div className="flex items-end justify-between flex-wrap gap-3 sm:gap-4 mb-6 sm:mb-8">
+          <div className="flex items-end justify-between flex-wrap gap-3 sm:gap-4 mb-8 sm:mb-10">
             <div>
               <p
                 className="font-ui text-[10px] sm:text-xs uppercase tracking-[0.3em] text-neon-orange mb-1.5 sm:mb-2"
                 style={{ textShadow: "0 0 10px hsl(25 100% 55% / 0.8)" }}
               >
-                What's coming up
+                {t("exp.upcomingEyebrow")}
               </p>
               <h2 className="font-display text-3xl md:text-5xl font-bold gradient-neon-text mt-1 mb-2 py-[8px]">
-                Upcoming Events
+                {t("exp.upcomingCta")}
               </h2>
             </div>
             <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
@@ -210,40 +214,48 @@ const Experiences = () => {
                       : "border-border/60 text-muted-foreground hover:border-primary/60 hover:text-primary"
                   }`}
                 >
-                  {c.label}
+                  {t(c.key)}
                 </button>
               ))}
             </div>
           </div>
 
           {upcomingEvents.length === 0 ? (
-            <p className="text-muted-foreground">No upcoming events in this category yet.</p>
+            <p className="text-muted-foreground">{t("exp.empty.events")}</p>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-7">
               {upcomingEvents.map((e, i) => (
-                <Link
+                <motion.div
                   key={e.id}
+                  initial={{ opacity: 0, y: 28 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{ duration: 0.5, delay: Math.min(i * 0.08, 0.4), ease: "easeOut" }}
+                  whileHover={{ y: -6 }}
+                >
+                <Link
                   to={`/experiences/${e.id}`}
-                  className="group relative rounded-xl overflow-hidden h-[22rem] sm:h-[26rem] animate-slide-up glass neon-border-pink"
-                  style={{ animationDelay: `${i * 100}ms` }}
+                  className="group relative block rounded-xl overflow-hidden h-[22rem] sm:h-[26rem] glass neon-border-pink transition-shadow duration-500 hover:shadow-[0_0_30px_hsl(330_100%_65%/0.55),0_0_60px_hsl(280_100%_70%/0.35)]"
                 >
                   <img
                     src={e.image}
-                    alt={e.title}
+                    alt={getLocalized(e, "title", lang)}
                     loading="lazy"
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-transparent" />
+                  {/* Neon sweep on hover */}
+                  <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-tr from-neon-pink/0 via-neon-pink/10 to-neon-purple/0" />
 
                   <div className="relative z-10 h-full flex flex-col justify-between p-5">
                     <div className="flex items-start justify-between gap-2">
                       <span className="px-3 py-1 rounded-full text-[10px] font-ui uppercase tracking-wider gradient-neon text-primary-foreground">
-                        {e.category}
+                        {t(`exp.filter.${e.category}` as StringKey)}
                       </span>
                       <div className="flex flex-col items-end gap-1.5">
                         <span className="flex items-center gap-1 px-2.5 py-1 rounded-full glass text-xs text-neon-cyan border border-neon-cyan/40">
                           <Calendar className="w-3 h-3" />
-                          {formatEventDate(e.date!)}
+                          {formatEventDate(e.date!, locale ?? "en")}
                         </span>
                         {/* Capacity status badge - under the date */}
                         {typeof e.capacity === "number" && (() => {
@@ -252,7 +264,7 @@ const Experiences = () => {
                               <div className="px-2.5 py-1 rounded-full bg-destructive/90 backdrop-blur-sm border border-destructive flex items-center gap-1.5">
                                 <span className="w-1.5 h-1.5 rounded-full bg-destructive-foreground" />
                                 <span className="font-ui text-[9px] uppercase tracking-widest text-destructive-foreground font-bold">
-                                  Sold Out
+                                  {t("exp.card.soldOut")}
                                 </span>
                               </div>
                             );
@@ -268,7 +280,7 @@ const Experiences = () => {
                                   className="font-ui text-[9px] uppercase tracking-widest text-neon-orange font-bold"
                                   style={{ textShadow: "0 0 8px hsl(25 100% 55% / 0.9)" }}
                                 >
-                                  Few Spots Left · {e.capacity}
+                                  {t("exp.card.fewLeft")} · {e.capacity}
                                 </span>
                               </div>
                             );
@@ -281,7 +293,7 @@ const Experiences = () => {
                                   className="font-ui text-[9px] uppercase tracking-widest text-neon-pink font-bold"
                                   style={{ textShadow: "0 0 8px hsl(330 100% 65% / 0.9)" }}
                                 >
-                                  Selling Fast
+                                  {t("exp.card.sellingFast")}
                                 </span>
                               </div>
                             );
@@ -293,10 +305,10 @@ const Experiences = () => {
 
                     <div>
                       <h3 className="font-display text-xl md:text-2xl font-bold text-foreground mb-1.5 leading-tight">
-                        {e.title}
+                        {getLocalized(e, "title", lang)}
                       </h3>
                       <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
-                        {e.tagline}
+                        {getLocalized(e, "tagline", lang)}
                       </p>
                       <div className="space-y-1.5 mb-4 text-xs">
                         <div className="flex items-center gap-2 text-muted-foreground">
@@ -308,18 +320,19 @@ const Experiences = () => {
                           <span className="line-clamp-1">{e.location}</span>
                         </div>
                       </div>
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-center justify-between gap-2">
                         <span className="font-display font-bold text-primary text-[1.375rem]">
                           {format(e.priceBdt)}
-                          <span className="text-xs text-muted-foreground font-normal ml-1">/ ticket</span>
+                          <span className="text-xs text-muted-foreground font-normal ml-1">{t("exp.card.ticket")}</span>
                         </span>
-                        <span className="px-3 py-1.5 rounded-lg text-[11px] font-ui uppercase tracking-widest glass border border-neon-orange/60 text-neon-orange group-hover:scale-105 transition-transform inline-flex items-center gap-1" style={{ boxShadow: "0 0 14px hsl(25 100% 55% / 0.45)" }}>
-                          <Ticket className="w-3 h-3" /> View
+                        <span className="shrink-0 min-w-[88px] justify-center px-3 py-2 rounded-lg text-[11px] font-ui uppercase tracking-widest glass border border-neon-orange/60 text-neon-orange group-hover:scale-105 transition-transform inline-flex items-center gap-1" style={{ boxShadow: "0 0 14px hsl(25 100% 55% / 0.45)" }}>
+                          <Ticket className="w-3 h-3" /> {t("exp.card.view")}
                         </span>
                       </div>
                     </div>
                   </div>
                 </Link>
+                </motion.div>
               ))}
             </div>
           )}
@@ -327,62 +340,69 @@ const Experiences = () => {
       </section>
 
       {/* ───────── Adventure Sports ───────── */}
-      <section id="sports" className="py-16 md:py-24 relative bg-background/40">
+      <section id="sports" className="py-14 sm:py-20 md:py-24 relative bg-background/40 scroll-mt-24">
         <div className="absolute top-0 right-0 w-96 h-96 bg-neon-cyan/5 rounded-full blur-[150px]" />
         <div className="container mx-auto px-4 relative">
-          <div className="flex items-end justify-between flex-wrap gap-4 mb-8">
+          <div className="flex items-end justify-between flex-wrap gap-3 sm:gap-4 mb-8 sm:mb-10">
             <div>
               <p
-                className="font-ui text-xs uppercase tracking-[0.3em] text-neon-cyan mb-2"
+                className="font-ui text-[10px] sm:text-xs uppercase tracking-[0.3em] text-neon-cyan mb-1.5 sm:mb-2"
                 style={{ textShadow: "0 0 10px hsl(180 100% 55% / 0.8)" }}
               >
-                Adrenaline along the coast
+                {t("exp.sportsEyebrow")}
               </p>
-              <h2 className="font-display text-3xl md:text-5xl font-bold gradient-neon-text">
-                Adventure Sports
+              <h2 className="font-display text-3xl md:text-5xl font-bold gradient-neon-text mt-1 mb-2 py-[8px]">
+                {t("exp.sportsCta")}
               </h2>
             </div>
-            <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
               <Filter className="w-4 h-4 text-muted-foreground" />
               {sportCategories.map((c) => (
                 <button
                   key={c.value}
                   onClick={() => setSportFilter(c.value)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-ui uppercase tracking-wider border transition-all ${
+                  className={`px-2.5 sm:px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-ui uppercase tracking-wider border transition-all ${
                     sportFilter === c.value
                       ? "bg-neon-cyan text-background border-neon-cyan"
                       : "border-border/60 text-muted-foreground hover:border-neon-cyan/60 hover:text-neon-cyan"
                   }`}
                 >
-                  {c.label}
+                  {t(c.key)}
                 </button>
               ))}
             </div>
           </div>
 
           {sports.length === 0 ? (
-            <p className="text-muted-foreground">No sports in this category yet.</p>
+            <p className="text-muted-foreground">{t("exp.empty.sports")}</p>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-7">
               {sports.map((s, i) => (
-                <Link
+                <motion.div
                   key={s.id}
+                  initial={{ opacity: 0, y: 28 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{ duration: 0.5, delay: Math.min(i * 0.08, 0.4), ease: "easeOut" }}
+                  whileHover={{ y: -6 }}
+                >
+                <Link
                   to={`/experiences/${s.id}`}
-                  className="group relative rounded-xl overflow-hidden h-[24rem] animate-slide-up glass neon-border-cyan"
-                  style={{ animationDelay: `${i * 100}ms` }}
+                  className="group relative block rounded-xl overflow-hidden h-[22rem] sm:h-[24rem] glass neon-border-cyan transition-shadow duration-500 hover:shadow-[0_0_30px_hsl(180_100%_55%/0.5),0_0_60px_hsl(280_100%_70%/0.3)]"
                 >
                   <img
                     src={s.image}
-                    alt={s.title}
+                    alt={getLocalized(s, "title", lang)}
                     loading="lazy"
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-transparent" />
+                  <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-tr from-neon-cyan/0 via-neon-cyan/10 to-neon-purple/0" />
 
                   <div className="relative z-10 h-full flex flex-col justify-between p-5">
                     <div className="flex items-center justify-between">
                       <span className="px-3 py-1 rounded-full text-[10px] font-ui uppercase tracking-wider bg-neon-cyan text-background">
-                        {s.category}
+                        {t(`exp.filter.${s.category}` as StringKey)}
                       </span>
                       <span className="flex items-center gap-1 px-2.5 py-1 rounded-full glass text-xs text-neon-orange border border-neon-orange/40">
                         <Sparkles className="w-3 h-3" />
@@ -392,10 +412,10 @@ const Experiences = () => {
 
                     <div>
                       <h3 className="font-display text-xl md:text-2xl font-bold text-foreground mb-1.5 leading-tight">
-                        {s.title}
+                        {getLocalized(s, "title", lang)}
                       </h3>
                       <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
-                        {s.tagline}
+                        {getLocalized(s, "tagline", lang)}
                       </p>
                       <div className="space-y-1.5 mb-4 text-xs">
                         <div className="flex items-center gap-2 text-muted-foreground">
@@ -407,18 +427,19 @@ const Experiences = () => {
                           <span className="line-clamp-1">{s.location}</span>
                         </div>
                       </div>
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-center justify-between gap-2">
                         <span className="font-display font-bold text-neon-cyan text-[1.375rem]">
                           {format(s.priceBdt)}
-                          <span className="text-xs text-muted-foreground font-normal ml-1">/ session</span>
+                          <span className="text-xs text-muted-foreground font-normal ml-1">{t("exp.card.session")}</span>
                         </span>
-                        <span className="px-3 py-1.5 rounded-lg text-[11px] font-ui uppercase tracking-widest glass border border-neon-orange/60 text-neon-orange group-hover:scale-105 transition-transform inline-flex items-center gap-1" style={{ boxShadow: "0 0 14px hsl(25 100% 55% / 0.45)" }}>
-                          Book
+                        <span className="shrink-0 min-w-[88px] justify-center px-3 py-2 rounded-lg text-[11px] font-ui uppercase tracking-widest glass border border-neon-orange/60 text-neon-orange group-hover:scale-105 transition-transform inline-flex items-center gap-1" style={{ boxShadow: "0 0 14px hsl(25 100% 55% / 0.45)" }}>
+                          <Ticket className="w-3 h-3" /> {t("exp.card.book")}
                         </span>
                       </div>
                     </div>
                   </div>
                 </Link>
+                </motion.div>
               ))}
             </div>
           )}
