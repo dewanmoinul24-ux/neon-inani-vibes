@@ -44,6 +44,7 @@ const App = () => (
             <Route path="/experiences/:id" element={<ExperienceDetail />} />
             <Route path="/places" element={<Places />} />
             <Route path="/vibes-experts" element={<VibesExperts />} />
+            <Route path="/vibes-experts/:id" element={<VibesExpertDetail />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/admin" element={<AdminOverview />} />
