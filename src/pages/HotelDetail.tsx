@@ -123,7 +123,10 @@ const HotelDetail = () => {
   }
 
   const nights = checkIn && checkOut ? differenceInDays(checkOut, checkIn) : 1;
-  const totalPrice = selectedRoom ? selectedRoom.price * nights * roomCount : 0;
+  const totalPrice = selectedRoomEntries.reduce(
+    (sum, e) => sum + e.room.price * nights * e.count,
+    0
+  );
   const vibesDiscount = Math.round(totalPrice * vibesTier.hotelDiscount);
   const discountedSubtotal = totalPrice - vibesDiscount;
   const taxes = Math.round(discountedSubtotal * 0.15);
@@ -140,8 +143,8 @@ const HotelDetail = () => {
       toast.error("Please select check-in and check-out dates.");
       return;
     }
-    if (!selectedRoom) {
-      toast.error("Please select a room.");
+    if (!hasSelection) {
+      toast.error("Please select at least one room.");
       return;
     }
 
@@ -156,7 +159,12 @@ const HotelDetail = () => {
         check_in: format(checkIn, "yyyy-MM-dd"),
         check_out: format(checkOut, "yyyy-MM-dd"),
         guests,
-        rooms: [{ name: selectedRoom.name, count: roomCount, price: selectedRoom.price }],
+        rooms: selectedRoomEntries.map((e) => ({
+          id: e.room.id,
+          name: e.room.name,
+          count: e.count,
+          price: e.room.price,
+        })),
         subtotal: totalPrice,
         tax_and_fees: taxes + platformFee - vibesDiscount,
         total: grandTotal,
@@ -166,11 +174,15 @@ const HotelDetail = () => {
 
       if (error) throw error;
 
+      const summary = selectedRoomEntries
+        .map((e) => `${e.room.name} × ${e.count}`)
+        .join(", ");
       toast.success("Booking confirmed! 🎉", {
-        description: `${hotel.name} — ${selectedRoom.name} × ${roomCount} for ${nights} night${nights > 1 ? "s" : ""}. Confirmation sent to ${guestEmail}.`,
+        description: `${hotel.name} — ${summary} for ${nights} night${nights > 1 ? "s" : ""}. Confirmation sent to ${guestEmail}.`,
         duration: 6000,
       });
       setShowBookingForm(false);
+      setSelectedRooms({});
     } catch (err: any) {
       toast.error("Booking failed. Please try again.", {
         description: err.message,
