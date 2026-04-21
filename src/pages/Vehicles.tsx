@@ -89,7 +89,7 @@ const Vehicles = () => {
               Ride the coast
             </p>
             <h1
-              className="font-display text-3xl sm:text-5xl md:text-7xl font-bold gradient-neon-text leading-[1.05] lg:text-6xl"
+              className="font-display text-3xl sm:text-5xl md:text-7xl font-bold gradient-neon-text leading-[1.05] lg:text-6xl py-[10px]"
               style={{
                 filter:
                   "drop-shadow(0 0 26px hsl(180 100% 55% / 0.6)) drop-shadow(0 6px 20px hsl(0 0% 0% / 0.98))",
