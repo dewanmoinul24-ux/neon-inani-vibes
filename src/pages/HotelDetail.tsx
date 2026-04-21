@@ -600,7 +600,115 @@ const HotelDetail = () => {
                 </div>
               </div>
 
-              {/* Policies */}
+              {/* Location & nearby */}
+              <div className="glass rounded-xl p-6">
+                <div className="flex items-center justify-between gap-3 mb-4">
+                  <h2 className="font-display text-lg font-semibold text-foreground">
+                    Location & nearby
+                  </h2>
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${hotel.coordinates.lat},${hotel.coordinates.lng}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-xs font-ui uppercase tracking-widest text-neon-cyan hover:text-primary transition-colors"
+                  >
+                    <Navigation size={12} /> Open in Maps
+                  </a>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Map preview */}
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${hotel.coordinates.lat},${hotel.coordinates.lng}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="relative rounded-lg overflow-hidden border border-border h-48 md:h-full min-h-[180px] group block"
+                    aria-label={`Open ${hotel.name} location in Google Maps`}
+                  >
+                    <iframe
+                      title={`Map of ${hotel.name}`}
+                      src={`https://www.openstreetmap.org/export/embed.html?bbox=${hotel.coordinates.lng - 0.01},${hotel.coordinates.lat - 0.008},${hotel.coordinates.lng + 0.01},${hotel.coordinates.lat + 0.008}&layer=mapnik&marker=${hotel.coordinates.lat},${hotel.coordinates.lng}`}
+                      className="w-full h-full border-0 grayscale-[0.2] contrast-110 pointer-events-none"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
+                    <div className="absolute bottom-2 left-2 right-2 flex items-center gap-2 text-xs font-body text-foreground bg-background/70 backdrop-blur-sm rounded-md px-2 py-1.5">
+                      <MapPin size={12} className="text-neon-pink flex-shrink-0" />
+                      <span className="truncate">{hotel.location}</span>
+                    </div>
+                  </a>
+
+                  {/* Landmarks list */}
+                  <ul className="space-y-2">
+                    {getLandmarks(hotel).map((lm) => {
+                      const Icon =
+                        lm.type === "airport"
+                          ? Plane
+                          : lm.type === "beach"
+                          ? Waves
+                          : lm.type === "restaurant"
+                          ? Utensils
+                          : lm.type === "transport"
+                          ? Bus
+                          : Landmark;
+                      const distLabel =
+                        lm.distanceKm < 1
+                          ? `${Math.round(lm.distanceKm * 1000)} m`
+                          : `${lm.distanceKm.toFixed(1)} km`;
+                      return (
+                        <li
+                          key={lm.name}
+                          className="flex items-center gap-3 rounded-md border border-border bg-background/30 px-3 py-2"
+                        >
+                          <div className="w-8 h-8 rounded-md glass flex items-center justify-center flex-shrink-0">
+                            <Icon size={14} className="text-neon-cyan" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-body text-sm text-foreground truncate">{lm.name}</p>
+                            <p className="text-[11px] text-muted-foreground font-ui uppercase tracking-widest capitalize">
+                              {lm.type}
+                            </p>
+                          </div>
+                          <div className="text-right flex-shrink-0">
+                            <p className="font-display text-sm font-semibold text-foreground leading-none">
+                              {distLabel}
+                            </p>
+                            {lm.travelMinutes && (
+                              <p className="text-[11px] text-muted-foreground font-ui mt-0.5">
+                                {lm.travelMinutes} min
+                              </p>
+                            )}
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              </div>
+
+              {/* FAQ */}
+              <div className="glass rounded-xl p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <HelpCircle size={18} className="text-neon-cyan" />
+                  <h2 className="font-display text-lg font-semibold text-foreground">
+                    Frequently asked questions
+                  </h2>
+                </div>
+                <Accordion type="single" collapsible className="w-full">
+                  {getFAQs(hotel).map((faq, i) => (
+                    <AccordionItem key={i} value={`faq-${i}`} className="border-border">
+                      <AccordionTrigger className="text-left font-body text-sm text-foreground hover:text-primary hover:no-underline">
+                        {faq.question}
+                      </AccordionTrigger>
+                      <AccordionContent className="text-sm text-muted-foreground font-body leading-relaxed">
+                        {faq.answer}
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+              </div>
+
+              {/* House Rules */}
               <div className="glass rounded-xl p-6">
                 <h2 className="font-display text-lg font-semibold text-foreground mb-4">
                   House Rules
