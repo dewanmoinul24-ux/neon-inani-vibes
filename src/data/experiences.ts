@@ -57,6 +57,10 @@ export const experiences: ExperienceItem[] = [
     tagline: "Dance under a million stars",
     description:
       "An open-air beach rave with bonfires, neon lasers, and live DJs spinning Bangla EDM, Afro-house, and tech beats until sunrise. Held right on the sand near Inani Beach Point with full bar service.",
+    titleBn: "নিয়ন বনফায়ার নাইট",
+    taglineBn: "লক্ষ তারার নিচে নাচুন",
+    descriptionBn:
+      "ইনানি বিচ পয়েন্টের বালির উপর খোলা আকাশের নিচে বিচ রেভ — বনফায়ার, নিয়ন লেজার আর লাইভ ডিজে সূর্যোদয় পর্যন্ত বাংলা ইডিএম, আফ্রো-হাউস ও টেক বিট বাজাবে। পূর্ণাঙ্গ বার সেবা।",
     image: partyImg,
     date: getUpcomingDate(5),
     startTime: "7:00 PM",
@@ -79,6 +83,32 @@ export const experiences: ExperienceItem[] = [
       "Receive a confirmation email within 30 minutes",
       "Pay on arrival at the entry gate (cash, card or bKash)",
       "Show your QR ticket at the neon arch entrance",
+    ],
+    faqs: [
+      {
+        q: "Is there parking on site?",
+        a: "Yes — free parking for ~80 cars and unlimited bikes, 50 m from the entry arch.",
+        qBn: "এখানে পার্কিং সুবিধা আছে?",
+        aBn: "হ্যাঁ — প্রবেশপথ থেকে ৫০ মিটার দূরে ৮০টি গাড়ি ও আনলিমিটেড বাইকের জন্য ফ্রি পার্কিং।",
+      },
+      {
+        q: "Can I bring my own drinks?",
+        a: "No outside alcohol. Soft drinks in plastic bottles are fine. Full bar with cocktails on site.",
+        qBn: "নিজের পানীয় আনতে পারব?",
+        aBn: "বাইরের অ্যালকোহল আনা যাবে না। প্লাস্টিক বোতলের সফট ড্রিংকস ঠিক আছে। ভেতরে পূর্ণ বার সুবিধা।",
+      },
+      {
+        q: "What if it rains?",
+        a: "Light rain — we keep going under the canopy stage. Storm — event reschedules and your ticket auto-rolls to the next date.",
+        qBn: "যদি বৃষ্টি হয়?",
+        aBn: "হালকা বৃষ্টি হলে ক্যানোপি স্টেজের নিচে চলবে। ঝড় হলে ইভেন্ট রিশিডিউল হবে এবং টিকিট পরবর্তী তারিখে ব্যবহার করা যাবে।",
+      },
+      {
+        q: "Is it safe for solo travelers?",
+        a: "Absolutely — security and a women's help desk are on site all night, with marked safe zones and CCTV.",
+        qBn: "একা ভ্রমণকারীদের জন্য নিরাপদ?",
+        aBn: "অবশ্যই — সারা রাত নিরাপত্তা ও নারী সহায়তা ডেস্ক সক্রিয় থাকে, চিহ্নিত নিরাপদ অঞ্চল ও সিসিটিভি কভারেজ রয়েছে।",
+      },
     ],
   },
   {
