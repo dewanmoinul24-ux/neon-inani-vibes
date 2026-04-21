@@ -119,13 +119,13 @@ const Places = () => {
             <div className="flex flex-wrap items-center justify-center gap-3 animate-slide-up">
               <a
                 href="#all-places"
-                className="px-6 py-3 rounded-lg font-ui text-sm uppercase tracking-widest gradient-neon text-primary-foreground neon-glow-pink transition-transform duration-300 hover:scale-105"
+                className="px-6 py-3 rounded-lg font-ui text-sm uppercase tracking-widest glass border border-border/60 text-foreground transition-all duration-300 hover:scale-105 hover:gradient-neon hover:text-primary-foreground hover:neon-glow-pink hover:border-transparent"
               >
                 Browse all places
               </a>
               <Link
                 to="/experiences"
-                className="px-6 py-3 rounded-lg font-ui text-sm uppercase tracking-widest glass neon-border-blue text-secondary transition-all duration-300 hover:scale-105 hover:neon-glow-blue"
+                className="px-6 py-3 rounded-lg font-ui text-sm uppercase tracking-widest glass border border-border/60 text-foreground transition-all duration-300 hover:scale-105 hover:neon-border-blue hover:text-secondary hover:neon-glow-blue"
               >
                 Plan an experience
               </Link>
