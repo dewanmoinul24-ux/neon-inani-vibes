@@ -125,7 +125,7 @@ const Places = () => {
               </a>
               <Link
                 to="/experiences"
-                className="px-6 py-3 rounded-lg font-ui text-sm uppercase tracking-widest glass border border-border/60 text-foreground transition-all duration-300 hover:scale-105 hover:neon-border-blue hover:text-secondary hover:neon-glow-blue"
+                className="px-6 py-3 rounded-lg font-ui text-sm uppercase tracking-widest glass border border-border/60 text-foreground transition-all duration-300 hover:scale-105 hover:gradient-neon hover:text-primary-foreground hover:neon-glow-pink hover:border-transparent"
               >
                 Plan an experience
               </Link>
