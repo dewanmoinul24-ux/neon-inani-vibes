@@ -44,12 +44,17 @@ import {
   Car as CarIcon,
   Ticket,
   Clock as ClockIcon,
+  Download,
+  Hash,
+  CircleDot,
 } from "lucide-react";
 import { format, isAfter, parseISO } from "date-fns";
+import { addMinutes, formatDistanceToNowStrict } from "date-fns";
 import { useCurrency } from "@/hooks/useCurrency";
 import { CURRENCY_LABEL } from "@/lib/currency";
 import { countCompletedTrips, getVibesTier } from "@/lib/vibesLevel";
 import VibesLevelCard from "@/components/VibesLevelCard";
+import { downloadReceiptPdf, buildReferenceCode } from "@/lib/receipt";
 
 interface Booking {
   id: string;
@@ -79,6 +84,9 @@ interface ExperienceReservation {
   status: string;
   special_requests: string | null;
   created_at: string;
+  guest_name?: string;
+  guest_email?: string;
+  guest_phone?: string;
 }
 
 type SectionKey =
@@ -974,16 +982,14 @@ const ReservationList = ({
                     </span>
                   )}
                 </div>
-                {r.status === "pending" && (
-                  <p className="text-xs text-muted-foreground font-body mt-2">
-                    Awaiting confirmation by the {r.organizer || "Inani Vibes"} team. You'll receive payment instructions on confirmation.
-                  </p>
-                )}
-                {r.status === "confirmed" && (
-                  <p className="text-xs text-neon-cyan font-body mt-2">
-                    Confirmed! Online payment is coming soon — instructions will follow shortly.
-                  </p>
-                )}
+                <div className="mt-3 flex items-center gap-2 text-[11px] font-ui text-muted-foreground">
+                  <Hash className="w-3 h-3 text-neon-cyan" />
+                  <span className="uppercase tracking-widest">Ref</span>
+                  <span className="font-mono text-foreground tracking-wider">
+                    {buildReferenceCode(r.id)}
+                  </span>
+                </div>
+                <ReservationTimeline status={r.status} createdAt={r.created_at} organizer={r.organizer} />
               </div>
               <div className="flex items-center gap-3 md:flex-col md:items-end">
                 <div className="text-right">
@@ -992,6 +998,34 @@ const ReservationList = ({
                   </p>
                   <p className="font-display text-lg text-primary">{formatPrice(r.total_price)}</p>
                 </div>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="border-neon-cyan/40 text-neon-cyan hover:bg-neon-cyan/10"
+                  onClick={() => {
+                    downloadReceiptPdf({
+                      referenceCode: buildReferenceCode(r.id),
+                      experienceTitle: r.experience_title,
+                      experienceType: r.experience_type,
+                      category: r.category,
+                      organizer: r.organizer,
+                      location: r.location,
+                      date: format(parseISO(r.preferred_date), "EEEE, MMMM d, yyyy"),
+                      time: r.preferred_time,
+                      quantity: r.quantity,
+                      unitPrice: formatPrice(r.unit_price),
+                      total: formatPrice(r.total_price),
+                      guestName: r.guest_name || "—",
+                      guestEmail: r.guest_email || "—",
+                      guestPhone: r.guest_phone,
+                      status: r.status,
+                      createdAt: format(parseISO(r.created_at), "MMM d, yyyy · h:mm a"),
+                      specialRequests: r.special_requests,
+                    });
+                  }}
+                >
+                  <Download className="w-3.5 h-3.5" /> Receipt
+                </Button>
                 {(r.status === "pending" || r.status === "confirmed") && (
                   <Button
                     size="sm"
@@ -1012,3 +1046,81 @@ const ReservationList = ({
 };
 
 export default Profile;
+
+/* ---------- Reservation status timeline ---------- */
+
+const ReservationTimeline = ({
+  status,
+  createdAt,
+  organizer,
+}: {
+  status: string;
+  createdAt: string;
+  organizer: string | null;
+}) => {
+  const created = parseISO(createdAt);
+  const expectedBy = addMinutes(created, 30);
+  const now = new Date();
+  const cancelled = status === "cancelled" || status === "rejected";
+  const confirmed = status === "confirmed";
+
+  const steps = [
+    {
+      key: "submitted",
+      label: "Request submitted",
+      sub: format(created, "MMM d · h:mm a"),
+      done: true,
+      active: false,
+    },
+    {
+      key: "pending",
+      label: cancelled ? "Cancelled" : "Pending confirmation",
+      sub: cancelled
+        ? "This request was closed."
+        : confirmed
+        ? "Confirmed by the team."
+        : isAfter(now, expectedBy)
+        ? `Expected within 30 min — running a little late`
+        : `Expected by ${format(expectedBy, "h:mm a")} (${formatDistanceToNowStrict(expectedBy, { addSuffix: true })})`,
+      done: confirmed || cancelled,
+      active: !confirmed && !cancelled,
+    },
+    {
+      key: "confirmed",
+      label: confirmed ? "Confirmed" : "Awaiting confirmation",
+      sub: confirmed
+        ? `${organizer || "InaniVibes"} will share payment instructions next.`
+        : `${organizer || "InaniVibes"} will email you to confirm.`,
+      done: confirmed,
+      active: false,
+    },
+  ];
+
+  return (
+    <ol className="mt-3 space-y-2.5 border-l border-border/60 pl-3.5 ml-1">
+      {steps.map((s) => {
+        const dotClass = cancelled && s.key !== "submitted"
+          ? "bg-destructive/20 text-destructive border-destructive/40"
+          : s.done
+          ? "bg-neon-cyan/15 text-neon-cyan border-neon-cyan/40"
+          : s.active
+          ? "bg-neon-orange/15 text-neon-orange border-neon-orange/40 animate-pulse"
+          : "bg-muted text-muted-foreground border-border";
+        const Icon = s.done ? CheckCircle2 : s.active ? CircleDot : ClockIcon;
+        return (
+          <li key={s.key} className="relative">
+            <span
+              className={`absolute -left-[19px] top-0.5 w-3.5 h-3.5 rounded-full border flex items-center justify-center ${dotClass}`}
+            >
+              <Icon className="w-2.5 h-2.5" />
+            </span>
+            <p className="text-xs font-ui text-foreground leading-tight">{s.label}</p>
+            <p className="text-[11px] text-muted-foreground font-body leading-tight mt-0.5">
+              {s.sub}
+            </p>
+          </li>
+        );
+      })}
+    </ol>
+  );
+};

@@ -17,6 +17,8 @@ import {
   XCircle,
   Ban,
   HelpCircle,
+  Download,
+  Share2,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -31,6 +33,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import StickyBookingBar from "@/components/StickyBookingBar";
 import ExperienceGallery from "@/components/ExperienceGallery";
+import { downloadReceiptPdf, shareReceiptPdf, type ReceiptData } from "@/lib/receipt";
 import {
   Accordion,
   AccordionContent,
@@ -70,6 +73,7 @@ const ExperienceDetail = () => {
   const [preferredTime, setPreferredTime] = useState("");
   const [specialRequests, setSpecialRequests] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [lockedUntil, setLockedUntil] = useState(0);
   const [confirmation, setConfirmation] = useState<null | {
     referenceCode: string;
     date: string;
@@ -78,6 +82,9 @@ const ExperienceDetail = () => {
     total: number;
     guestName: string;
     guestEmail: string;
+    createdAt: string;
+    phone: string;
+    specialRequests: string | null;
   }>(null);
 
   if (!experience) {
@@ -98,6 +105,17 @@ const ExperienceDetail = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Prevent double-submit / rapid re-clicks
+    if (submitting) return;
+    if (Date.now() < lockedUntil) {
+      const seconds = Math.ceil((lockedUntil - Date.now()) / 1000);
+      toast({
+        title: "Hold on a moment",
+        description: `Please wait ${seconds}s before sending another request.`,
+      });
+      return;
+    }
 
     if (!user) {
       toast({
@@ -123,6 +141,8 @@ const ExperienceDetail = () => {
     }
 
     setSubmitting(true);
+    // Lock out further submissions for 10s after the request fires
+    setLockedUntil(Date.now() + 10_000);
     const { data: inserted, error } = await supabase
       .from("experience_reservations")
       .insert({
@@ -144,11 +164,13 @@ const ExperienceDetail = () => {
       special_requests: specialRequests || null,
       status: "pending",
       })
-      .select("id, preferred_date, preferred_time, quantity, total_price, guest_name, guest_email")
+      .select("id, preferred_date, preferred_time, quantity, total_price, guest_name, guest_email, created_at")
       .single();
     setSubmitting(false);
 
     if (error) {
+      // unlock immediately on error so the user can retry
+      setLockedUntil(0);
       toast({
         title: "Could not submit",
         description: error.message,
@@ -166,6 +188,9 @@ const ExperienceDetail = () => {
       total: Number(inserted?.total_price ?? total),
       guestName: inserted?.guest_name ?? name,
       guestEmail: inserted?.guest_email ?? email,
+      createdAt: inserted?.created_at ?? new Date().toISOString(),
+      phone,
+      specialRequests: specialRequests || null,
     });
   };
 
@@ -671,6 +696,70 @@ const ExperienceDetail = () => {
             >
               Close
             </Button>
+            {confirmation && (
+              <>
+                <Button
+                  variant="outline"
+                  className="w-full sm:w-auto border-neon-cyan/40 text-neon-cyan hover:bg-neon-cyan/10"
+                  onClick={() => {
+                    const data: ReceiptData = {
+                      referenceCode: confirmation.referenceCode,
+                      experienceTitle: experience.title,
+                      experienceType: experience.type,
+                      category: experience.category,
+                      organizer: experience.organizer,
+                      location: experience.location,
+                      date: formatEventDate(confirmation.date),
+                      time: confirmation.time || null,
+                      quantity: confirmation.quantity,
+                      unitPrice: format(experience.priceBdt),
+                      total: format(confirmation.total),
+                      guestName: confirmation.guestName,
+                      guestEmail: confirmation.guestEmail,
+                      guestPhone: confirmation.phone,
+                      status: "pending",
+                      createdAt: new Date(confirmation.createdAt).toLocaleString(),
+                      specialRequests: confirmation.specialRequests,
+                    };
+                    downloadReceiptPdf(data);
+                    toast({ title: "Receipt downloaded", description: `Saved as InaniVibes-${confirmation.referenceCode}.pdf` });
+                  }}
+                >
+                  <Download className="w-4 h-4" /> PDF
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full sm:w-auto border-neon-purple/40 text-neon-purple hover:bg-neon-purple/10"
+                  onClick={async () => {
+                    const data: ReceiptData = {
+                      referenceCode: confirmation.referenceCode,
+                      experienceTitle: experience.title,
+                      experienceType: experience.type,
+                      category: experience.category,
+                      organizer: experience.organizer,
+                      location: experience.location,
+                      date: formatEventDate(confirmation.date),
+                      time: confirmation.time || null,
+                      quantity: confirmation.quantity,
+                      unitPrice: format(experience.priceBdt),
+                      total: format(confirmation.total),
+                      guestName: confirmation.guestName,
+                      guestEmail: confirmation.guestEmail,
+                      guestPhone: confirmation.phone,
+                      status: "pending",
+                      createdAt: new Date(confirmation.createdAt).toLocaleString(),
+                      specialRequests: confirmation.specialRequests,
+                    };
+                    const result = await shareReceiptPdf(data);
+                    if (result === "downloaded") {
+                      toast({ title: "Receipt downloaded", description: "Sharing isn't supported here, so we saved it instead." });
+                    }
+                  }}
+                >
+                  <Share2 className="w-4 h-4" /> Share
+                </Button>
+              </>
+            )}
             <Button
               className="w-full sm:w-auto gradient-neon text-primary-foreground font-ui uppercase tracking-widest neon-glow-pink hover:opacity-90"
               onClick={() => {
