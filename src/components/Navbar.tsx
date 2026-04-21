@@ -37,7 +37,23 @@ const Navbar = () => {
   const { tier: vibesTier, completedTrips } = useVibes();
   const { isSuperAdmin } = useIsSuperAdmin();
   const navigate = useNavigate();
+  const location = useLocation();
   const tierClass = tierAccentClass[vibesTier.accent] ?? tierAccentClass.cyan;
+
+  // Auto-close mobile menu on route change for a polished SPA feel.
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname, location.hash]);
+
+  // Lock body scroll while the mobile menu is open (Sheet handles focus trap + ESC).
+  useEffect(() => {
+    if (!open) return;
+    const original = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = original;
+    };
+  }, [open]);
 
   const handleSignOut = async () => {
     await signOut();
