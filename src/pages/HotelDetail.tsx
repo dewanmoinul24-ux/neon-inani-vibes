@@ -62,8 +62,8 @@ const HotelDetail = () => {
   const [guests, setGuests] = useState(
     Number(searchParams.get("guests")) || 2
   );
-  const [selectedRoom, setSelectedRoom] = useState<HotelRoom | null>(null);
-  const [roomCount, setRoomCount] = useState(1);
+  // Multi-room-type selection: map of roomId -> count
+  const [selectedRooms, setSelectedRooms] = useState<Record<string, number>>({});
   const [showBookingForm, setShowBookingForm] = useState(false);
 
   // Booking form state
@@ -75,6 +75,30 @@ const HotelDetail = () => {
 
   // Room photo viewer modal
   const [photosRoom, setPhotosRoom] = useState<HotelRoom | null>(null);
+
+  // Helpers for multi-room selection
+  const getCount = (roomId: string) => selectedRooms[roomId] ?? 0;
+  const setCount = (room: HotelRoom, next: number) => {
+    setSelectedRooms((prev) => {
+      const clamped = Math.max(0, Math.min(room.available, next));
+      const updated = { ...prev };
+      if (clamped === 0) delete updated[room.id];
+      else updated[room.id] = clamped;
+      return updated;
+    });
+  };
+
+  const selectedRoomEntries = useMemo(
+    () =>
+      hotel
+        ? hotel.rooms
+            .filter((r) => (selectedRooms[r.id] ?? 0) > 0)
+            .map((r) => ({ room: r, count: selectedRooms[r.id] }))
+        : [],
+    [hotel, selectedRooms]
+  );
+  const totalRoomsSelected = selectedRoomEntries.reduce((s, e) => s + e.count, 0);
+  const hasSelection = totalRoomsSelected > 0;
 
   // Pre-fill from logged-in user's profile (only when fields are still blank).
   useEffect(() => {
@@ -99,7 +123,10 @@ const HotelDetail = () => {
   }
 
   const nights = checkIn && checkOut ? differenceInDays(checkOut, checkIn) : 1;
-  const totalPrice = selectedRoom ? selectedRoom.price * nights * roomCount : 0;
+  const totalPrice = selectedRoomEntries.reduce(
+    (sum, e) => sum + e.room.price * nights * e.count,
+    0
+  );
   const vibesDiscount = Math.round(totalPrice * vibesTier.hotelDiscount);
   const discountedSubtotal = totalPrice - vibesDiscount;
   const taxes = Math.round(discountedSubtotal * 0.15);
@@ -116,8 +143,8 @@ const HotelDetail = () => {
       toast.error("Please select check-in and check-out dates.");
       return;
     }
-    if (!selectedRoom) {
-      toast.error("Please select a room.");
+    if (!hasSelection) {
+      toast.error("Please select at least one room.");
       return;
     }
 
@@ -132,7 +159,12 @@ const HotelDetail = () => {
         check_in: format(checkIn, "yyyy-MM-dd"),
         check_out: format(checkOut, "yyyy-MM-dd"),
         guests,
-        rooms: [{ name: selectedRoom.name, count: roomCount, price: selectedRoom.price }],
+        rooms: selectedRoomEntries.map((e) => ({
+          id: e.room.id,
+          name: e.room.name,
+          count: e.count,
+          price: e.room.price,
+        })),
         subtotal: totalPrice,
         tax_and_fees: taxes + platformFee - vibesDiscount,
         total: grandTotal,
@@ -142,11 +174,15 @@ const HotelDetail = () => {
 
       if (error) throw error;
 
+      const summary = selectedRoomEntries
+        .map((e) => `${e.room.name} × ${e.count}`)
+        .join(", ");
       toast.success("Booking confirmed! 🎉", {
-        description: `${hotel.name} — ${selectedRoom.name} × ${roomCount} for ${nights} night${nights > 1 ? "s" : ""}. Confirmation sent to ${guestEmail}.`,
+        description: `${hotel.name} — ${summary} for ${nights} night${nights > 1 ? "s" : ""}. Confirmation sent to ${guestEmail}.`,
         duration: 6000,
       });
       setShowBookingForm(false);
+      setSelectedRooms({});
     } catch (err: any) {
       toast.error("Booking failed. Please try again.", {
         description: err.message,
@@ -314,16 +350,18 @@ const HotelDetail = () => {
               <div>
                 <h2 className="font-display text-lg font-semibold text-foreground mb-4">Available Rooms</h2>
                 <div className="space-y-4">
-                  {hotel.rooms.map((room) => (
+                  {hotel.rooms.map((room) => {
+                    const count = getCount(room.id);
+                    const isSelected = count > 0;
+                    return (
                     <div
                       key={room.id}
                       className={cn(
-                        "glass rounded-xl p-5 transition-all duration-300 cursor-pointer",
-                        selectedRoom?.id === room.id
+                        "glass rounded-xl p-5 transition-all duration-300",
+                        isSelected
                           ? "neon-border-pink neon-glow-pink"
                           : "border border-border hover:border-primary/30"
                       )}
-                      onClick={() => setSelectedRoom(room)}
                     >
                       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div className="flex-1">
@@ -358,31 +396,37 @@ const HotelDetail = () => {
                           <p className="text-xs text-neon-cyan mt-1">
                             {room.available} {room.available === 1 ? "room" : "rooms"} left
                           </p>
-                          {selectedRoom?.id === room.id && (
-                            <div className="mt-2 flex items-center gap-2 justify-end">
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setRoomCount(Math.max(1, roomCount - 1));
-                                }}
-                                aria-label="Decrease room count"
-                                className="w-10 h-10 rounded-md glass flex items-center justify-center text-foreground hover:text-primary"
+                          <div className="mt-3 flex items-center gap-2 justify-end">
+                            {isSelected ? (
+                              <>
+                                <button
+                                  onClick={() => setCount(room, count - 1)}
+                                  aria-label="Decrease room count"
+                                  className="w-10 h-10 rounded-md glass flex items-center justify-center text-foreground hover:text-primary"
+                                >
+                                  <Minus size={16} />
+                                </button>
+                                <span className="font-ui text-sm text-foreground w-6 text-center">{count}</span>
+                                <button
+                                  onClick={() => setCount(room, count + 1)}
+                                  disabled={count >= room.available}
+                                  aria-label="Increase room count"
+                                  className="w-10 h-10 rounded-md glass flex items-center justify-center text-foreground hover:text-primary disabled:opacity-40 disabled:cursor-not-allowed"
+                                >
+                                  <Plus size={16} />
+                                </button>
+                              </>
+                            ) : (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="h-10 font-ui text-xs uppercase tracking-widest"
+                                onClick={() => setCount(room, 1)}
                               >
-                                <Minus size={16} />
-                              </button>
-                              <span className="font-ui text-sm text-foreground w-6 text-center">{roomCount}</span>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setRoomCount(Math.min(room.available, roomCount + 1));
-                                }}
-                                aria-label="Increase room count"
-                                className="w-10 h-10 rounded-md glass flex items-center justify-center text-foreground hover:text-primary"
-                              >
-                                <Plus size={16} />
-                              </button>
-                            </div>
-                          )}
+                                <Plus size={14} className="mr-1.5" /> Add
+                              </Button>
+                            )}
+                          </div>
                         </div>
                       </div>
 
@@ -406,7 +450,7 @@ const HotelDetail = () => {
                           className="hidden sm:inline-flex h-11 sm:flex-1 gradient-neon text-primary-foreground font-ui text-xs uppercase tracking-widest neon-glow-pink hover:scale-[1.02] transition-transform"
                           onClick={(e) => {
                             e.stopPropagation();
-                            setSelectedRoom(room);
+                            if (count === 0) setCount(room, 1);
                             if (!checkIn || !checkOut) {
                               toast.info("Please select your check-in & check-out dates first.");
                               window.scrollTo({ top: 0, behavior: "smooth" });
@@ -425,7 +469,8 @@ const HotelDetail = () => {
                         </Button>
                       </div>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
 
@@ -541,16 +586,18 @@ const HotelDetail = () => {
                   </div>
 
                   {/* Price Breakdown */}
-                  {selectedRoom && (
+                  {hasSelection && (
                     <div className="space-y-2 mb-4 pt-4 border-t border-border">
-                      <div className="flex justify-between text-sm font-body">
-                        <span className="text-muted-foreground">
-                          {selectedRoom.name} × {roomCount}
-                        </span>
-                        <span className="text-foreground">
-                          {formatPrice(selectedRoom.price * roomCount)}
-                        </span>
-                      </div>
+                      {selectedRoomEntries.map((e) => (
+                        <div key={e.room.id} className="flex justify-between text-sm font-body">
+                          <span className="text-muted-foreground">
+                            {e.room.name} × {e.count}
+                          </span>
+                          <span className="text-foreground">
+                            {formatPrice(e.room.price * e.count)}
+                          </span>
+                        </div>
+                      ))}
                       <div className="flex justify-between text-sm font-body">
                         <span className="text-muted-foreground">
                           {nights} night{nights > 1 ? "s" : ""}
@@ -585,8 +632,8 @@ const HotelDetail = () => {
                   <Button
                     className="w-full gradient-neon text-primary-foreground font-ui uppercase tracking-widest h-12 text-sm neon-glow-pink hover:scale-[1.02] transition-transform"
                     onClick={() => {
-                      if (!selectedRoom) {
-                        toast.error("Please select a room first.");
+                      if (!hasSelection) {
+                        toast.error("Please add at least one room first.");
                         return;
                       }
                       if (!user) {
@@ -615,7 +662,7 @@ const HotelDetail = () => {
       </section>
 
       {/* Booking Modal */}
-      {showBookingForm && selectedRoom && (
+      {showBookingForm && hasSelection && (
         <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-background/80 backdrop-blur-sm sm:p-4">
           <div className="glass-strong rounded-t-2xl sm:rounded-xl p-5 sm:p-6 md:p-8 w-full sm:max-w-lg neon-border-pink animate-slide-up max-h-[92vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
@@ -632,7 +679,13 @@ const HotelDetail = () => {
             {/* Summary */}
             <div className="glass rounded-lg p-4 mb-6">
               <p className="font-display text-sm font-semibold text-foreground">{hotel.name}</p>
-              <p className="text-xs text-muted-foreground font-body">{selectedRoom.name} × {roomCount}</p>
+              <div className="text-xs text-muted-foreground font-body space-y-0.5 mt-1">
+                {selectedRoomEntries.map((e) => (
+                  <p key={e.room.id}>
+                    {e.room.name} × {e.count}
+                  </p>
+                ))}
+              </div>
               <div className="flex justify-between mt-2 text-sm font-body">
                 <span className="text-muted-foreground">
                   {checkIn ? format(checkIn, "MMM dd") : "—"} → {checkOut ? format(checkOut, "MMM dd, yyyy") : "—"}
@@ -720,18 +773,18 @@ const HotelDetail = () => {
       {!showBookingForm && (
         <StickyBookingBar
           priceLabel={
-            selectedRoom
+            hasSelection
               ? `${formatPrice(grandTotal)}`
               : `From ${formatPrice(hotel.price)}`
           }
           subLabel={
-            selectedRoom
-              ? `${selectedRoom.name} · ${nights} night${nights > 1 ? "s" : ""}`
+            hasSelection
+              ? `${totalRoomsSelected} room${totalRoomsSelected > 1 ? "s" : ""} · ${nights} night${nights > 1 ? "s" : ""}`
               : "per night"
           }
-          ctaLabel={selectedRoom ? "Reserve" : "Select Room"}
+          ctaLabel={hasSelection ? "Reserve" : "Select Room"}
           onCta={() => {
-            if (!selectedRoom) {
+            if (!hasSelection) {
               const roomsEl = document.querySelector("h2.font-display + div .glass");
               roomsEl?.scrollIntoView({ behavior: "smooth", block: "center" });
               toast.info("Pick a room to continue");
@@ -788,7 +841,7 @@ const HotelDetail = () => {
                   onClick={() => {
                     const room = photosRoom;
                     setPhotosRoom(null);
-                    setSelectedRoom(room);
+                    if (room && getCount(room.id) === 0) setCount(room, 1);
                     if (!checkIn || !checkOut) {
                       toast.info("Please select your check-in & check-out dates first.");
                       window.scrollTo({ top: 0, behavior: "smooth" });
