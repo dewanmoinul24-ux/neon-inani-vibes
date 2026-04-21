@@ -1046,3 +1046,81 @@ const ReservationList = ({
 };
 
 export default Profile;
+
+/* ---------- Reservation status timeline ---------- */
+
+const ReservationTimeline = ({
+  status,
+  createdAt,
+  organizer,
+}: {
+  status: string;
+  createdAt: string;
+  organizer: string | null;
+}) => {
+  const created = parseISO(createdAt);
+  const expectedBy = addMinutes(created, 30);
+  const now = new Date();
+  const cancelled = status === "cancelled" || status === "rejected";
+  const confirmed = status === "confirmed";
+
+  const steps = [
+    {
+      key: "submitted",
+      label: "Request submitted",
+      sub: format(created, "MMM d · h:mm a"),
+      done: true,
+      active: false,
+    },
+    {
+      key: "pending",
+      label: cancelled ? "Cancelled" : "Pending confirmation",
+      sub: cancelled
+        ? "This request was closed."
+        : confirmed
+        ? "Confirmed by the team."
+        : isAfter(now, expectedBy)
+        ? `Expected within 30 min — running a little late`
+        : `Expected by ${format(expectedBy, "h:mm a")} (${formatDistanceToNowStrict(expectedBy, { addSuffix: true })})`,
+      done: confirmed || cancelled,
+      active: !confirmed && !cancelled,
+    },
+    {
+      key: "confirmed",
+      label: confirmed ? "Confirmed" : "Awaiting confirmation",
+      sub: confirmed
+        ? `${organizer || "InaniVibes"} will share payment instructions next.`
+        : `${organizer || "InaniVibes"} will email you to confirm.`,
+      done: confirmed,
+      active: false,
+    },
+  ];
+
+  return (
+    <ol className="mt-3 space-y-2.5 border-l border-border/60 pl-3.5 ml-1">
+      {steps.map((s) => {
+        const dotClass = cancelled && s.key !== "submitted"
+          ? "bg-destructive/20 text-destructive border-destructive/40"
+          : s.done
+          ? "bg-neon-cyan/15 text-neon-cyan border-neon-cyan/40"
+          : s.active
+          ? "bg-neon-orange/15 text-neon-orange border-neon-orange/40 animate-pulse"
+          : "bg-muted text-muted-foreground border-border";
+        const Icon = s.done ? CheckCircle2 : s.active ? CircleDot : ClockIcon;
+        return (
+          <li key={s.key} className="relative">
+            <span
+              className={`absolute -left-[19px] top-0.5 w-3.5 h-3.5 rounded-full border flex items-center justify-center ${dotClass}`}
+            >
+              <Icon className="w-2.5 h-2.5" />
+            </span>
+            <p className="text-xs font-ui text-foreground leading-tight">{s.label}</p>
+            <p className="text-[11px] text-muted-foreground font-body leading-tight mt-0.5">
+              {s.sub}
+            </p>
+          </li>
+        );
+      })}
+    </ol>
+  );
+};
