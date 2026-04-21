@@ -73,6 +73,7 @@ const ExperienceDetail = () => {
   const [preferredTime, setPreferredTime] = useState("");
   const [specialRequests, setSpecialRequests] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [lockedUntil, setLockedUntil] = useState(0);
   const [confirmation, setConfirmation] = useState<null | {
     referenceCode: string;
     date: string;
@@ -81,6 +82,9 @@ const ExperienceDetail = () => {
     total: number;
     guestName: string;
     guestEmail: string;
+    createdAt: string;
+    phone: string;
+    specialRequests: string | null;
   }>(null);
 
   if (!experience) {
