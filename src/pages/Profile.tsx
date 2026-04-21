@@ -995,6 +995,7 @@ const ReservationList = ({
                   </span>
                 </div>
                 <ReservationTimeline status={r.status} createdAt={r.created_at} organizer={r.organizer} />
+                <ReservationPayment reservation={r} formatPrice={formatPrice} />
               </div>
               <div className="flex items-center gap-3 md:flex-col md:items-end">
                 <div className="text-right">
