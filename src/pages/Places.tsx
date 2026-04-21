@@ -245,17 +245,11 @@ const Places = () => {
           ) : (
             <div className="space-y-10 sm:space-y-12">
               {visiblePlaces.map((place, i) => {
-                const highlighted = activePin === place.slug;
                 return (
                   <article
                     key={place.slug}
                     id={`place-${place.slug}`}
-                    ref={(el) => (cardRefs.current[place.slug] = el)}
-                    className={`flex flex-col ${i % 2 === 1 ? "md:flex-row-reverse" : "md:flex-row"} gap-5 sm:gap-6 md:gap-10 items-center animate-slide-up rounded-2xl transition-all duration-500 ${
-                      highlighted
-                        ? "ring-2 ring-neon-pink/70 shadow-[0_0_40px_hsl(320_100%_60%_/_0.35)]"
-                        : ""
-                    }`}
+                    className={`flex flex-col ${i % 2 === 1 ? "md:flex-row-reverse" : "md:flex-row"} gap-5 sm:gap-6 md:gap-10 items-center animate-slide-up rounded-2xl`}
                     style={{ animationDelay: `${(i % 6) * 80}ms` }}
                   >
                     <div className="w-full md:w-1/2 rounded-xl overflow-hidden neon-border-blue group relative">
