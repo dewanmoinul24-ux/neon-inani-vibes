@@ -56,6 +56,7 @@ export const experiences: ExperienceItem[] = [
     description:
       "An open-air beach rave with bonfires, neon lasers, and live DJs spinning Bangla EDM, Afro-house, and tech beats until sunrise. Held right on the sand near Inani Beach Point with full bar service.",
     image: partyImg,
+    gallery: [partyImg, musicImg, sportsImg],
     date: getUpcomingDate(5),
     startTime: "7:00 PM",
     endTime: "2:00 AM",
@@ -105,6 +106,7 @@ export const experiences: ExperienceItem[] = [
     description:
       "A two-stage open-air festival featuring top Bangladeshi rock, indie, and folk-fusion artists. Set against the cliffs of Himchari with food trucks, art installations, and a sunset acoustic stage.",
     image: musicImg,
+    gallery: [musicImg, partyImg, sportsImg],
     date: getUpcomingDate(12),
     startTime: "4:00 PM",
     endTime: "11:30 PM",
@@ -150,6 +152,7 @@ export const experiences: ExperienceItem[] = [
     description:
       "A 90-minute candlelit yoga flow followed by a Tibetan singing-bowl sound bath on the soft sand of Sugandha Beach, timed perfectly with the full moon rising over the Bay of Bengal.",
     image: musicImg,
+    gallery: [musicImg, partyImg, sportsImg],
     date: getUpcomingDate(3),
     startTime: "5:30 PM",
     endTime: "7:30 PM",
@@ -191,6 +194,7 @@ export const experiences: ExperienceItem[] = [
     description:
       "A weekly seafood street-food festival with 40+ stalls grilling lobster, prawn, snapper, and squid right by the shoreline. Live folk music, craft stalls, and a kids' corner.",
     image: partyImg,
+    gallery: [partyImg, musicImg, sportsImg],
     date: getUpcomingDate(8),
     startTime: "6:00 PM",
     endTime: "11:00 PM",
@@ -234,6 +238,7 @@ export const experiences: ExperienceItem[] = [
     description:
       "Strap into a tandem parachute and soar 300 feet above the Bay of Bengal with a panoramic view of the world's longest natural beach. Includes professional briefing and GoPro footage.",
     image: sportsImg,
+    gallery: [sportsImg, partyImg, musicImg],
     operatingHours: "9:00 AM – 5:00 PM daily",
     durationMinutes: 15,
     category: "aerial",
@@ -278,6 +283,7 @@ export const experiences: ExperienceItem[] = [
     description:
       "Pilot a 130 HP Yamaha jet ski along a 3 km coastal route with an instructor escort. Beginner and expert routes available, calm-water bay or open-sea breakers.",
     image: sportsImg,
+    gallery: [sportsImg, partyImg, musicImg],
     operatingHours: "8:00 AM – 6:00 PM daily",
     durationMinutes: 30,
     category: "water",
@@ -317,6 +323,7 @@ export const experiences: ExperienceItem[] = [
     description:
       "A high-speed inflatable tow ride for groups of 4–6 along the Himchari shoreline. Friendly for first-timers and absolute chaos for the brave.",
     image: sportsImg,
+    gallery: [sportsImg, partyImg, musicImg],
     operatingHours: "9:00 AM – 5:30 PM daily",
     durationMinutes: 20,
     category: "water",
@@ -352,6 +359,7 @@ export const experiences: ExperienceItem[] = [
     description:
       "Ride a 250cc quad bike along a guided 5 km off-road trail through dunes and pine groves between Marine Drive and the beach. Helmets, goggles, and instructor included.",
     image: sportsImg,
+    gallery: [sportsImg, partyImg, musicImg],
     operatingHours: "9:00 AM – 6:00 PM daily",
     durationMinutes: 45,
     category: "land",
@@ -387,6 +395,7 @@ export const experiences: ExperienceItem[] = [
     description:
       "A guided beginner's scuba experience off Sonadia Island with PADI-certified instructors. Includes 30 min pool training, then a 25 min open-water dive to 8 m.",
     image: sportsImg,
+    gallery: [sportsImg, partyImg, musicImg],
     operatingHours: "8:00 AM – 4:00 PM (weather permitting)",
     durationMinutes: 180,
     category: "water",
