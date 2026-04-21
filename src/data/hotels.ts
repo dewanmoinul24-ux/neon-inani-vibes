@@ -72,6 +72,18 @@ export interface HotelReview {
   tripType?: "Couple" | "Family" | "Solo" | "Business" | "Group";
 }
 
+export interface HotelLandmark {
+  name: string;
+  type: "airport" | "beach" | "restaurant" | "attraction" | "transport";
+  distanceKm: number;
+  travelMinutes?: number;
+}
+
+export interface HotelFAQ {
+  question: string;
+  answer: string;
+}
+
 /**
  * Returns a 6-axis review score breakdown. Falls back to a generated set
  * derived from the hotel's overall rating so every hotel renders nicely
