@@ -328,12 +328,12 @@ const ExperienceDetail = () => {
             >
               <div>
                 <p className="font-ui text-xs uppercase tracking-widest text-muted-foreground">
-                  {isEvent ? "Reserve your ticket" : "Book a session"}
+                  {isEvent ? t("det.form.reserveTicket") : t("det.form.bookSession")}
                 </p>
                 <p className="font-display text-3xl font-bold gradient-neon-text mt-1">
                   {format(experience.priceBdt)}
                   <span className="text-sm text-muted-foreground font-normal ml-1">
-                    / {isEvent ? "ticket" : "session"}
+                    {isEvent ? t("exp.card.ticket") : t("exp.card.session")}
                   </span>
                 </p>
               </div>
@@ -341,7 +341,7 @@ const ExperienceDetail = () => {
               {!isEvent && (
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <Label htmlFor="date" className="text-xs">Preferred date *</Label>
+                    <Label htmlFor="date" className="text-xs">{t("det.form.preferredDate")}</Label>
                     <Input
                       id="date"
                       type="date"
@@ -352,7 +352,7 @@ const ExperienceDetail = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="time" className="text-xs">Preferred time *</Label>
+                    <Label htmlFor="time" className="text-xs">{t("det.form.preferredTime")}</Label>
                     <Input
                       id="time"
                       type="time"
@@ -366,7 +366,7 @@ const ExperienceDetail = () => {
 
               <div>
                 <Label htmlFor="qty" className="text-xs">
-                  {isEvent ? "Tickets" : "Riders / participants"}
+                  {isEvent ? t("det.form.tickets") : t("det.form.riders")}
                 </Label>
                 <Input
                   id="qty"
@@ -379,12 +379,12 @@ const ExperienceDetail = () => {
               </div>
 
               <div>
-                <Label htmlFor="name" className="text-xs">Full name *</Label>
+                <Label htmlFor="name" className="text-xs">{t("det.form.name")}</Label>
                 <Input id="name" required value={name} onChange={(e) => setName(e.target.value)} />
               </div>
 
               <div>
-                <Label htmlFor="email" className="text-xs">Email *</Label>
+                <Label htmlFor="email" className="text-xs">{t("det.form.email")}</Label>
                 <Input
                   id="email"
                   type="email"
@@ -395,7 +395,7 @@ const ExperienceDetail = () => {
               </div>
 
               <div>
-                <Label htmlFor="phone" className="text-xs">Phone *</Label>
+                <Label htmlFor="phone" className="text-xs">{t("det.form.phone")}</Label>
                 <Input
                   id="phone"
                   type="tel"
@@ -407,19 +407,19 @@ const ExperienceDetail = () => {
               </div>
 
               <div>
-                <Label htmlFor="notes" className="text-xs">Special requests (optional)</Label>
+                <Label htmlFor="notes" className="text-xs">{t("det.form.notes")}</Label>
                 <Textarea
                   id="notes"
                   rows={2}
                   maxLength={500}
-                  placeholder="Allergies, group ages, accessibility..."
+                  placeholder={t("det.form.notesPh")}
                   value={specialRequests}
                   onChange={(e) => setSpecialRequests(e.target.value)}
                 />
               </div>
 
               <div className="border-t border-border/60 pt-3 flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Total</span>
+                <span className="text-sm text-muted-foreground">{t("det.form.total")}</span>
                 <span className="font-display text-2xl font-bold text-primary">{format(total)}</span>
               </div>
 
@@ -428,7 +428,7 @@ const ExperienceDetail = () => {
                 disabled={submitting}
                 className="w-full gradient-neon text-primary-foreground font-ui uppercase tracking-widest neon-glow-pink hover:opacity-90"
               >
-                {submitting ? "Sending..." : user ? "Request Reservation" : "Sign in to reserve"}
+                {submitting ? t("det.form.sending") : user ? t("det.form.submit") : t("det.form.signInToReserve")}
               </Button>
 
               <div className="text-xs text-muted-foreground space-y-1.5 pt-1">
@@ -436,10 +436,10 @@ const ExperienceDetail = () => {
                   <Phone className="w-3 h-3" /> {experience.contactPhone}
                 </p>
                 <p className="flex items-center gap-2">
-                  <Mail className="w-3 h-3" /> Confirmation within 30 min by the Inani Vibes team
+                  <Mail className="w-3 h-3" /> {t("det.form.confirm")}
                 </p>
                 <p className="opacity-80">
-                  Online payment coming soon — instructions will follow on confirmation.
+                  {t("det.form.payNote")}
                 </p>
               </div>
             </form>
