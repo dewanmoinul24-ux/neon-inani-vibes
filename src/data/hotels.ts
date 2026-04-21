@@ -59,6 +59,10 @@ export interface Hotel {
     facilities: number;
   };
   reviews?: HotelReview[];
+  /** Optional curated nearby landmarks. Falls back to defaults if not set. */
+  landmarks?: HotelLandmark[];
+  /** Optional curated FAQ entries. Falls back to defaults if not set. */
+  faqs?: HotelFAQ[];
 }
 
 export interface HotelReview {
