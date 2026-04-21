@@ -16,6 +16,7 @@ import {
   Ticket,
   XCircle,
   Ban,
+  HelpCircle,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -24,14 +25,21 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
-import { getExperienceById } from "@/data/experiences";
+import { getExperienceById, getLocalized } from "@/data/experiences";
 import { useCurrency } from "@/hooks/useCurrency";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import StickyBookingBar from "@/components/StickyBookingBar";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
-const formatEventDate = (iso: string) =>
-  new Date(iso + "T00:00:00").toLocaleDateString(undefined, {
+const formatEventDate = (iso: string, locale?: string) =>
+  new Date(iso + "T00:00:00").toLocaleDateString(locale, {
     weekday: "long",
     month: "long",
     day: "numeric",
@@ -42,6 +50,8 @@ const ExperienceDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { formatPrice: format } = useCurrency();
+  const { lang, t } = useLanguage();
+  const locale = lang === "bn" ? "bn-BD" : undefined;
   const { user, profile } = useAuth();
 
   const experience = useMemo(() => (id ? getExperienceById(id) : undefined), [id]);
