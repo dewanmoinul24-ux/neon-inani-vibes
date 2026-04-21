@@ -25,9 +25,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
-import { getExperienceById, getLocalized } from "@/data/experiences";
+import { getExperienceById } from "@/data/experiences";
 import { useCurrency } from "@/hooks/useCurrency";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import StickyBookingBar from "@/components/StickyBookingBar";
@@ -50,8 +49,6 @@ const ExperienceDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { formatPrice: format } = useCurrency();
-  const { lang, t } = useLanguage();
-  const locale = lang === "bn" ? "bn-BD" : undefined;
   const { user, profile } = useAuth();
 
   const experience = useMemo(() => (id ? getExperienceById(id) : undefined), [id]);
@@ -70,8 +67,8 @@ const ExperienceDetail = () => {
       <div className="min-h-screen bg-background">
         <Navbar />
         <div className="container mx-auto px-4 pt-32 pb-20 text-center">
-          <h1 className="font-display text-3xl mb-4">{t("det.notFound")}</h1>
-          <Button onClick={() => navigate("/experiences")}>{t("det.back")}</Button>
+          <h1 className="font-display text-3xl mb-4">{'Experience not found'}</h1>
+          <Button onClick={() => navigate("/experiences")}>{'Back to Experiences'}</Button>
         </div>
         <Footer />
       </div>
@@ -165,21 +162,21 @@ const ExperienceDetail = () => {
               className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-4 w-fit"
             >
               <ArrowLeft className="w-4 h-4" />
-              {t("det.back")}
+              {'Back to Experiences'}
             </Link>
             <div className="flex items-center gap-2 mb-3 flex-wrap">
               <span className="px-3 py-1 rounded-full text-[10px] font-ui uppercase tracking-wider gradient-neon text-primary-foreground">
                 {experience.category}
               </span>
               <span className="px-3 py-1 rounded-full text-[10px] font-ui uppercase tracking-wider glass border border-neon-cyan/40 text-neon-cyan">
-                {isEvent ? t("det.event") : t("det.sport")}
+                {isEvent ? 'Event' : 'Adventure Sport'}
               </span>
             </div>
             <h1 className="font-display text-3xl md:text-5xl font-bold gradient-neon-text max-w-4xl leading-tight py-[20px] lg:text-7xl">
-              {getLocalized(experience, "title", lang)}
+              {experience.title}
             </h1>
             <p className="mt-2 text-base md:text-lg text-muted-foreground max-w-2xl">
-              {getLocalized(experience, "tagline", lang)}
+              {experience.tagline}
             </p>
           </div>
         </div>
@@ -191,21 +188,21 @@ const ExperienceDetail = () => {
           <div className="lg:col-span-2 space-y-8">
             {/* Quick facts */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              <FactCard icon={<MapPin className="w-4 h-4" />} label={t("det.fact.location")} value={experience.location} accent="pink" />
+              <FactCard icon={<MapPin className="w-4 h-4" />} label={'Location'} value={experience.location} accent="pink" />
               {isEvent ? (
                 <>
-                  <FactCard icon={<Calendar className="w-4 h-4" />} label={t("det.fact.date")} value={formatEventDate(experience.date!, locale)} accent="cyan" />
-                  <FactCard icon={<Clock className="w-4 h-4" />} label={t("det.fact.time")} value={`${experience.startTime} – ${experience.endTime}`} accent="orange" />
+                  <FactCard icon={<Calendar className="w-4 h-4" />} label={'Date'} value={formatEventDate(experience.date!)} accent="cyan" />
+                  <FactCard icon={<Clock className="w-4 h-4" />} label={'Time'} value={`${experience.startTime} – ${experience.endTime}`} accent="orange" />
                 </>
               ) : (
                 <>
-                  <FactCard icon={<Clock className="w-4 h-4" />} label={t("det.fact.hours")} value={experience.operatingHours!} accent="cyan" />
-                  <FactCard icon={<Sparkles className="w-4 h-4" />} label={t("det.fact.duration")} value={`${experience.durationMinutes} min`} accent="orange" />
+                  <FactCard icon={<Clock className="w-4 h-4" />} label={'Hours'} value={experience.operatingHours!} accent="cyan" />
+                  <FactCard icon={<Sparkles className="w-4 h-4" />} label={'Duration'} value={`${experience.durationMinutes} min`} accent="orange" />
                 </>
               )}
               <FactCard
                 icon={<Ticket className="w-4 h-4" />}
-                label={isEvent ? t("det.fact.ticket") : t("det.fact.session")}
+                label={isEvent ? 'Ticket' : 'Session'}
                 value={format(experience.priceBdt)}
                 accent="purple"
               />
@@ -214,10 +211,10 @@ const ExperienceDetail = () => {
             {/* About */}
             <div className="glass rounded-xl p-6 border border-border/60">
               <h2 className="font-display text-2xl font-bold mb-3">
-                {isEvent ? t("det.about.event") : t("det.about.sport")}
+                {isEvent ? 'About this event' : 'About this experience'}
               </h2>
               <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
-                {getLocalized(experience, "description", lang)}
+                {experience.description}
               </p>
               <a
                 href={experience.mapUrl}
@@ -225,7 +222,7 @@ const ExperienceDetail = () => {
                 rel="noopener noreferrer"
                 className="mt-4 inline-flex items-center gap-2 text-sm text-neon-cyan hover:underline"
               >
-                <MapPin className="w-4 h-4" /> {t("det.viewMap")} <ExternalLink className="w-3 h-3" />
+                <MapPin className="w-4 h-4" /> {'View on Google Maps'} <ExternalLink className="w-3 h-3" />
               </a>
             </div>
 
@@ -233,12 +230,12 @@ const ExperienceDetail = () => {
             <div className="grid md:grid-cols-2 gap-4">
               <InfoBlock
                 icon={<Shirt className="w-4 h-4 text-neon-pink" />}
-                title={t("det.dressCode")}
+                title={'Dress Code'}
                 items={experience.dressCode}
               />
               <InfoBlock
                 icon={<ShieldCheck className="w-4 h-4 text-neon-cyan" />}
-                title={t("det.requirements")}
+                title={'Requirements'}
                 items={experience.requirements}
               />
             </div>
@@ -247,13 +244,13 @@ const ExperienceDetail = () => {
             <div className="grid md:grid-cols-2 gap-4">
               <InfoBlock
                 icon={<CheckCircle2 className="w-4 h-4 text-emerald-400" />}
-                title={t("det.dos")}
+                title={"Do's"}
                 items={experience.dos}
                 tone="positive"
               />
               <InfoBlock
                 icon={<XCircle className="w-4 h-4 text-rose-400" />}
-                title={t("det.donts")}
+                title={"Don'ts"}
                 items={experience.donts}
                 tone="negative"
               />
@@ -262,7 +259,7 @@ const ExperienceDetail = () => {
             {/* Restricted items */}
             <div className="glass rounded-xl p-6 border border-rose-500/30">
               <h3 className="font-display text-lg font-bold mb-3 flex items-center gap-2">
-                <Ban className="w-4 h-4 text-rose-400" /> {t("det.restricted")}
+                <Ban className="w-4 h-4 text-rose-400" /> {'Restricted Items'}
               </h3>
               <div className="flex flex-wrap gap-2">
                 {experience.restrictedItems.map((item) => (
@@ -279,7 +276,7 @@ const ExperienceDetail = () => {
             {/* Booking process */}
             <div className="glass rounded-xl p-6 border border-border/60">
               <h3 className="font-display text-lg font-bold mb-4 flex items-center gap-2">
-                <ShieldAlert className="w-4 h-4 text-neon-orange" /> {t("det.bookingProcess")}
+                <ShieldAlert className="w-4 h-4 text-neon-orange" /> {'Booking Process'}
               </h3>
               <ol className="space-y-3">
                 {experience.bookingProcess.map((step, i) => (
@@ -297,12 +294,12 @@ const ExperienceDetail = () => {
             {experience.faqs && experience.faqs.length > 0 && (
               <div className="glass rounded-xl p-6 border border-neon-purple/30">
                 <h3 className="font-display text-lg font-bold mb-4 flex items-center gap-2">
-                  <HelpCircle className="w-4 h-4 text-neon-purple" /> {t("det.faq")}
+                  <HelpCircle className="w-4 h-4 text-neon-purple" /> {'Frequently Asked Questions'}
                 </h3>
                 <Accordion type="single" collapsible className="w-full">
                   {experience.faqs.map((faq, i) => {
-                    const q = lang === "bn" && faq.qBn ? faq.qBn : faq.q;
-                    const a = lang === "bn" && faq.aBn ? faq.aBn : faq.a;
+                    const q = faq.q;
+                    const a = faq.a;
                     return (
                       <AccordionItem key={i} value={`faq-${i}`} className="border-border/60">
                         <AccordionTrigger className="text-left text-sm font-medium hover:no-underline hover:text-neon-purple transition-colors py-3">
@@ -328,12 +325,12 @@ const ExperienceDetail = () => {
             >
               <div>
                 <p className="font-ui text-xs uppercase tracking-widest text-muted-foreground">
-                  {isEvent ? t("det.form.reserveTicket") : t("det.form.bookSession")}
+                  {isEvent ? 'Reserve your ticket' : 'Book a session'}
                 </p>
                 <p className="font-display text-3xl font-bold gradient-neon-text mt-1">
                   {format(experience.priceBdt)}
                   <span className="text-sm text-muted-foreground font-normal ml-1">
-                    {isEvent ? t("exp.card.ticket") : t("exp.card.session")}
+                    {isEvent ? '/ ticket' : '/ session'}
                   </span>
                 </p>
               </div>
@@ -341,7 +338,7 @@ const ExperienceDetail = () => {
               {!isEvent && (
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <Label htmlFor="date" className="text-xs">{t("det.form.preferredDate")}</Label>
+                    <Label htmlFor="date" className="text-xs">{'Preferred date *'}</Label>
                     <Input
                       id="date"
                       type="date"
@@ -352,7 +349,7 @@ const ExperienceDetail = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="time" className="text-xs">{t("det.form.preferredTime")}</Label>
+                    <Label htmlFor="time" className="text-xs">{'Preferred time *'}</Label>
                     <Input
                       id="time"
                       type="time"
@@ -366,7 +363,7 @@ const ExperienceDetail = () => {
 
               <div>
                 <Label htmlFor="qty" className="text-xs">
-                  {isEvent ? t("det.form.tickets") : t("det.form.riders")}
+                  {isEvent ? 'Tickets' : 'Riders / participants'}
                 </Label>
                 <Input
                   id="qty"
@@ -379,12 +376,12 @@ const ExperienceDetail = () => {
               </div>
 
               <div>
-                <Label htmlFor="name" className="text-xs">{t("det.form.name")}</Label>
+                <Label htmlFor="name" className="text-xs">{'Full name *'}</Label>
                 <Input id="name" required value={name} onChange={(e) => setName(e.target.value)} />
               </div>
 
               <div>
-                <Label htmlFor="email" className="text-xs">{t("det.form.email")}</Label>
+                <Label htmlFor="email" className="text-xs">{'Email *'}</Label>
                 <Input
                   id="email"
                   type="email"
@@ -395,7 +392,7 @@ const ExperienceDetail = () => {
               </div>
 
               <div>
-                <Label htmlFor="phone" className="text-xs">{t("det.form.phone")}</Label>
+                <Label htmlFor="phone" className="text-xs">{'Phone *'}</Label>
                 <Input
                   id="phone"
                   type="tel"
@@ -407,19 +404,19 @@ const ExperienceDetail = () => {
               </div>
 
               <div>
-                <Label htmlFor="notes" className="text-xs">{t("det.form.notes")}</Label>
+                <Label htmlFor="notes" className="text-xs">{'Special requests (optional)'}</Label>
                 <Textarea
                   id="notes"
                   rows={2}
                   maxLength={500}
-                  placeholder={t("det.form.notesPh")}
+                  placeholder={'Allergies, group ages, accessibility...'}
                   value={specialRequests}
                   onChange={(e) => setSpecialRequests(e.target.value)}
                 />
               </div>
 
               <div className="border-t border-border/60 pt-3 flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">{t("det.form.total")}</span>
+                <span className="text-sm text-muted-foreground">{'Total'}</span>
                 <span className="font-display text-2xl font-bold text-primary">{format(total)}</span>
               </div>
 
@@ -428,7 +425,7 @@ const ExperienceDetail = () => {
                 disabled={submitting}
                 className="w-full gradient-neon text-primary-foreground font-ui uppercase tracking-widest neon-glow-pink hover:opacity-90"
               >
-                {submitting ? t("det.form.sending") : user ? t("det.form.submit") : t("det.form.signInToReserve")}
+                {submitting ? 'Sending...' : user ? 'Request Reservation' : 'Sign in to reserve'}
               </Button>
 
               <div className="text-xs text-muted-foreground space-y-1.5 pt-1">
@@ -436,10 +433,10 @@ const ExperienceDetail = () => {
                   <Phone className="w-3 h-3" /> {experience.contactPhone}
                 </p>
                 <p className="flex items-center gap-2">
-                  <Mail className="w-3 h-3" /> {t("det.form.confirm")}
+                  <Mail className="w-3 h-3" /> {'Confirmation within 30 min by the Inani Vibes team'}
                 </p>
                 <p className="opacity-80">
-                  {t("det.form.payNote")}
+                  {'Online payment coming soon — instructions will follow on confirmation.'}
                 </p>
               </div>
             </form>
