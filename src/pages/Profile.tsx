@@ -87,6 +87,9 @@ interface ExperienceReservation {
   guest_name?: string;
   guest_email?: string;
   guest_phone?: string;
+  payment_status?: string | null;
+  paid_at?: string | null;
+  payment_method?: string | null;
 }
 
 type SectionKey =
