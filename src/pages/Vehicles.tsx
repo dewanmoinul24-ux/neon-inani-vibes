@@ -78,7 +78,7 @@ const Vehicles = () => {
           <div className="absolute bottom-6 sm:bottom-8 md:bottom-12 left-0 right-0 container mx-auto">
             <Link
               to="/"
-              className="inline-flex items-center gap-1 text-muted-foreground hover:text-primary transition-colors font-ui text-xs sm:text-sm mb-3 sm:mb-4"
+              className="inline-flex items-center gap-1 text-foreground/90 hover:text-primary transition-colors font-ui text-xs sm:text-sm mb-3 sm:mb-4"
             >
               <ChevronLeft size={16} /> Back to Home
             </Link>
