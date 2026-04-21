@@ -11,33 +11,30 @@ import {
   experiences,
   getUpcomingEvents,
   getAdventureSports,
-  getLocalized,
   type ExperienceCategory,
   type SportCategory,
 } from "@/data/experiences";
 import { useCurrency } from "@/hooks/useCurrency";
-import { useLanguage } from "@/contexts/LanguageContext";
-import type { StringKey } from "@/i18n/strings";
 
-const eventCategories: { value: "all" | ExperienceCategory; key: StringKey }[] = [
-  { value: "all", key: "exp.filter.all" },
-  { value: "party", key: "exp.filter.party" },
-  { value: "music", key: "exp.filter.music" },
-  { value: "festival", key: "exp.filter.festival" },
-  { value: "cultural", key: "exp.filter.cultural" },
-  { value: "food", key: "exp.filter.food" },
+const eventCategories: { value: "all" | ExperienceCategory; label: string }[] = [
+  { value: "all", label: "All" },
+  { value: "party", label: "Party" },
+  { value: "music", label: "Music" },
+  { value: "festival", label: "Festival" },
+  { value: "cultural", label: "Cultural" },
+  { value: "food", label: "Food" },
 ];
 
-const sportCategories: { value: "all" | SportCategory; key: StringKey }[] = [
-  { value: "all", key: "exp.filter.all" },
-  { value: "water", key: "exp.filter.water" },
-  { value: "aerial", key: "exp.filter.aerial" },
-  { value: "land", key: "exp.filter.land" },
+const sportCategories: { value: "all" | SportCategory; label: string }[] = [
+  { value: "all", label: "All" },
+  { value: "water", label: "Water" },
+  { value: "aerial", label: "Aerial" },
+  { value: "land", label: "Land" },
 ];
 
-const formatEventDate = (iso: string, locale: string) => {
+const formatEventDate = (iso: string) => {
   const d = new Date(iso + "T00:00:00");
-  return d.toLocaleDateString(locale, {
+  return d.toLocaleDateString(undefined, {
     weekday: "short",
     month: "short",
     day: "numeric",
@@ -46,8 +43,6 @@ const formatEventDate = (iso: string, locale: string) => {
 
 const Experiences = () => {
   const { formatPrice: format } = useCurrency();
-  const { lang, t } = useLanguage();
-  const locale = lang === "bn" ? "bn-BD" : undefined;
   const [eventFilter, setEventFilter] = useState<"all" | ExperienceCategory>("all");
   const [sportFilter, setSportFilter] = useState<"all" | SportCategory>("all");
   const { scrollY } = useScroll();
