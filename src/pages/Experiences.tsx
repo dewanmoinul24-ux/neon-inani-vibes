@@ -187,19 +187,19 @@ const Experiences = () => {
       <FeaturedTonight />
 
       {/* ───────── Upcoming Events ───────── */}
-      <section id="upcoming" className="py-12 sm:py-16 md:py-24 relative">
+      <section id="upcoming" className="py-14 sm:py-20 md:py-24 relative scroll-mt-24">
         <div className="absolute top-1/4 left-0 w-96 h-96 bg-neon-pink/5 rounded-full blur-[150px]" />
         <div className="container mx-auto px-4 relative">
-          <div className="flex items-end justify-between flex-wrap gap-3 sm:gap-4 mb-6 sm:mb-8">
+          <div className="flex items-end justify-between flex-wrap gap-3 sm:gap-4 mb-8 sm:mb-10">
             <div>
               <p
                 className="font-ui text-[10px] sm:text-xs uppercase tracking-[0.3em] text-neon-orange mb-1.5 sm:mb-2"
                 style={{ textShadow: "0 0 10px hsl(25 100% 55% / 0.8)" }}
               >
-                What's coming up
+                {t("exp.upcomingEyebrow")}
               </p>
               <h2 className="font-display text-3xl md:text-5xl font-bold gradient-neon-text mt-1 mb-2 py-[8px]">
-                Upcoming Events
+                {t("exp.upcomingCta")}
               </h2>
             </div>
             <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
@@ -214,40 +214,48 @@ const Experiences = () => {
                       : "border-border/60 text-muted-foreground hover:border-primary/60 hover:text-primary"
                   }`}
                 >
-                  {c.label}
+                  {t(c.key)}
                 </button>
               ))}
             </div>
           </div>
 
           {upcomingEvents.length === 0 ? (
-            <p className="text-muted-foreground">No upcoming events in this category yet.</p>
+            <p className="text-muted-foreground">{t("exp.empty.events")}</p>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-7">
               {upcomingEvents.map((e, i) => (
-                <Link
+                <motion.div
                   key={e.id}
+                  initial={{ opacity: 0, y: 28 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{ duration: 0.5, delay: Math.min(i * 0.08, 0.4), ease: "easeOut" }}
+                  whileHover={{ y: -6 }}
+                >
+                <Link
                   to={`/experiences/${e.id}`}
-                  className="group relative rounded-xl overflow-hidden h-[22rem] sm:h-[26rem] animate-slide-up glass neon-border-pink"
-                  style={{ animationDelay: `${i * 100}ms` }}
+                  className="group relative block rounded-xl overflow-hidden h-[22rem] sm:h-[26rem] glass neon-border-pink transition-shadow duration-500 hover:shadow-[0_0_30px_hsl(330_100%_65%/0.55),0_0_60px_hsl(280_100%_70%/0.35)]"
                 >
                   <img
                     src={e.image}
-                    alt={e.title}
+                    alt={getLocalized(e, "title", lang)}
                     loading="lazy"
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-transparent" />
+                  {/* Neon sweep on hover */}
+                  <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-tr from-neon-pink/0 via-neon-pink/10 to-neon-purple/0" />
 
                   <div className="relative z-10 h-full flex flex-col justify-between p-5">
                     <div className="flex items-start justify-between gap-2">
                       <span className="px-3 py-1 rounded-full text-[10px] font-ui uppercase tracking-wider gradient-neon text-primary-foreground">
-                        {e.category}
+                        {t(`exp.filter.${e.category}` as StringKey)}
                       </span>
                       <div className="flex flex-col items-end gap-1.5">
                         <span className="flex items-center gap-1 px-2.5 py-1 rounded-full glass text-xs text-neon-cyan border border-neon-cyan/40">
                           <Calendar className="w-3 h-3" />
-                          {formatEventDate(e.date!)}
+                          {formatEventDate(e.date!, locale ?? "en")}
                         </span>
                         {/* Capacity status badge - under the date */}
                         {typeof e.capacity === "number" && (() => {
@@ -256,7 +264,7 @@ const Experiences = () => {
                               <div className="px-2.5 py-1 rounded-full bg-destructive/90 backdrop-blur-sm border border-destructive flex items-center gap-1.5">
                                 <span className="w-1.5 h-1.5 rounded-full bg-destructive-foreground" />
                                 <span className="font-ui text-[9px] uppercase tracking-widest text-destructive-foreground font-bold">
-                                  Sold Out
+                                  {t("exp.card.soldOut")}
                                 </span>
                               </div>
                             );
@@ -272,7 +280,7 @@ const Experiences = () => {
                                   className="font-ui text-[9px] uppercase tracking-widest text-neon-orange font-bold"
                                   style={{ textShadow: "0 0 8px hsl(25 100% 55% / 0.9)" }}
                                 >
-                                  Few Spots Left · {e.capacity}
+                                  {t("exp.card.fewLeft")} · {e.capacity}
                                 </span>
                               </div>
                             );
@@ -285,7 +293,7 @@ const Experiences = () => {
                                   className="font-ui text-[9px] uppercase tracking-widest text-neon-pink font-bold"
                                   style={{ textShadow: "0 0 8px hsl(330 100% 65% / 0.9)" }}
                                 >
-                                  Selling Fast
+                                  {t("exp.card.sellingFast")}
                                 </span>
                               </div>
                             );
@@ -297,10 +305,10 @@ const Experiences = () => {
 
                     <div>
                       <h3 className="font-display text-xl md:text-2xl font-bold text-foreground mb-1.5 leading-tight">
-                        {e.title}
+                        {getLocalized(e, "title", lang)}
                       </h3>
                       <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
-                        {e.tagline}
+                        {getLocalized(e, "tagline", lang)}
                       </p>
                       <div className="space-y-1.5 mb-4 text-xs">
                         <div className="flex items-center gap-2 text-muted-foreground">
@@ -312,18 +320,19 @@ const Experiences = () => {
                           <span className="line-clamp-1">{e.location}</span>
                         </div>
                       </div>
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-center justify-between gap-2">
                         <span className="font-display font-bold text-primary text-[1.375rem]">
                           {format(e.priceBdt)}
-                          <span className="text-xs text-muted-foreground font-normal ml-1">/ ticket</span>
+                          <span className="text-xs text-muted-foreground font-normal ml-1">{t("exp.card.ticket")}</span>
                         </span>
-                        <span className="px-3 py-1.5 rounded-lg text-[11px] font-ui uppercase tracking-widest glass border border-neon-orange/60 text-neon-orange group-hover:scale-105 transition-transform inline-flex items-center gap-1" style={{ boxShadow: "0 0 14px hsl(25 100% 55% / 0.45)" }}>
-                          <Ticket className="w-3 h-3" /> View
+                        <span className="shrink-0 min-w-[88px] justify-center px-3 py-2 rounded-lg text-[11px] font-ui uppercase tracking-widest glass border border-neon-orange/60 text-neon-orange group-hover:scale-105 transition-transform inline-flex items-center gap-1" style={{ boxShadow: "0 0 14px hsl(25 100% 55% / 0.45)" }}>
+                          <Ticket className="w-3 h-3" /> {t("exp.card.view")}
                         </span>
                       </div>
                     </div>
                   </div>
                 </Link>
+                </motion.div>
               ))}
             </div>
           )}
