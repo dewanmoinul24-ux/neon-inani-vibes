@@ -118,6 +118,10 @@ export const experiences: ExperienceItem[] = [
     tagline: "Two stages. One coastline.",
     description:
       "A two-stage open-air festival featuring top Bangladeshi rock, indie, and folk-fusion artists. Set against the cliffs of Himchari with food trucks, art installations, and a sunset acoustic stage.",
+    titleBn: "মেরিন ড্রাইভ মিউজিক ফেস্টিভ্যাল",
+    taglineBn: "দুটি মঞ্চ। এক উপকূল।",
+    descriptionBn:
+      "শীর্ষ বাংলাদেশী রক, ইন্ডি ও ফোক-ফিউশন শিল্পীদের নিয়ে দুই মঞ্চের খোলা আকাশের ফেস্টিভ্যাল। হিমছড়ির পাহাড়ের পটভূমিতে ফুড ট্রাক, আর্ট ইনস্টলেশন এবং সূর্যাস্তের অ্যাকুস্টিক মঞ্চ।",
     image: musicImg,
     date: getUpcomingDate(12),
     startTime: "4:00 PM",
@@ -141,6 +145,26 @@ export const experiences: ExperienceItem[] = [
       "Pay at the box office or via bKash on confirmation",
       "Collect your wristband at the festival gate",
     ],
+    faqs: [
+      {
+        q: "What's the difference between General and VIP?",
+        a: "VIP gets front-of-stage access on both stages, a private bar, and seated lounge with food vouchers.",
+        qBn: "জেনারেল আর ভিআইপি-র পার্থক্য কী?",
+        aBn: "ভিআইপি পাবে দুই মঞ্চের সামনের অংশে প্রবেশাধিকার, প্রাইভেট বার, ফুড ভাউচারসহ বসার লাউঞ্জ।",
+      },
+      {
+        q: "Are kids allowed?",
+        a: "Kids under 10 enter free with a ticketed adult; under 16 must be accompanied throughout.",
+        qBn: "বাচ্চাদের অনুমতি আছে?",
+        aBn: "১০ বছরের নিচের শিশুরা টিকিটধারী অভিভাবকের সঙ্গে ফ্রি; ১৬ বছরের নিচে অভিভাবকের সঙ্গ আবশ্যক।",
+      },
+      {
+        q: "Is there a lost & found?",
+        a: "Yes — at the info booth near the main gate. Items are kept for 72 hours after the festival.",
+        qBn: "হারানো জিনিস ফেরতের ব্যবস্থা আছে?",
+        aBn: "হ্যাঁ — মূল গেটের পাশে ইনফো বুথে। ফেস্টিভ্যাল শেষের পর ৭২ ঘণ্টা পর্যন্ত রাখা হয়।",
+      },
+    ],
   },
   {
     id: "full-moon-beach-yoga",
@@ -149,6 +173,10 @@ export const experiences: ExperienceItem[] = [
     tagline: "Restore by the waves",
     description:
       "A 90-minute candlelit yoga flow followed by a Tibetan singing-bowl sound bath on the soft sand of Sugandha Beach, timed perfectly with the full moon rising over the Bay of Bengal.",
+    titleBn: "পূর্ণিমা বিচ যোগা ও সাউন্ড বাথ",
+    taglineBn: "ঢেউয়ের পাশে নিজেকে ফিরিয়ে আনুন",
+    descriptionBn:
+      "৯০ মিনিটের মোমবাতি জ্বালানো যোগা সেশন, এরপর সুগন্ধা বিচের নরম বালির উপর তিব্বতীয় সিঙ্গিং বোল সাউন্ড বাথ — বঙ্গোপসাগরের পূর্ণচন্দ্রের সাথে মিলিয়ে।",
     image: musicImg,
     date: getUpcomingDate(3),
     startTime: "5:30 PM",
@@ -172,6 +200,20 @@ export const experiences: ExperienceItem[] = [
       "Pay BDT in cash or bKash on arrival",
       "Sign in at the welcome table",
     ],
+    faqs: [
+      {
+        q: "Do I need yoga experience?",
+        a: "No — the flow is beginner-friendly with modifications shown for every pose.",
+        qBn: "যোগার অভিজ্ঞতা থাকা কি জরুরি?",
+        aBn: "না — সেশনটি নবীনদের জন্য, প্রতিটি ভঙ্গির সহজ সংস্করণ দেখানো হয়।",
+      },
+      {
+        q: "Are mats provided?",
+        a: "Yes, eco-friendly cork mats and bolsters are included in the ticket.",
+        qBn: "ম্যাট দেওয়া হবে?",
+        aBn: "হ্যাঁ — টিকিটের সঙ্গে ইকো-ফ্রেন্ডলি কর্ক ম্যাট ও বলস্টার অন্তর্ভুক্ত।",
+      },
+    ],
   },
   {
     id: "seafood-night-bazaar",
@@ -180,6 +222,10 @@ export const experiences: ExperienceItem[] = [
     tagline: "Fresh catch, neon lights",
     description:
       "A weekly seafood street-food festival with 40+ stalls grilling lobster, prawn, snapper, and squid right by the shoreline. Live folk music, craft stalls, and a kids' corner.",
+    titleBn: "মেরিন ড্রাইভ সিফুড নাইট বাজার",
+    taglineBn: "তাজা মাছ, নিয়ন আলো",
+    descriptionBn:
+      "সাপ্তাহিক সিফুড স্ট্রিট-ফুড উৎসব — ৪০টিরও বেশি স্টলে লবস্টার, চিংড়ি, স্ন্যাপার ও স্কুইড গ্রিল হয় সমুদ্রের ধারেই। লাইভ ফোক মিউজিক, ক্রাফট স্টল এবং শিশু কর্নার।",
     image: partyImg,
     date: getUpcomingDate(8),
     startTime: "6:00 PM",
@@ -202,6 +248,20 @@ export const experiences: ExperienceItem[] = [
       "Receive QR ticket via email",
       "Scan at the entry gate",
       "Buy food directly from stalls (cash / bKash)",
+    ],
+    faqs: [
+      {
+        q: "Is the entry ticket the only cost?",
+        a: "Entry is just BDT 200. Stalls are pay-as-you-go — most plates are BDT 250–950.",
+        qBn: "শুধু প্রবেশ টিকিটেই হবে?",
+        aBn: "প্রবেশ টিকিট মাত্র ২০০ টাকা। স্টলে আলাদা পেমেন্ট — অধিকাংশ প্লেট ২৫০–৯৫০ টাকা।",
+      },
+      {
+        q: "Are vegetarian options available?",
+        a: "Yes — at least 6 stalls serve veg snacks, dosa, and seasonal grilled vegetables.",
+        qBn: "নিরামিষ খাবার পাওয়া যাবে?",
+        aBn: "হ্যাঁ — অন্তত ৬টি স্টলে নিরামিষ স্ন্যাকস, দোসা এবং মৌসুমি গ্রিলড সবজি পাওয়া যাবে।",
+      },
     ],
   },
 
