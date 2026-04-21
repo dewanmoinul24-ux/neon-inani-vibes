@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X, User, LogOut, Settings, History, ChevronDown, Wallet, Sparkles, Shield } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { useAuth } from "@/contexts/AuthContext";
@@ -15,6 +15,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetTitle,
+  SheetDescription,
+} from "@/components/ui/sheet";
 
 const tierAccentClass: Record<string, string> = {
   cyan: "text-neon-cyan border-neon-cyan/40 bg-neon-cyan/10",
@@ -30,7 +37,23 @@ const Navbar = () => {
   const { tier: vibesTier, completedTrips } = useVibes();
   const { isSuperAdmin } = useIsSuperAdmin();
   const navigate = useNavigate();
+  const location = useLocation();
   const tierClass = tierAccentClass[vibesTier.accent] ?? tierAccentClass.cyan;
+
+  // Auto-close mobile menu on route change for a polished SPA feel.
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname, location.hash]);
+
+  // Lock body scroll while the mobile menu is open (Sheet handles focus trap + ESC).
+  useEffect(() => {
+    if (!open) return;
+    const original = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = original;
+    };
+  }, [open]);
 
   const handleSignOut = async () => {
     await signOut();
@@ -200,67 +223,101 @@ const Navbar = () => {
           {/* Mobile right cluster */}
           <div className="lg:hidden flex items-center gap-2">
             <CurrencySwitcher compact />
-            <button
-              onClick={() => setOpen(!open)}
-              className="text-foreground"
-              aria-label="Toggle menu"
-            >
-              {open ? <X size={24} /> : <Menu size={24} />}
-            </button>
+            <Sheet open={open} onOpenChange={setOpen}>
+              <SheetTrigger asChild>
+                <button
+                  type="button"
+                  className="relative w-10 h-10 inline-flex items-center justify-center rounded-lg text-foreground hover:bg-muted/40 active:scale-95 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  aria-label={open ? "Close menu" : "Open menu"}
+                  aria-expanded={open}
+                  aria-controls="mobile-nav-sheet"
+                >
+                  <Menu
+                    size={24}
+                    className={`absolute transition-all duration-300 ease-out ${
+                      open ? "rotate-90 opacity-0 scale-75" : "rotate-0 opacity-100 scale-100"
+                    }`}
+                  />
+                  <X
+                    size={24}
+                    className={`absolute transition-all duration-300 ease-out ${
+                      open ? "rotate-0 opacity-100 scale-100" : "-rotate-90 opacity-0 scale-75"
+                    }`}
+                  />
+                </button>
+              </SheetTrigger>
+              <SheetContent
+                id="mobile-nav-sheet"
+                side="right"
+                className="w-[85vw] sm:max-w-sm glass-strong border-l border-primary/20 p-0 flex flex-col"
+              >
+                <SheetTitle className="sr-only">Navigation menu</SheetTitle>
+                <SheetDescription className="sr-only">
+                  Site navigation and account actions
+                </SheetDescription>
+                <div className="px-6 pt-8 pb-6 border-b border-border/40">
+                  <Link to="/" className="inline-flex items-center" onClick={() => setOpen(false)}>
+                    <img src={logo} alt="InaniVibes" className="h-12 w-auto" />
+                  </Link>
+                </div>
+                <nav className="flex-1 overflow-y-auto px-6 py-6 flex flex-col gap-1">
+                  {navLinks.map((l, idx) => {
+                    const className =
+                      "group font-ui text-base uppercase tracking-widest text-muted-foreground hover:text-primary hover:bg-primary/5 px-3 py-3 rounded-lg transition-all duration-200 animate-fade-in";
+                    const style = { animationDelay: `${idx * 30}ms` } as React.CSSProperties;
+                    return l.isRoute ? (
+                      <Link key={l.href} to={l.href} className={className} style={style}>
+                        {l.label}
+                      </Link>
+                    ) : (
+                      <a key={l.href} href={l.href} className={className} style={style}>
+                        {l.label}
+                      </a>
+                    );
+                  })}
+                </nav>
+                <div className="px-6 py-6 border-t border-border/40 flex flex-col gap-3">
+                  {user ? (
+                    <>
+                      <Link
+                        to="/profile"
+                        className="font-ui text-sm uppercase tracking-widest text-primary px-3 py-2 rounded-lg hover:bg-primary/10 transition-colors"
+                      >
+                        Profile
+                      </Link>
+                      <button
+                        onClick={() => {
+                          handleSignOut();
+                          setOpen(false);
+                        }}
+                        className="font-ui text-sm uppercase tracking-widest text-destructive text-left px-3 py-2 rounded-lg hover:bg-destructive/10 transition-colors"
+                      >
+                        Sign Out
+                      </button>
+                    </>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        setAuthOpen(true);
+                        setOpen(false);
+                      }}
+                      className="font-ui text-sm uppercase tracking-widest text-primary text-left px-3 py-2 rounded-lg hover:bg-primary/10 transition-colors"
+                    >
+                      Login / Sign Up
+                    </button>
+                  )}
+                  <Link
+                    to="/hotels"
+                    onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                    className="mt-1 px-5 py-3 rounded-lg font-ui text-center uppercase tracking-widest gradient-neon text-primary-foreground neon-glow-pink transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                  >
+                    Book Now
+                  </Link>
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
-
-        {/* Mobile menu */}
-        {open && (
-          <div className="lg:hidden glass-strong border-t border-border animate-slide-up">
-            <div className="container mx-auto px-4 py-6 flex flex-col gap-4">
-              {navLinks.map((l) =>
-                l.isRoute ? (
-                  <Link
-                    key={l.href}
-                    to={l.href}
-                    onClick={() => setOpen(false)}
-                    className="font-ui text-lg uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    {l.label}
-                  </Link>
-                ) : (
-                  <a
-                    key={l.href}
-                    href={l.href}
-                    onClick={() => setOpen(false)}
-                    className="font-ui text-lg uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    {l.label}
-                  </a>
-                )
-              )}
-
-              {user ? (
-                <>
-                  <Link to="/profile" onClick={() => setOpen(false)} className="font-ui text-lg uppercase tracking-widest text-primary">
-                    Profile
-                  </Link>
-                  <button onClick={() => { handleSignOut(); setOpen(false); }} className="font-ui text-lg uppercase tracking-widest text-destructive text-left">
-                    Sign Out
-                  </button>
-                </>
-              ) : (
-                <button onClick={() => { setAuthOpen(true); setOpen(false); }} className="font-ui text-lg uppercase tracking-widest text-primary text-left">
-                  Login / Sign Up
-                </button>
-              )}
-
-              <Link
-                to="/hotels"
-                onClick={() => { setOpen(false); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-                className="mt-2 px-5 py-3 rounded-lg font-ui text-center uppercase tracking-widest gradient-neon text-primary-foreground"
-              >
-                Book Now
-              </Link>
-            </div>
-          </div>
-        )}
       </nav>
 
       <AuthModal open={authOpen} onOpenChange={setAuthOpen} />
