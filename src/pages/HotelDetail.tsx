@@ -773,18 +773,18 @@ const HotelDetail = () => {
       {!showBookingForm && (
         <StickyBookingBar
           priceLabel={
-            selectedRoom
+            hasSelection
               ? `${formatPrice(grandTotal)}`
               : `From ${formatPrice(hotel.price)}`
           }
           subLabel={
-            selectedRoom
-              ? `${selectedRoom.name} · ${nights} night${nights > 1 ? "s" : ""}`
+            hasSelection
+              ? `${totalRoomsSelected} room${totalRoomsSelected > 1 ? "s" : ""} · ${nights} night${nights > 1 ? "s" : ""}`
               : "per night"
           }
-          ctaLabel={selectedRoom ? "Reserve" : "Select Room"}
+          ctaLabel={hasSelection ? "Reserve" : "Select Room"}
           onCta={() => {
-            if (!selectedRoom) {
+            if (!hasSelection) {
               const roomsEl = document.querySelector("h2.font-display + div .glass");
               roomsEl?.scrollIntoView({ behavior: "smooth", block: "center" });
               toast.info("Pick a room to continue");
@@ -841,7 +841,7 @@ const HotelDetail = () => {
                   onClick={() => {
                     const room = photosRoom;
                     setPhotosRoom(null);
-                    setSelectedRoom(room);
+                    if (room && getCount(room.id) === 0) setCount(room, 1);
                     if (!checkIn || !checkOut) {
                       toast.info("Please select your check-in & check-out dates first.");
                       window.scrollTo({ top: 0, behavior: "smooth" });
