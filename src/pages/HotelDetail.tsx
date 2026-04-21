@@ -22,6 +22,14 @@ import { format, differenceInDays } from "date-fns";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { hotels, getRoomGallery, type HotelRoom } from "@/data/hotels";
+import {
+  getHighlights,
+  getOverallScore,
+  getReviewScores,
+  getReviews,
+  getScoreLabel,
+} from "@/data/hotels";
+import { ThumbsUp, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
