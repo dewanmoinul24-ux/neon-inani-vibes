@@ -1,9 +1,8 @@
 import { Link } from "react-router-dom";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { MapPin, Clock, Camera, Compass, Navigation, Search, X, ArrowUpDown } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import PlacesMap from "@/components/places/PlacesMap";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -32,9 +31,6 @@ const Places = () => {
   const [activeCategory, setActiveCategory] = useState<"All" | PlaceCategory>("All");
   const [query, setQuery] = useState("");
   const [sortKey, setSortKey] = useState<SortKey>("default");
-  const [activePin, setActivePin] = useState<string | null>(null);
-  const [hoveredPin, setHoveredPin] = useState<string | null>(null);
-  const cardRefs = useRef<Record<string, HTMLElement | null>>({});
 
   // Apply category, search, then sort.
   const visiblePlaces = useMemo(() => {
@@ -74,30 +70,6 @@ const Places = () => {
     }
     return sorted;
   }, [activeCategory, query, sortKey]);
-
-  // Pin click: clear category filter (so the pin is always visible),
-  // surface the place card, and scroll to it.
-  const handlePinClick = (slug: string) => {
-    const place = places.find((p) => p.slug === slug);
-    if (!place) return;
-    setActivePin(slug);
-    setQuery("");
-    setActiveCategory(place.category);
-    // wait for re-render, then scroll
-    requestAnimationFrame(() => {
-      const el = cardRefs.current[slug];
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
-    });
-  };
-
-  // Auto-clear active pin after a short highlight.
-  useEffect(() => {
-    if (!activePin) return;
-    const t = setTimeout(() => setActivePin(null), 2800);
-    return () => clearTimeout(t);
-  }, [activePin]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -146,10 +118,10 @@ const Places = () => {
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3 animate-slide-up">
               <a
-                href="#map"
+                href="#all-places"
                 className="px-6 py-3 rounded-lg font-ui text-sm uppercase tracking-widest gradient-neon text-primary-foreground neon-glow-pink transition-transform duration-300 hover:scale-105"
               >
-                Open the map
+                Browse all places
               </a>
               <Link
                 to="/experiences"
@@ -160,28 +132,6 @@ const Places = () => {
             </div>
           </div>
         </div>
-      </section>
-
-      {/* Interactive map */}
-      <section id="map" className="container mx-auto px-4 pt-12 sm:pt-16">
-        <div className="text-center mb-6 sm:mb-8">
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <Compass size={18} className="text-neon-cyan" />
-            <p className="font-ui text-xs sm:text-sm uppercase tracking-[0.3em] text-neon-blue neon-text-blue">
-              Interactive coastline map
-            </p>
-          </div>
-          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold gradient-neon-text">
-            Tap a pin · Filter · Jump
-          </h2>
-        </div>
-        <PlacesMap
-          places={places}
-          activePlaceSlug={activePin}
-          hoveredSlug={hoveredPin}
-          onPinClick={handlePinClick}
-          onPinHover={setHoveredPin}
-        />
       </section>
 
       {/* Search + Sort + Filter */}
@@ -295,17 +245,11 @@ const Places = () => {
           ) : (
             <div className="space-y-10 sm:space-y-12">
               {visiblePlaces.map((place, i) => {
-                const highlighted = activePin === place.slug;
                 return (
                   <article
                     key={place.slug}
                     id={`place-${place.slug}`}
-                    ref={(el) => (cardRefs.current[place.slug] = el)}
-                    className={`flex flex-col ${i % 2 === 1 ? "md:flex-row-reverse" : "md:flex-row"} gap-5 sm:gap-6 md:gap-10 items-center animate-slide-up rounded-2xl transition-all duration-500 ${
-                      highlighted
-                        ? "ring-2 ring-neon-pink/70 shadow-[0_0_40px_hsl(320_100%_60%_/_0.35)]"
-                        : ""
-                    }`}
+                    className={`flex flex-col ${i % 2 === 1 ? "md:flex-row-reverse" : "md:flex-row"} gap-5 sm:gap-6 md:gap-10 items-center animate-slide-up rounded-2xl`}
                     style={{ animationDelay: `${(i % 6) * 80}ms` }}
                   >
                     <div className="w-full md:w-1/2 rounded-xl overflow-hidden neon-border-blue group relative">
