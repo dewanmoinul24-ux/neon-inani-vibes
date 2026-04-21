@@ -37,6 +37,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const formatEventDate = (iso: string, locale?: string) =>
   new Date(iso + "T00:00:00").toLocaleDateString(locale, {
@@ -62,6 +70,15 @@ const ExperienceDetail = () => {
   const [preferredTime, setPreferredTime] = useState("");
   const [specialRequests, setSpecialRequests] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [confirmation, setConfirmation] = useState<null | {
+    referenceCode: string;
+    date: string;
+    time: string;
+    quantity: number;
+    total: number;
+    guestName: string;
+    guestEmail: string;
+  }>(null);
 
   if (!experience) {
     return (
@@ -106,7 +123,9 @@ const ExperienceDetail = () => {
     }
 
     setSubmitting(true);
-    const { error } = await supabase.from("experience_reservations").insert({
+    const { data: inserted, error } = await supabase
+      .from("experience_reservations")
+      .insert({
       user_id: user.id,
       experience_id: experience.id,
       experience_title: experience.title,
@@ -124,7 +143,9 @@ const ExperienceDetail = () => {
       guest_phone: phone,
       special_requests: specialRequests || null,
       status: "pending",
-    });
+      })
+      .select("id, preferred_date, preferred_time, quantity, total_price, guest_name, guest_email")
+      .single();
     setSubmitting(false);
 
     if (error) {
@@ -136,11 +157,16 @@ const ExperienceDetail = () => {
       return;
     }
 
-    toast({
-      title: "Reservation requested! 🎉",
-      description: "Pending confirmation by the Inani Vibes team. Track it in Profile → My reservations.",
+    const refCode = `IV-${(inserted?.id ?? "").replace(/-/g, "").slice(0, 8).toUpperCase()}`;
+    setConfirmation({
+      referenceCode: refCode,
+      date: inserted?.preferred_date ?? (isEvent ? experience.date! : preferredDate),
+      time: inserted?.preferred_time ?? (isEvent ? experience.startTime ?? "" : preferredTime),
+      quantity: inserted?.quantity ?? quantity,
+      total: Number(inserted?.total_price ?? total),
+      guestName: inserted?.guest_name ?? name,
+      guestEmail: inserted?.guest_email ?? email,
     });
-    navigate("/profile?tab=reservations");
   };
 
   return (
