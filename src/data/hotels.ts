@@ -192,6 +192,91 @@ export const getReviews = (hotel: Hotel): HotelReview[] => {
   });
 };
 
+/**
+ * Returns nearby landmarks. Falls back to a sensible default set tailored to
+ * Cox's Bazar so every hotel renders a useful Location section without
+ * requiring hand-authored data.
+ */
+export const getLandmarks = (hotel: Hotel): HotelLandmark[] => {
+  if (hotel.landmarks && hotel.landmarks.length) return hotel.landmarks;
+  // Slight per-hotel variance using a stable hash-ish offset
+  const seed = hotel.id.length % 5;
+  const v = (base: number) => +(base + seed * 0.1).toFixed(1);
+  return [
+    { name: "Cox's Bazar Airport (CXB)", type: "airport", distanceKm: v(6.5), travelMinutes: 18 + seed },
+    { name: "Laboni Beach", type: "beach", distanceKm: v(0.4), travelMinutes: 5 },
+    { name: "Marine Drive viewpoint", type: "attraction", distanceKm: v(1.8), travelMinutes: 8 },
+    { name: "Burmese Market", type: "attraction", distanceKm: v(2.1), travelMinutes: 9 },
+    { name: "Poushee Restaurant", type: "restaurant", distanceKm: v(0.6), travelMinutes: 4 },
+    { name: "Jhaubon Beach Cafe", type: "restaurant", distanceKm: v(0.9), travelMinutes: 6 },
+  ];
+};
+
+/**
+ * Returns FAQ entries. Falls back to defaults derived from the hotel's
+ * amenities and policies so every property has a useful FAQ block.
+ */
+export const getFAQs = (hotel: Hotel): HotelFAQ[] => {
+  if (hotel.faqs && hotel.faqs.length) return hotel.faqs;
+  const hasPool = hotel.amenities.some((a) => /pool/i.test(a));
+  const hasBreakfast = hotel.amenities.some((a) => /breakfast|restaurant/i.test(a));
+  const hasParking = hotel.amenities.some((a) => /parking/i.test(a));
+  const hasGym = hotel.amenities.some((a) => /gym/i.test(a));
+  const hasSpa = hotel.amenities.some((a) => /spa/i.test(a));
+  const hasWifi = hotel.amenities.some((a) => /wifi/i.test(a));
+
+  const faqs: HotelFAQ[] = [
+    {
+      question: `What are the check-in and check-out times at ${hotel.name}?`,
+      answer: `Check-in starts at ${hotel.checkInTime} and check-out is by ${hotel.checkOutTime}. Early check-in or late check-out can be requested at the front desk and is subject to availability.`,
+    },
+    {
+      question: `Does ${hotel.name} have a swimming pool?`,
+      answer: hasPool
+        ? "Yes, guests can enjoy the on-site pool. Towels are provided and pool hours are typically from early morning until evening."
+        : "There is no on-site swimming pool, but the beach is just a short walk away.",
+    },
+    {
+      question: "Is breakfast included in the room rate?",
+      answer: hasBreakfast
+        ? "An on-site restaurant serves breakfast daily. Breakfast can be added to your booking at checkout if it is not already included in your selected rate."
+        : "Breakfast is not included by default. Several local cafes and restaurants are within walking distance.",
+    },
+    {
+      question: "Is parking available?",
+      answer: hasParking
+        ? "Yes, on-site parking is available for guests free of charge, subject to availability."
+        : "On-site parking is not available, but paid parking can be arranged nearby on request.",
+    },
+    {
+      question: "Are pets allowed?",
+      answer: hotel.policies.pets,
+    },
+  ];
+
+  if (hasGym || hasSpa) {
+    faqs.push({
+      question: "What wellness facilities are on-site?",
+      answer: [
+        hasGym ? "a fully equipped gym" : null,
+        hasSpa ? "a spa with treatments and massages" : null,
+      ]
+        .filter(Boolean)
+        .join(" and ")
+        .replace(/^./, (c) => `Guests have access to ${c}`)
+        .concat("."),
+    });
+  }
+  if (hasWifi) {
+    faqs.push({
+      question: "Is WiFi free for guests?",
+      answer: "Yes, complimentary WiFi is available throughout the property in all rooms and public areas.",
+    });
+  }
+
+  return faqs;
+};
+
 export const hotels: Hotel[] = [
   {
     id: "ocean-neon-resort",
