@@ -71,30 +71,6 @@ const Places = () => {
     return sorted;
   }, [activeCategory, query, sortKey]);
 
-  // Pin click: clear category filter (so the pin is always visible),
-  // surface the place card, and scroll to it.
-  const handlePinClick = (slug: string) => {
-    const place = places.find((p) => p.slug === slug);
-    if (!place) return;
-    setActivePin(slug);
-    setQuery("");
-    setActiveCategory(place.category);
-    // wait for re-render, then scroll
-    requestAnimationFrame(() => {
-      const el = cardRefs.current[slug];
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
-    });
-  };
-
-  // Auto-clear active pin after a short highlight.
-  useEffect(() => {
-    if (!activePin) return;
-    const t = setTimeout(() => setActivePin(null), 2800);
-    return () => clearTimeout(t);
-  }, [activePin]);
-
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
