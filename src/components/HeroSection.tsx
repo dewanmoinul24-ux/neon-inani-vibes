@@ -66,7 +66,7 @@ const HeroSection = () => {
             className="font-display text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6"
             style={{
               filter:
-                "drop-shadow(0 0 24px hsl(320 100% 60% / 0.45)) drop-shadow(0 4px 18px hsl(0 0% 0% / 0.95))",
+                "drop-shadow(0 0 12px hsl(330 100% 60% / 0.9)) drop-shadow(0 0 28px hsl(330 100% 60% / 0.7)) drop-shadow(0 0 60px hsl(270 80% 60% / 0.55)) drop-shadow(0 0 90px hsl(200 100% 50% / 0.4)) drop-shadow(0 4px 18px hsl(0 0% 0% / 0.95))",
             }}
           >
             <span className="gradient-neon-text">Experience</span>
