@@ -160,13 +160,13 @@ const Experiences = () => {
             <div className="mt-4 sm:mt-6 flex flex-wrap gap-2 sm:gap-3">
               <a
                 href="#upcoming"
-                className="px-4 sm:px-5 py-2.5 rounded-lg font-ui text-[11px] sm:text-xs uppercase tracking-widest gradient-neon text-primary-foreground neon-glow-pink hover:scale-105 transition-transform"
+                className="px-4 sm:px-5 py-2.5 rounded-lg font-ui text-[11px] sm:text-xs uppercase tracking-widest glass border border-border/60 text-foreground neon-glow-pink transition-all duration-300 hover:scale-105 hover:gradient-neon hover:text-primary-foreground hover:border-transparent"
               >
                 {'Upcoming Events'}
               </a>
               <a
                 href="#sports"
-                className="px-4 sm:px-5 py-2.5 rounded-lg font-ui text-[11px] sm:text-xs uppercase tracking-widest glass neon-border-cyan text-neon-cyan hover:scale-105 transition-transform"
+                className="px-4 sm:px-5 py-2.5 rounded-lg font-ui text-[11px] sm:text-xs uppercase tracking-widest glass border border-border/60 text-foreground neon-glow-pink transition-all duration-300 hover:scale-105 hover:gradient-neon hover:text-primary-foreground hover:border-transparent"
               >
                 {'Adventure Sports'}
               </a>
