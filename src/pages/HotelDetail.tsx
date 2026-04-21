@@ -602,16 +602,32 @@ const HotelDetail = () => {
 
               {/* Policies */}
               <div className="glass rounded-xl p-6">
-                <h2 className="font-display text-lg font-semibold text-foreground mb-4">Hotel Policies</h2>
-                <div className="space-y-3">
-                  {Object.entries(hotel.policies).map(([key, value]) => (
-                    <div key={key} className="flex gap-3">
-                      <Info size={16} className="text-muted-foreground flex-shrink-0 mt-0.5" />
-                      <div>
-                        <p className="text-xs text-muted-foreground font-ui uppercase tracking-widest capitalize">
+                <h2 className="font-display text-lg font-semibold text-foreground mb-4">
+                  House Rules
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {[
+                    { key: "Check-in", value: `From ${hotel.checkInTime}`, icon: Clock, accent: "text-neon-cyan" },
+                    { key: "Check-out", value: `Until ${hotel.checkOutTime}`, icon: Clock, accent: "text-neon-pink" },
+                    { key: "Cancellation", value: hotel.policies.cancellation, icon: ShieldCheck, accent: "text-neon-cyan" },
+                    { key: "Children", value: hotel.policies.children, icon: Baby, accent: "text-neon-orange" },
+                    { key: "Pets", value: hotel.policies.pets, icon: PawPrint, accent: "text-neon-pink" },
+                    { key: "Smoking", value: hotel.policies.smoking, icon: Cigarette, accent: "text-muted-foreground" },
+                  ].map(({ key, value, icon: Icon, accent }) => (
+                    <div
+                      key={key}
+                      className="flex gap-3 rounded-lg border border-border bg-background/30 p-3"
+                    >
+                      <div className="w-9 h-9 rounded-md glass flex items-center justify-center flex-shrink-0">
+                        <Icon size={16} className={accent} />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-[11px] text-muted-foreground font-ui uppercase tracking-widest">
                           {key}
                         </p>
-                        <p className="text-foreground text-sm font-body">{value}</p>
+                        <p className="text-foreground text-sm font-body leading-snug">
+                          {value}
+                        </p>
                       </div>
                     </div>
                   ))}
