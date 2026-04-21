@@ -1,9 +1,8 @@
 import { Link } from "react-router-dom";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { MapPin, Clock, Camera, Compass, Navigation, Search, X, ArrowUpDown } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import PlacesMap from "@/components/places/PlacesMap";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -32,9 +31,6 @@ const Places = () => {
   const [activeCategory, setActiveCategory] = useState<"All" | PlaceCategory>("All");
   const [query, setQuery] = useState("");
   const [sortKey, setSortKey] = useState<SortKey>("default");
-  const [activePin, setActivePin] = useState<string | null>(null);
-  const [hoveredPin, setHoveredPin] = useState<string | null>(null);
-  const cardRefs = useRef<Record<string, HTMLElement | null>>({});
 
   // Apply category, search, then sort.
   const visiblePlaces = useMemo(() => {
