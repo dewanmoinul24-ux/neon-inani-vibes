@@ -310,6 +310,29 @@ const HotelDetail = () => {
                 </div>
               </div>
 
+              {/* What guests loved — highlight strip */}
+              {getHighlights(hotel).length > 0 && (
+                <div className="glass rounded-xl p-5 border border-neon-cyan/15">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Sparkles size={16} className="text-neon-cyan" />
+                    <h2 className="font-display text-sm font-semibold text-foreground uppercase tracking-widest">
+                      What guests loved
+                    </h2>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    {getHighlights(hotel).map((h) => (
+                      <div
+                        key={h}
+                        className="flex items-start gap-2 text-sm font-body text-foreground/90"
+                      >
+                        <Check size={16} className="text-neon-cyan flex-shrink-0 mt-0.5" />
+                        <span>{h}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Description */}
               <div className="glass rounded-xl p-6">
                 <h2 className="font-display text-lg font-semibold text-foreground mb-3">About This Property</h2>
