@@ -24,16 +24,6 @@ const tierAccentClass: Record<string, string> = {
   orange: "text-neon-orange border-neon-orange/40 bg-neon-orange/10",
 };
 
-const navLinks = [
-  { label: "Home", href: "/", isRoute: true },
-  { label: "Hotels", href: "/hotels", isRoute: true },
-  { label: "Vehicles", href: "/vehicles", isRoute: true },
-  { label: "Experiences", href: "/experiences", isRoute: true },
-  { label: "Places", href: "/#places" },
-  { label: "About", href: "/#about" },
-  { label: "Contact", href: "/#contact" },
-];
-
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
@@ -225,7 +215,7 @@ const Navbar = () => {
                 onClick={() => setAuthOpen(true)}
                 className="font-ui text-sm uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
               >
-                Login
+                {t("nav.login")}
               </button>
             )}
 
@@ -281,15 +271,15 @@ const Navbar = () => {
               {user ? (
                 <>
                   <Link to="/profile" onClick={() => setOpen(false)} className="font-ui text-lg uppercase tracking-widest text-primary">
-                    Profile
+                    {t("nav.profile")}
                   </Link>
                   <button onClick={() => { handleSignOut(); setOpen(false); }} className="font-ui text-lg uppercase tracking-widest text-destructive text-left">
-                    Sign Out
+                    {t("nav.signOut")}
                   </button>
                 </>
               ) : (
                 <button onClick={() => { setAuthOpen(true); setOpen(false); }} className="font-ui text-lg uppercase tracking-widest text-primary text-left">
-                  Login / Sign Up
+                  {t("nav.loginSignup")}
                 </button>
               )}
 
@@ -298,7 +288,7 @@ const Navbar = () => {
                 onClick={() => { setOpen(false); window.scrollTo({ top: 0, behavior: "smooth" }); }}
                 className="mt-2 px-5 py-3 rounded-lg font-ui text-center uppercase tracking-widest gradient-neon text-primary-foreground"
               >
-                Book Now
+                {t("nav.bookNow")}
               </Link>
             </div>
           </div>
