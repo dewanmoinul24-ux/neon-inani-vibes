@@ -70,8 +70,8 @@ const ExperienceDetail = () => {
       <div className="min-h-screen bg-background">
         <Navbar />
         <div className="container mx-auto px-4 pt-32 pb-20 text-center">
-          <h1 className="font-display text-3xl mb-4">Experience not found</h1>
-          <Button onClick={() => navigate("/experiences")}>Back to Experiences</Button>
+          <h1 className="font-display text-3xl mb-4">{t("det.notFound")}</h1>
+          <Button onClick={() => navigate("/experiences")}>{t("det.back")}</Button>
         </div>
         <Footer />
       </div>
@@ -165,21 +165,21 @@ const ExperienceDetail = () => {
               className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-4 w-fit"
             >
               <ArrowLeft className="w-4 h-4" />
-              Back to Experiences
+              {t("det.back")}
             </Link>
             <div className="flex items-center gap-2 mb-3 flex-wrap">
               <span className="px-3 py-1 rounded-full text-[10px] font-ui uppercase tracking-wider gradient-neon text-primary-foreground">
                 {experience.category}
               </span>
               <span className="px-3 py-1 rounded-full text-[10px] font-ui uppercase tracking-wider glass border border-neon-cyan/40 text-neon-cyan">
-                {isEvent ? "Event" : "Adventure Sport"}
+                {isEvent ? t("det.event") : t("det.sport")}
               </span>
             </div>
             <h1 className="font-display text-3xl md:text-5xl font-bold gradient-neon-text max-w-4xl leading-tight py-[20px] lg:text-7xl">
-              {experience.title}
+              {getLocalized(experience, "title", lang)}
             </h1>
             <p className="mt-2 text-base md:text-lg text-muted-foreground max-w-2xl">
-              {experience.tagline}
+              {getLocalized(experience, "tagline", lang)}
             </p>
           </div>
         </div>
@@ -191,21 +191,21 @@ const ExperienceDetail = () => {
           <div className="lg:col-span-2 space-y-8">
             {/* Quick facts */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              <FactCard icon={<MapPin className="w-4 h-4" />} label="Location" value={experience.location} accent="pink" />
+              <FactCard icon={<MapPin className="w-4 h-4" />} label={t("det.fact.location")} value={experience.location} accent="pink" />
               {isEvent ? (
                 <>
-                  <FactCard icon={<Calendar className="w-4 h-4" />} label="Date" value={formatEventDate(experience.date!)} accent="cyan" />
-                  <FactCard icon={<Clock className="w-4 h-4" />} label="Time" value={`${experience.startTime} – ${experience.endTime}`} accent="orange" />
+                  <FactCard icon={<Calendar className="w-4 h-4" />} label={t("det.fact.date")} value={formatEventDate(experience.date!, locale)} accent="cyan" />
+                  <FactCard icon={<Clock className="w-4 h-4" />} label={t("det.fact.time")} value={`${experience.startTime} – ${experience.endTime}`} accent="orange" />
                 </>
               ) : (
                 <>
-                  <FactCard icon={<Clock className="w-4 h-4" />} label="Hours" value={experience.operatingHours!} accent="cyan" />
-                  <FactCard icon={<Sparkles className="w-4 h-4" />} label="Duration" value={`${experience.durationMinutes} min`} accent="orange" />
+                  <FactCard icon={<Clock className="w-4 h-4" />} label={t("det.fact.hours")} value={experience.operatingHours!} accent="cyan" />
+                  <FactCard icon={<Sparkles className="w-4 h-4" />} label={t("det.fact.duration")} value={`${experience.durationMinutes} min`} accent="orange" />
                 </>
               )}
               <FactCard
                 icon={<Ticket className="w-4 h-4" />}
-                label={isEvent ? "Ticket" : "Session"}
+                label={isEvent ? t("det.fact.ticket") : t("det.fact.session")}
                 value={format(experience.priceBdt)}
                 accent="purple"
               />
@@ -213,15 +213,19 @@ const ExperienceDetail = () => {
 
             {/* About */}
             <div className="glass rounded-xl p-6 border border-border/60">
-              <h2 className="font-display text-2xl font-bold mb-3">About this {isEvent ? "event" : "experience"}</h2>
-              <p className="text-muted-foreground leading-relaxed">{experience.description}</p>
+              <h2 className="font-display text-2xl font-bold mb-3">
+                {isEvent ? t("det.about.event") : t("det.about.sport")}
+              </h2>
+              <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
+                {getLocalized(experience, "description", lang)}
+              </p>
               <a
                 href={experience.mapUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-4 inline-flex items-center gap-2 text-sm text-neon-cyan hover:underline"
               >
-                <MapPin className="w-4 h-4" /> View on Google Maps <ExternalLink className="w-3 h-3" />
+                <MapPin className="w-4 h-4" /> {t("det.viewMap")} <ExternalLink className="w-3 h-3" />
               </a>
             </div>
 
@@ -229,12 +233,12 @@ const ExperienceDetail = () => {
             <div className="grid md:grid-cols-2 gap-4">
               <InfoBlock
                 icon={<Shirt className="w-4 h-4 text-neon-pink" />}
-                title="Dress Code"
+                title={t("det.dressCode")}
                 items={experience.dressCode}
               />
               <InfoBlock
                 icon={<ShieldCheck className="w-4 h-4 text-neon-cyan" />}
-                title="Requirements"
+                title={t("det.requirements")}
                 items={experience.requirements}
               />
             </div>
@@ -243,13 +247,13 @@ const ExperienceDetail = () => {
             <div className="grid md:grid-cols-2 gap-4">
               <InfoBlock
                 icon={<CheckCircle2 className="w-4 h-4 text-emerald-400" />}
-                title="Do's"
+                title={t("det.dos")}
                 items={experience.dos}
                 tone="positive"
               />
               <InfoBlock
                 icon={<XCircle className="w-4 h-4 text-rose-400" />}
-                title="Don'ts"
+                title={t("det.donts")}
                 items={experience.donts}
                 tone="negative"
               />
@@ -258,7 +262,7 @@ const ExperienceDetail = () => {
             {/* Restricted items */}
             <div className="glass rounded-xl p-6 border border-rose-500/30">
               <h3 className="font-display text-lg font-bold mb-3 flex items-center gap-2">
-                <Ban className="w-4 h-4 text-rose-400" /> Restricted Items
+                <Ban className="w-4 h-4 text-rose-400" /> {t("det.restricted")}
               </h3>
               <div className="flex flex-wrap gap-2">
                 {experience.restrictedItems.map((item) => (
@@ -275,7 +279,7 @@ const ExperienceDetail = () => {
             {/* Booking process */}
             <div className="glass rounded-xl p-6 border border-border/60">
               <h3 className="font-display text-lg font-bold mb-4 flex items-center gap-2">
-                <ShieldAlert className="w-4 h-4 text-neon-orange" /> Booking Process
+                <ShieldAlert className="w-4 h-4 text-neon-orange" /> {t("det.bookingProcess")}
               </h3>
               <ol className="space-y-3">
                 {experience.bookingProcess.map((step, i) => (
@@ -288,6 +292,31 @@ const ExperienceDetail = () => {
                 ))}
               </ol>
             </div>
+
+            {/* FAQ */}
+            {experience.faqs && experience.faqs.length > 0 && (
+              <div className="glass rounded-xl p-6 border border-neon-purple/30">
+                <h3 className="font-display text-lg font-bold mb-4 flex items-center gap-2">
+                  <HelpCircle className="w-4 h-4 text-neon-purple" /> {t("det.faq")}
+                </h3>
+                <Accordion type="single" collapsible className="w-full">
+                  {experience.faqs.map((faq, i) => {
+                    const q = lang === "bn" && faq.qBn ? faq.qBn : faq.q;
+                    const a = lang === "bn" && faq.aBn ? faq.aBn : faq.a;
+                    return (
+                      <AccordionItem key={i} value={`faq-${i}`} className="border-border/60">
+                        <AccordionTrigger className="text-left text-sm font-medium hover:no-underline hover:text-neon-purple transition-colors py-3">
+                          {q}
+                        </AccordionTrigger>
+                        <AccordionContent className="text-sm text-muted-foreground leading-relaxed">
+                          {a}
+                        </AccordionContent>
+                      </AccordionItem>
+                    );
+                  })}
+                </Accordion>
+              </div>
+            )}
           </div>
 
           {/* Right — booking form (sticky on desktop, hidden on mobile in favor of StickyBookingBar) */}
