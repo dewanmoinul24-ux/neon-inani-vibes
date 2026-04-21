@@ -87,7 +87,7 @@ const Navbar = () => {
             <img
               src={logo}
               alt="InaniVibes"
-              className="h-14 md:h-16 lg:h-20 w-auto animate-neon-flicker"
+              className="h-12 md:h-12 lg:h-20 w-auto animate-neon-flicker shrink-0"
             />
           </Link>
 
