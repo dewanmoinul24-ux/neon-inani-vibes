@@ -24,6 +24,7 @@ import { vehicles } from "@/data/vehicles";
 import vehiclesBanner from "@/assets/vehicles-banner.jpg";
 import { useCurrency } from "@/hooks/useCurrency";
 import { useVibes } from "@/hooks/useVibes";
+import { useParallax } from "@/hooks/useParallax";
 
 const iconMap: Record<string, React.ElementType> = {
   Sedan: Car,
@@ -53,6 +54,7 @@ const Vehicles = () => {
   const navigate = useNavigate();
   const { formatPrice } = useCurrency();
   const { tier: vibesTier } = useVibes();
+  const bannerRef = useParallax<HTMLImageElement>(0.15, 0.03);
   const vehicleDiscountPct = Math.round(vibesTier.vehicleDiscount * 100);
   const [rentalType, setRentalType] = useState<"hourly" | "daily">("daily");
 
@@ -64,9 +66,10 @@ const Vehicles = () => {
       <section className="relative pt-16 md:pt-20">
         <div className="relative h-[260px] sm:h-[320px] md:h-[420px] overflow-hidden">
           <img
+            ref={bannerRef}
             src={vehiclesBanner}
             alt="Neon cars on Marine Drive Cox's Bazar"
-            className="w-full h-full object-cover"
+            className="w-full h-[115%] object-cover will-change-transform origin-center -translate-y-[5%]"
             width={1920}
             height={640}
           />

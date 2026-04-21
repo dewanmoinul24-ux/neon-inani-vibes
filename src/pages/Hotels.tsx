@@ -13,6 +13,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { cn } from "@/lib/utils";
 import { useCurrency } from "@/hooks/useCurrency";
 import { useVibes } from "@/hooks/useVibes";
+import { useParallax } from "@/hooks/useParallax";
 
 const amenityIcons: Record<string, React.ReactNode> = {
   "Free WiFi": <Wifi size={14} />,
@@ -28,6 +29,7 @@ const allTags = Array.from(new Set(hotels.flatMap((h) => h.tags)));
 const Hotels = () => {
   const { formatPrice } = useCurrency();
   const { tier: vibesTier } = useVibes();
+  const bannerRef = useParallax<HTMLImageElement>(0.15, 0.03);
   const hotelDiscountPct = Math.round(vibesTier.hotelDiscount * 100);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -84,9 +86,10 @@ const Hotels = () => {
       <section className="relative pt-16 md:pt-20">
         <div className="relative h-[260px] sm:h-[320px] md:h-[420px] overflow-hidden">
           <img
+            ref={bannerRef}
             src={hotelsBanner}
             alt="Neon-lit luxury hotels along Cox's Bazar Marine Drive at night"
-            className="w-full h-full object-cover"
+            className="w-full h-[115%] object-cover will-change-transform origin-center -translate-y-[5%]"
             width={1920}
             height={640}
           />
