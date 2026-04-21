@@ -106,6 +106,17 @@ const ExperienceDetail = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Prevent double-submit / rapid re-clicks
+    if (submitting) return;
+    if (Date.now() < lockedUntil) {
+      const seconds = Math.ceil((lockedUntil - Date.now()) / 1000);
+      toast({
+        title: "Hold on a moment",
+        description: `Please wait ${seconds}s before sending another request.`,
+      });
+      return;
+    }
+
     if (!user) {
       toast({
         title: "Please sign in",
@@ -130,6 +141,8 @@ const ExperienceDetail = () => {
     }
 
     setSubmitting(true);
+    // Lock out further submissions for 10s after the request fires
+    setLockedUntil(Date.now() + 10_000);
     const { data: inserted, error } = await supabase
       .from("experience_reservations")
       .insert({
@@ -151,11 +164,13 @@ const ExperienceDetail = () => {
       special_requests: specialRequests || null,
       status: "pending",
       })
-      .select("id, preferred_date, preferred_time, quantity, total_price, guest_name, guest_email")
+      .select("id, preferred_date, preferred_time, quantity, total_price, guest_name, guest_email, created_at")
       .single();
     setSubmitting(false);
 
     if (error) {
+      // unlock immediately on error so the user can retry
+      setLockedUntil(0);
       toast({
         title: "Could not submit",
         description: error.message,
@@ -173,6 +188,9 @@ const ExperienceDetail = () => {
       total: Number(inserted?.total_price ?? total),
       guestName: inserted?.guest_name ?? name,
       guestEmail: inserted?.guest_email ?? email,
+      createdAt: inserted?.created_at ?? new Date().toISOString(),
+      phone,
+      specialRequests: specialRequests || null,
     });
   };
 
