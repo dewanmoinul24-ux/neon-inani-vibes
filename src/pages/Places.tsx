@@ -118,10 +118,10 @@ const Places = () => {
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3 animate-slide-up">
               <a
-                href="#map"
+                href="#all-places"
                 className="px-6 py-3 rounded-lg font-ui text-sm uppercase tracking-widest gradient-neon text-primary-foreground neon-glow-pink transition-transform duration-300 hover:scale-105"
               >
-                Open the map
+                Browse all places
               </a>
               <Link
                 to="/experiences"
@@ -132,28 +132,6 @@ const Places = () => {
             </div>
           </div>
         </div>
-      </section>
-
-      {/* Interactive map */}
-      <section id="map" className="container mx-auto px-4 pt-12 sm:pt-16">
-        <div className="text-center mb-6 sm:mb-8">
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <Compass size={18} className="text-neon-cyan" />
-            <p className="font-ui text-xs sm:text-sm uppercase tracking-[0.3em] text-neon-blue neon-text-blue">
-              Interactive coastline map
-            </p>
-          </div>
-          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold gradient-neon-text">
-            Tap a pin · Filter · Jump
-          </h2>
-        </div>
-        <PlacesMap
-          places={places}
-          activePlaceSlug={activePin}
-          hoveredSlug={hoveredPin}
-          onPinClick={handlePinClick}
-          onPinHover={setHoveredPin}
-        />
       </section>
 
       {/* Search + Sort + Filter */}
