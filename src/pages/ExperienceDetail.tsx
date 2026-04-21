@@ -37,6 +37,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const formatEventDate = (iso: string, locale?: string) =>
   new Date(iso + "T00:00:00").toLocaleDateString(locale, {
@@ -62,6 +70,15 @@ const ExperienceDetail = () => {
   const [preferredTime, setPreferredTime] = useState("");
   const [specialRequests, setSpecialRequests] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [confirmation, setConfirmation] = useState<null | {
+    referenceCode: string;
+    date: string;
+    time: string;
+    quantity: number;
+    total: number;
+    guestName: string;
+    guestEmail: string;
+  }>(null);
 
   if (!experience) {
     return (
@@ -106,7 +123,9 @@ const ExperienceDetail = () => {
     }
 
     setSubmitting(true);
-    const { error } = await supabase.from("experience_reservations").insert({
+    const { data: inserted, error } = await supabase
+      .from("experience_reservations")
+      .insert({
       user_id: user.id,
       experience_id: experience.id,
       experience_title: experience.title,
@@ -124,7 +143,9 @@ const ExperienceDetail = () => {
       guest_phone: phone,
       special_requests: specialRequests || null,
       status: "pending",
-    });
+      })
+      .select("id, preferred_date, preferred_time, quantity, total_price, guest_name, guest_email")
+      .single();
     setSubmitting(false);
 
     if (error) {
@@ -136,11 +157,16 @@ const ExperienceDetail = () => {
       return;
     }
 
-    toast({
-      title: "Reservation requested! 🎉",
-      description: "Pending confirmation by the Inani Vibes team. Track it in Profile → My reservations.",
+    const refCode = `IV-${(inserted?.id ?? "").replace(/-/g, "").slice(0, 8).toUpperCase()}`;
+    setConfirmation({
+      referenceCode: refCode,
+      date: inserted?.preferred_date ?? (isEvent ? experience.date! : preferredDate),
+      time: inserted?.preferred_time ?? (isEvent ? experience.startTime ?? "" : preferredTime),
+      quantity: inserted?.quantity ?? quantity,
+      total: Number(inserted?.total_price ?? total),
+      guestName: inserted?.guest_name ?? name,
+      guestEmail: inserted?.guest_email ?? email,
     });
-    navigate("/profile?tab=reservations");
   };
 
   return (
@@ -586,10 +612,89 @@ const ExperienceDetail = () => {
         }}
       />
 
+      {/* Booking confirmation */}
+      <Dialog
+        open={!!confirmation}
+        onOpenChange={(open) => {
+          if (!open) setConfirmation(null);
+        }}
+      >
+        <DialogContent className="max-w-md border-neon-pink/40 bg-background/95 backdrop-blur-xl">
+          <DialogHeader>
+            <div className="mx-auto w-14 h-14 rounded-full gradient-neon flex items-center justify-center mb-2 neon-glow-pink">
+              <CheckCircle2 className="w-7 h-7 text-primary-foreground" />
+            </div>
+            <DialogTitle className="text-center font-display text-2xl gradient-neon-text">
+              Reservation requested!
+            </DialogTitle>
+            <DialogDescription className="text-center">
+              Your spot is on hold. The Inani Vibes team will confirm within 30 minutes by email.
+            </DialogDescription>
+          </DialogHeader>
+
+          {confirmation && (
+            <div className="space-y-3">
+              <div className="rounded-lg border border-neon-cyan/40 glass p-4 text-center">
+                <p className="text-[10px] font-ui uppercase tracking-widest text-muted-foreground">
+                  Reference code
+                </p>
+                <p className="font-display text-2xl font-bold text-neon-cyan tracking-widest mt-1">
+                  {confirmation.referenceCode}
+                </p>
+              </div>
+
+              <div className="rounded-lg border border-border/60 glass p-4 space-y-2 text-sm">
+                <p className="font-medium text-foreground">{experience.title}</p>
+                <Row label="Date" value={formatEventDate(confirmation.date)} />
+                {confirmation.time && <Row label="Time" value={confirmation.time} />}
+                <Row
+                  label={isEvent ? "Tickets" : "Participants"}
+                  value={String(confirmation.quantity)}
+                />
+                <Row label="Guest" value={confirmation.guestName} />
+                <Row label="Email" value={confirmation.guestEmail} />
+                <div className="border-t border-border/60 pt-2 flex items-center justify-between">
+                  <span className="text-muted-foreground">Total</span>
+                  <span className="font-display text-xl font-bold text-primary">
+                    {format(confirmation.total)}
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <DialogFooter className="flex-col sm:flex-row gap-2">
+            <Button
+              variant="outline"
+              className="w-full sm:w-auto"
+              onClick={() => setConfirmation(null)}
+            >
+              Close
+            </Button>
+            <Button
+              className="w-full sm:w-auto gradient-neon text-primary-foreground font-ui uppercase tracking-widest neon-glow-pink hover:opacity-90"
+              onClick={() => {
+                setConfirmation(null);
+                navigate("/profile?tab=reservations");
+              }}
+            >
+              View my reservations
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <Footer />
     </div>
   );
 };
+
+const Row = ({ label, value }: { label: string; value: string }) => (
+  <div className="flex items-center justify-between gap-3">
+    <span className="text-muted-foreground">{label}</span>
+    <span className="text-foreground text-right truncate">{value}</span>
+  </div>
+);
 
 const FactCard = ({
   icon,
