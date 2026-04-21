@@ -17,6 +17,12 @@ export interface ExperienceItem {
   tagline: string;
   description: string;
   image: string;
+  // Bangla content (optional — falls back to English when missing)
+  titleBn?: string;
+  taglineBn?: string;
+  descriptionBn?: string;
+  // FAQ rendered on the detail page
+  faqs?: { q: string; a: string; qBn?: string; aBn?: string }[];
   // Event-only — ISO date + display time
   date?: string;            // YYYY-MM-DD (events only)
   startTime?: string;       // e.g. "7:00 PM"
