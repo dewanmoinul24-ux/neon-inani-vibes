@@ -47,7 +47,134 @@ export interface Hotel {
     smoking: string;
   };
   coordinates: { lat: number; lng: number };
+  // Optional review/highlight content. When omitted, the UI falls back to
+  // sensible defaults derived from the hotel's existing rating + tags.
+  highlights?: string[];
+  reviewScores?: {
+    cleanliness: number;
+    location: number;
+    staff: number;
+    comfort: number;
+    value: number;
+    facilities: number;
+  };
+  reviews?: HotelReview[];
 }
+
+export interface HotelReview {
+  id: string;
+  author: string;
+  country: string;
+  date: string; // ISO yyyy-mm-dd
+  score: number; // 0–10
+  title: string;
+  comment: string;
+  tripType?: "Couple" | "Family" | "Solo" | "Business" | "Group";
+}
+
+/**
+ * Returns a 6-axis review score breakdown. Falls back to a generated set
+ * derived from the hotel's overall rating so every hotel renders nicely
+ * without needing to hand-author scores.
+ */
+export const getReviewScores = (hotel: Hotel) => {
+  if (hotel.reviewScores) return hotel.reviewScores;
+  // Convert 0–5 rating to a 0–10 score and add small natural variance.
+  const base = hotel.rating * 2;
+  const v = (offset: number) => Math.max(7, Math.min(10, +(base + offset).toFixed(1)));
+  return {
+    cleanliness: v(0.2),
+    location: v(0.4),
+    staff: v(0.3),
+    comfort: v(0.1),
+    value: v(-0.2),
+    facilities: v(0.0),
+  };
+};
+
+/** Overall numeric score (0–10) derived from rating. */
+export const getOverallScore = (hotel: Hotel) => +(hotel.rating * 2).toFixed(1);
+
+/** Booking.com-style verbal label for a 0–10 score. */
+export const getScoreLabel = (score: number) => {
+  if (score >= 9) return "Exceptional";
+  if (score >= 8.5) return "Fabulous";
+  if (score >= 8) return "Very Good";
+  if (score >= 7) return "Good";
+  return "Pleasant";
+};
+
+/** Highlights shown near the top — falls back to tag-derived defaults. */
+export const getHighlights = (hotel: Hotel): string[] => {
+  if (hotel.highlights && hotel.highlights.length) return hotel.highlights;
+  const fallback: string[] = [];
+  if (hotel.tags.some((t) => /sea|beach/i.test(t))) fallback.push("Steps from the beach");
+  if (hotel.amenities.some((a) => /pool/i.test(a))) fallback.push("Outdoor pool");
+  if (hotel.amenities.some((a) => /wifi/i.test(a))) fallback.push("Free WiFi in all rooms");
+  if (hotel.amenities.some((a) => /breakfast|restaurant/i.test(a))) fallback.push("On-site restaurant");
+  if (hotel.policies.cancellation.toLowerCase().includes("free cancellation"))
+    fallback.push("Free cancellation available");
+  return fallback.slice(0, 4);
+};
+
+const sampleAuthors = [
+  { author: "Tasnim R.", country: "Bangladesh", tripType: "Couple" as const },
+  { author: "Rafi A.", country: "Bangladesh", tripType: "Family" as const },
+  { author: "Sana K.", country: "India", tripType: "Solo" as const },
+  { author: "James W.", country: "United Kingdom", tripType: "Couple" as const },
+  { author: "Mehedi H.", country: "Bangladesh", tripType: "Group" as const },
+];
+
+const sampleReviewTemplates = [
+  {
+    title: "An unforgettable beach getaway",
+    comment:
+      "The views from the room were stunning and the staff went above and beyond to make our stay memorable. Breakfast was fresh and the location is unbeatable.",
+  },
+  {
+    title: "Exactly what we needed",
+    comment:
+      "Clean rooms, friendly team and a great pool to unwind after a day at the beach. Will definitely come back next season.",
+  },
+  {
+    title: "Loved the vibe and the food",
+    comment:
+      "The rooftop is a scene at sunset. Rooms are modern and comfy, and the in-house restaurant served some of the best seafood we tried in Cox's Bazar.",
+  },
+  {
+    title: "Great value for the price",
+    comment:
+      "Everything was as promised. Spotless room, quick check-in, and the front desk helped us arrange transport without any fuss.",
+  },
+];
+
+/**
+ * Returns a deterministic set of sample reviews for a hotel. Real reviews
+ * (when present) are returned first; otherwise we generate 4 plausible ones.
+ */
+export const getReviews = (hotel: Hotel): HotelReview[] => {
+  if (hotel.reviews && hotel.reviews.length) return hotel.reviews;
+  const overall = getOverallScore(hotel);
+  return sampleReviewTemplates.map((tpl, i) => {
+    const a = sampleAuthors[i % sampleAuthors.length];
+    // Spread scores around the overall (±0.4)
+    const offset = [0.2, -0.1, 0.4, -0.3][i] ?? 0;
+    const score = Math.max(7, Math.min(10, +(overall + offset).toFixed(1)));
+    // Spread dates over the last few months
+    const d = new Date();
+    d.setMonth(d.getMonth() - (i + 1));
+    return {
+      id: `${hotel.id}-rev-${i}`,
+      author: a.author,
+      country: a.country,
+      tripType: a.tripType,
+      date: d.toISOString().slice(0, 10),
+      score,
+      title: tpl.title,
+      comment: tpl.comment,
+    };
+  });
+};
 
 export const hotels: Hotel[] = [
   {
