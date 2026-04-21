@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ChevronLeft,
   Clock,
@@ -14,82 +14,62 @@ import {
   AlertTriangle,
   ArrowRight,
   Sparkles,
+  SlidersHorizontal,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useCurrency } from "@/hooks/useCurrency";
 import { useParallax } from "@/hooks/useParallax";
 import vibesExpertsBanner from "@/assets/vibes-experts-banner.jpg";
+import { vibesExperts, type VibesExpert, type ExpertType } from "@/data/vibesExperts";
+import BookingDialog from "@/components/vibes-experts/BookingDialog";
+import { Slider } from "@/components/ui/slider";
+import { cn } from "@/lib/utils";
 
-type ExpertId = "guides" | "photographers";
+type TypeFilter = "all" | ExpertType;
+type Duration = "hourly" | "daily";
 
-interface Expert {
-  id: ExpertId;
-  name: string;
-  tagline: string;
-  description: string;
-  icon: typeof Compass;
-  pricePerHour: number;
-  pricePerDay: number;
-  bookingAdvance: number; // %
-  features: string[];
-  highlights: string[];
-  accent: "cyan" | "pink";
-}
-
-const experts: Expert[] = [
-  {
-    id: "guides",
-    name: "Local Guides",
-    tagline: "Stories, shortcuts & secret spots",
-    description:
-      "Hand-picked Cox's Bazar locals who know every beach turn, hidden waterfall and sunset viewpoint. Fluent storytellers who turn a tour into an unforgettable vibe.",
-    icon: Compass,
-    pricePerHour: 500,
-    pricePerDay: 3500,
-    bookingAdvance: 50,
-    features: ["English & Bangla", "Local Insider", "Custom Itinerary", "Group or Solo"],
-    highlights: [
-      "5+ years guiding Cox's Bazar",
-      "Hidden viewpoints & food stops",
-      "Safety briefings included",
-    ],
-    accent: "cyan",
-  },
-  {
-    id: "photographers",
-    name: "Photographers",
-    tagline: "Pro shots of your coastline moments",
-    description:
-      "Professional photographers with DSLRs and drones, ready to capture sunset portraits, group shoots and reels along Marine Drive, Inani and Himchari.",
-    icon: Camera,
-    pricePerHour: 1200,
-    pricePerDay: 8000,
-    bookingAdvance: 50,
-    features: ["DSLR + Drone", "Edited Photos", "Reels & Shorts", "Same-Day Delivery"],
-    highlights: [
-      "60+ edited photos per session",
-      "Sunset & blue-hour specialists",
-      "Online gallery within 48 hours",
-    ],
-    accent: "pink",
-  },
-];
-
-const accentBorderMap: Record<Expert["accent"], string> = {
+const accentBorderMap: Record<VibesExpert["accent"], string> = {
   cyan: "neon-border-blue hover:neon-glow-cyan",
   pink: "neon-border-pink hover:neon-glow-pink",
+  purple: "neon-border-pink hover:neon-glow-pink",
 };
 
-const accentTextMap: Record<Expert["accent"], string> = {
+const accentTextMap: Record<VibesExpert["accent"], string> = {
   cyan: "text-neon-cyan",
   pink: "text-neon-pink",
+  purple: "text-neon-purple",
 };
 
 const VibesExperts = () => {
+  const navigate = useNavigate();
   const { formatPrice } = useCurrency();
   const bannerRef = useParallax<HTMLImageElement>(0.15, 0.03);
-  const [rentalType, setRentalType] = useState<"hourly" | "daily">("daily");
+
+  const [typeFilter, setTypeFilter] = useState<TypeFilter>("all");
+  const [duration, setDuration] = useState<Duration>("daily");
+
+  // Compute the price-range bounds for the active duration so the slider stays meaningful.
+  const priceBounds = useMemo(() => {
+    const prices = vibesExperts.map((e) => (duration === "hourly" ? e.pricePerHour : e.pricePerDay));
+    return [Math.min(...prices), Math.max(...prices)] as const;
+  }, [duration]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([priceBounds[0], priceBounds[1]]);
+
+  // Reset range whenever duration changes (different scale).
+  useMemo(() => {
+    setPriceRange([priceBounds[0], priceBounds[1]]);
+  }, [priceBounds]);
+
+  const [bookingExpert, setBookingExpert] = useState<VibesExpert | null>(null);
+
+  const visible = useMemo(() => {
+    return vibesExperts.filter((e) => {
+      if (typeFilter !== "all" && e.type !== typeFilter) return false;
+      const startingPrice = duration === "hourly" ? e.pricePerHour : e.pricePerDay;
+      return startingPrice >= priceRange[0] && startingPrice <= priceRange[1];
+    });
+  }, [typeFilter, duration, priceRange]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -142,132 +122,235 @@ const VibesExperts = () => {
         </div>
       </section>
 
-      {/* Rental Type Toggle */}
-      <section className="container mx-auto py-6 sm:py-8">
-        <div className="flex items-center justify-center gap-2 sm:gap-4 mb-8 sm:mb-12">
-          <button
-            onClick={() => setRentalType("hourly")}
-            className={`px-4 sm:px-6 py-2.5 min-h-[44px] rounded-lg font-ui text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 ${
-              rentalType === "hourly"
-                ? "gradient-neon text-primary-foreground neon-glow-pink"
-                : "glass text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            <Clock size={14} className="inline mr-1.5 sm:mr-2" /> Hourly
-          </button>
-          <button
-            onClick={() => setRentalType("daily")}
-            className={`px-4 sm:px-6 py-2.5 min-h-[44px] rounded-lg font-ui text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 ${
-              rentalType === "daily"
-                ? "gradient-neon text-primary-foreground neon-glow-pink"
-                : "glass text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            <CalendarDays size={14} className="inline mr-1.5 sm:mr-2" /> Full Day
-          </button>
-        </div>
-        <p className="text-center text-[11px] sm:text-xs md:text-sm font-ui text-neon-cyan neon-text-cyan -mt-6 sm:-mt-8 mb-8 sm:mb-12">
-          <Clock size={12} className="inline mr-1.5 -mt-0.5" />
-          Whole Day = 8 hours from start time
-        </p>
+      {/* Filters */}
+      <section className="container mx-auto px-4 py-8 sm:py-10">
+        <div className="glass rounded-2xl p-5 sm:p-6 border border-border/60 max-w-5xl mx-auto space-y-5">
+          <div className="flex items-center gap-2">
+            <SlidersHorizontal size={16} className="text-neon-cyan" />
+            <p className="font-ui text-xs sm:text-sm uppercase tracking-[0.3em] text-neon-blue neon-text-blue">
+              Find your match
+            </p>
+          </div>
 
-        {/* Expert Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 max-w-4xl mx-auto">
-          {experts.map((e, i) => {
-            const Icon = e.icon;
-            const startingPrice = rentalType === "hourly" ? e.pricePerHour : e.pricePerDay;
-            return (
-              <div
-                key={e.id}
-                className={`glass rounded-xl overflow-hidden ${accentBorderMap[e.accent]} transition-all duration-500 hover:scale-[1.02] animate-slide-up flex flex-col`}
-                style={{ animationDelay: `${i * 120}ms` }}
-              >
-                {/* Card Header */}
-                <div className="p-6 pb-4 flex-1">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="w-14 h-14 rounded-full glass flex items-center justify-center">
-                      <Icon size={28} className={accentTextMap[e.accent]} />
-                    </div>
-                    <div className="text-right">
-                      <p className="text-[10px] uppercase tracking-widest font-ui text-muted-foreground">
-                        Starting From
-                      </p>
-                      <p className="font-display text-xl font-bold text-foreground">
-                        {formatPrice(startingPrice)}
-                      </p>
-                      <p className="text-xs text-muted-foreground font-ui">
-                        per {rentalType === "hourly" ? "hour" : "day"}
-                      </p>
-                    </div>
-                  </div>
-
-                  <h3 className="font-display text-lg font-semibold text-foreground mb-1">
-                    {e.name}
-                  </h3>
-                  <p className={`text-xs font-ui uppercase tracking-widest mb-3 ${accentTextMap[e.accent]}`}>
-                    {e.tagline}
-                  </p>
-                  <p className="text-sm text-muted-foreground font-body leading-relaxed mb-4">
-                    {e.description}
-                  </p>
-
-                  {/* Feature Tags */}
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {e.features.map((f) => (
-                      <span
-                        key={f}
-                        className="px-2 py-0.5 rounded-full text-[10px] font-ui uppercase tracking-wider glass border border-border text-muted-foreground"
-                      >
-                        {f}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Highlights */}
-                  <div className="space-y-2 text-sm">
-                    {e.highlights.map((h) => (
-                      <div key={h} className="flex items-start gap-2">
-                        <CheckCircle2 size={14} className="text-neon-cyan mt-0.5 shrink-0" />
-                        <span className="text-foreground/90">{h}</span>
-                      </div>
-                    ))}
-                    <div className="flex items-center gap-2 pt-1">
-                      {e.id === "guides" ? (
-                        <>
-                          <Languages size={14} className="text-muted-foreground" />
-                          <span className="text-muted-foreground">Languages:</span>
-                          <span className="text-foreground font-semibold">Bangla · English</span>
-                        </>
-                      ) : (
-                        <>
-                          <Star size={14} className="text-muted-foreground" />
-                          <span className="text-muted-foreground">Avg rating:</span>
-                          <span className="text-foreground font-semibold">4.9 / 5</span>
-                        </>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {/* Type filter */}
+            <div>
+              <p className="font-ui text-[10px] uppercase tracking-widest text-muted-foreground mb-2">
+                Expert type
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {([
+                  { id: "all" as const, label: "All", icon: Sparkles },
+                  { id: "guide" as const, label: "Guides", icon: Compass },
+                  { id: "photographer" as const, label: "Photographers", icon: Camera },
+                ]).map((opt) => {
+                  const Icon = opt.icon;
+                  const active = typeFilter === opt.id;
+                  return (
+                    <button
+                      key={opt.id}
+                      onClick={() => setTypeFilter(opt.id)}
+                      className={cn(
+                        "px-3 py-1.5 rounded-full font-ui text-xs uppercase tracking-widest transition-all flex items-center gap-1.5",
+                        active
+                          ? "gradient-neon text-primary-foreground neon-glow-pink"
+                          : "glass border border-border/60 text-muted-foreground hover:text-foreground hover:border-primary/50"
                       )}
-                    </div>
-                  </div>
-                </div>
+                    >
+                      <Icon size={12} /> {opt.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
 
-                {/* Card Footer */}
-                <div className="border-t border-border p-4 bg-muted/20 space-y-3">
-                  <p className="text-center text-xs font-ui uppercase tracking-widest text-neon-cyan neon-text-cyan font-semibold">
-                    {e.bookingAdvance}% Booking Advance
-                  </p>
+            {/* Duration */}
+            <div>
+              <p className="font-ui text-[10px] uppercase tracking-widest text-muted-foreground mb-2">
+                Pricing basis
+              </p>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setDuration("hourly")}
+                  className={cn(
+                    "flex-1 px-3 py-2 rounded-lg font-ui text-xs uppercase tracking-widest transition-all",
+                    duration === "hourly"
+                      ? "gradient-neon text-primary-foreground neon-glow-pink"
+                      : "glass border border-border/60 text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  <Clock size={12} className="inline mr-1.5 -mt-0.5" /> Hourly
+                </button>
+                <button
+                  onClick={() => setDuration("daily")}
+                  className={cn(
+                    "flex-1 px-3 py-2 rounded-lg font-ui text-xs uppercase tracking-widest transition-all",
+                    duration === "daily"
+                      ? "gradient-neon text-primary-foreground neon-glow-pink"
+                      : "glass border border-border/60 text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  <CalendarDays size={12} className="inline mr-1.5 -mt-0.5" /> Full day
+                </button>
+              </div>
+            </div>
+
+            {/* Price range */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <p className="font-ui text-[10px] uppercase tracking-widest text-muted-foreground">
+                  Starting price
+                </p>
+                <p className="text-[10px] font-ui text-foreground tabular-nums">
+                  {formatPrice(priceRange[0])} – {formatPrice(priceRange[1])}
+                </p>
+              </div>
+              <Slider
+                min={priceBounds[0]}
+                max={priceBounds[1]}
+                step={100}
+                value={priceRange}
+                onValueChange={(v) => setPriceRange([v[0], v[1]] as [number, number])}
+                className="mt-1"
+              />
+            </div>
+          </div>
+
+          <p className="text-xs text-muted-foreground font-ui">
+            Showing <span className="text-foreground font-medium">{visible.length}</span> of{" "}
+            {vibesExperts.length} experts
+          </p>
+        </div>
+      </section>
+
+      {/* Cards */}
+      <section className="container mx-auto px-4 pb-10">
+        {visible.length === 0 ? (
+          <div className="text-center py-16 max-w-md mx-auto">
+            <p className="font-ui text-sm uppercase tracking-widest text-muted-foreground mb-3">
+              No experts match those filters
+            </p>
+            <button
+              onClick={() => {
+                setTypeFilter("all");
+                setPriceRange([priceBounds[0], priceBounds[1]]);
+              }}
+              className="px-5 py-2.5 rounded-lg font-ui text-sm uppercase tracking-widest gradient-neon text-primary-foreground neon-glow-pink"
+            >
+              Clear filters
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 max-w-6xl mx-auto">
+            {visible.map((e, i) => {
+              const TypeIcon = e.type === "guide" ? Compass : Camera;
+              const startingPrice = duration === "hourly" ? e.pricePerHour : e.pricePerDay;
+              return (
+                <div
+                  key={e.id}
+                  className={cn(
+                    "glass rounded-xl overflow-hidden transition-all duration-500 hover:scale-[1.02] animate-slide-up flex flex-col",
+                    accentBorderMap[e.accent]
+                  )}
+                  style={{ animationDelay: `${i * 90}ms` }}
+                >
+                  {/* Portrait */}
                   <button
                     type="button"
-                    className="w-full px-4 py-3 min-h-[44px] rounded-lg font-ui text-xs uppercase tracking-widest gradient-neon text-primary-foreground transition-transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
+                    onClick={() => navigate(`/vibes-experts/${e.id}`)}
+                    className="relative block w-full aspect-[4/3] overflow-hidden"
+                    aria-label={`View ${e.name} profile`}
                   >
-                    <Sparkles size={14} /> Book {e.name} <ArrowRight size={14} />
+                    <img
+                      src={e.portrait}
+                      alt={e.name}
+                      loading="lazy"
+                      width={800}
+                      height={600}
+                      className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                    />
+                    <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full glass-strong border border-primary/40 font-ui text-[10px] uppercase tracking-widest text-foreground flex items-center gap-1.5">
+                      <TypeIcon size={12} className={accentTextMap[e.accent]} />
+                      {e.type === "guide" ? "Guide" : "Photographer"}
+                    </span>
+                    <span className="absolute top-3 right-3 px-2.5 py-1 rounded-full glass-strong border border-neon-pink/40 font-ui text-[10px] flex items-center gap-1">
+                      <Star size={10} className="text-neon-pink fill-neon-pink" />
+                      <span className="font-semibold text-foreground">{e.rating.toFixed(1)}</span>
+                      <span className="text-muted-foreground">({e.reviewCount})</span>
+                    </span>
                   </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
 
-        {/* Notes Section */}
-        <div className="max-w-3xl mx-auto mt-12 sm:mt-16 glass rounded-xl p-5 sm:p-6 md:p-8 neon-border-blue">
+                  {/* Body */}
+                  <div className="p-5 flex-1 flex flex-col">
+                    <div className="flex items-start justify-between mb-2 gap-3">
+                      <div>
+                        <h3 className="font-display text-lg font-semibold text-foreground">
+                          {e.name}
+                        </h3>
+                        <p className={cn("text-[11px] font-ui uppercase tracking-widest", accentTextMap[e.accent])}>
+                          {e.tagline}
+                        </p>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <p className="text-[10px] uppercase tracking-widest font-ui text-muted-foreground">
+                          From
+                        </p>
+                        <p className="font-display text-base font-bold text-foreground">
+                          {formatPrice(startingPrice)}
+                        </p>
+                        <p className="text-[10px] text-muted-foreground font-ui">
+                          / {duration === "hourly" ? "hr" : "day"}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {e.features.slice(0, 3).map((f) => (
+                        <span
+                          key={f}
+                          className="px-2 py-0.5 rounded-full text-[10px] font-ui uppercase tracking-wider glass border border-border text-muted-foreground"
+                        >
+                          {f}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="space-y-1.5 text-xs mb-4">
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <Languages size={12} />
+                        <span>{e.languages.join(" · ")}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <ShieldCheck size={12} className="text-neon-cyan" />
+                        <span>{e.experienceYears} yrs experience</span>
+                      </div>
+                    </div>
+
+                    <div className="mt-auto grid grid-cols-2 gap-2">
+                      <button
+                        onClick={() => navigate(`/vibes-experts/${e.id}`)}
+                        className="px-3 py-2.5 rounded-lg font-ui text-[11px] uppercase tracking-widest glass border border-border/60 text-foreground transition-all hover:border-primary/60"
+                      >
+                        View profile
+                      </button>
+                      <button
+                        onClick={() => setBookingExpert(e)}
+                        className="px-3 py-2.5 rounded-lg font-ui text-[11px] uppercase tracking-widest gradient-neon text-primary-foreground transition-transform hover:scale-105 flex items-center justify-center gap-1.5"
+                      >
+                        Book <ArrowRight size={12} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </section>
+
+      {/* Notes */}
+      <section className="container mx-auto px-4 pb-16 sm:pb-24">
+        <div className="max-w-3xl mx-auto glass rounded-xl p-5 sm:p-6 md:p-8 neon-border-blue">
           <h3 className="font-display text-lg font-semibold gradient-neon-text mb-4 flex items-center gap-2">
             <AlertTriangle size={18} className="text-neon-orange" /> Important Information
           </h3>
@@ -282,16 +365,15 @@ const VibesExperts = () => {
             <li className="flex items-start gap-2">
               <ShieldCheck size={14} className="text-neon-orange mt-0.5 shrink-0" />
               <span>
-                All guides and photographers are <strong className="text-foreground">verified</strong>
-                {" "}with valid IDs and pass our local background check.
+                All guides and photographers are <strong className="text-foreground">verified</strong>{" "}
+                with valid IDs and pass our local background check.
               </span>
             </li>
             <li className="flex items-start gap-2">
               <Clock size={14} className="text-neon-cyan mt-0.5 shrink-0" />
               <span>
                 <strong className="text-foreground">Whole Day = 8 hours</strong> from the agreed
-                start time. Hourly bookings have a minimum of 1 hour. Overtime is charged at the
-                hourly rate.
+                start time. Hourly bookings have a minimum of 1 hour.
               </span>
             </li>
             <li className="flex items-start gap-2">
@@ -299,7 +381,6 @@ const VibesExperts = () => {
               <span>
                 Photographers deliver edited shots within{" "}
                 <strong className="text-foreground">48 hours</strong> via a private online gallery.
-                Drone usage may require permits at restricted locations.
               </span>
             </li>
           </ul>
@@ -307,6 +388,13 @@ const VibesExperts = () => {
       </section>
 
       <Footer />
+
+      <BookingDialog
+        expert={bookingExpert}
+        open={!!bookingExpert}
+        onOpenChange={(o) => !o && setBookingExpert(null)}
+        initialDuration={duration}
+      />
     </div>
   );
 };

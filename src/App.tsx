@@ -15,6 +15,7 @@ import Experiences from "./pages/Experiences.tsx";
 import ExperienceDetail from "./pages/ExperienceDetail.tsx";
 import Places from "./pages/Places.tsx";
 import VibesExperts from "./pages/VibesExperts.tsx";
+import VibesExpertDetail from "./pages/VibesExpertDetail.tsx";
 import Profile from "./pages/Profile.tsx";
 import ResetPassword from "./pages/ResetPassword.tsx";
 import AdminOverview from "./pages/admin/AdminOverview.tsx";
@@ -43,6 +44,7 @@ const App = () => (
             <Route path="/experiences/:id" element={<ExperienceDetail />} />
             <Route path="/places" element={<Places />} />
             <Route path="/vibes-experts" element={<VibesExperts />} />
+            <Route path="/vibes-experts/:id" element={<VibesExpertDetail />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/admin" element={<AdminOverview />} />
