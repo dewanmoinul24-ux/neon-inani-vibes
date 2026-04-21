@@ -469,7 +469,8 @@ const HotelDetail = () => {
                         </Button>
                       </div>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
 
