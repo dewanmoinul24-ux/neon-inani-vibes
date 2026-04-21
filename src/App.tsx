@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import AuthGate from "@/components/AuthGate";
 import ScrollToTop from "@/components/ScrollToTop";
 import Index from "./pages/Index.tsx";
@@ -29,9 +30,10 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <AuthGate />
-          <ScrollToTop />
-          <Routes>
+          <LanguageProvider>
+            <AuthGate />
+            <ScrollToTop />
+            <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/hotels" element={<Hotels />} />
             <Route path="/hotels/:id" element={<HotelDetail />} />
