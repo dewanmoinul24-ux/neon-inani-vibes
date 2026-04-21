@@ -47,6 +47,8 @@ import {
   Download,
   Hash,
   CircleDot,
+  Wallet,
+  CreditCard as CreditCardIcon,
 } from "lucide-react";
 import { format, isAfter, parseISO } from "date-fns";
 import { addMinutes, formatDistanceToNowStrict } from "date-fns";
