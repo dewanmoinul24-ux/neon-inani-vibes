@@ -15,6 +15,7 @@ import Experiences from "./pages/Experiences.tsx";
 import ExperienceDetail from "./pages/ExperienceDetail.tsx";
 import Places from "./pages/Places.tsx";
 import VibesExperts from "./pages/VibesExperts.tsx";
+import VibesExpertDetail from "./pages/VibesExpertDetail.tsx";
 import Profile from "./pages/Profile.tsx";
 import ResetPassword from "./pages/ResetPassword.tsx";
 import AdminOverview from "./pages/admin/AdminOverview.tsx";
