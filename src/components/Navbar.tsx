@@ -44,7 +44,7 @@ const Navbar = () => {
     { label: "Hotels", href: "/hotels", isRoute: true },
     { label: "Vehicles", href: "/vehicles", isRoute: true },
     { label: "Experiences", href: "/experiences", isRoute: true },
-    { label: "Places", href: "/#places" },
+    { label: "Places", href: "/places", isRoute: true },
     { label: "About", href: "/#about" },
     { label: "Contact", href: "/#contact" },
   ];
