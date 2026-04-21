@@ -30,6 +30,7 @@ import { useCurrency } from "@/hooks/useCurrency";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import StickyBookingBar from "@/components/StickyBookingBar";
+import ExperienceGallery from "@/components/ExperienceGallery";
 import {
   Accordion,
   AccordionContent,
@@ -224,6 +225,15 @@ const ExperienceDetail = () => {
               >
                 <MapPin className="w-4 h-4" /> {'View on Google Maps'} <ExternalLink className="w-3 h-3" />
               </a>
+            </div>
+
+            {/* Gallery */}
+            <div>
+              <h2 className="font-display text-2xl font-bold mb-3">Gallery</h2>
+              <ExperienceGallery
+                images={experience.gallery && experience.gallery.length > 0 ? experience.gallery : [experience.image]}
+                alt={experience.title}
+              />
             </div>
 
             {/* Dress code & requirements */}
