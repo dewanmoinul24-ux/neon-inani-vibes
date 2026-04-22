@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import heroBg from "@/assets/hero-bg.jpg";
 
 const HeroSection = () => {
@@ -82,12 +83,12 @@ const HeroSection = () => {
             Book hotels, rides, and experiences in one place. Your premium neon beach city adventure starts here.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="/hotels"
+            <Link
+              to="/hotels"
               className="px-8 py-4 rounded-lg font-ui text-base uppercase tracking-widest gradient-neon text-primary-foreground animate-pulse-glow transition-transform duration-300 hover:scale-105"
             >
               Book Now
-            </a>
+            </Link>
             <a
               href="#experiences"
               className="px-8 py-4 rounded-lg font-ui text-base uppercase tracking-widest glass neon-border-blue text-secondary transition-all duration-300 hover:scale-105 hover:neon-glow-blue"
